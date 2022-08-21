@@ -400,7 +400,7 @@ struct LinkSpriteBody {
   int8 y, x;
   uint8 tile;
 };
-static const LinkSpriteBody kLinkSpriteBodys[303] = {
+static const struct LinkSpriteBody kLinkSpriteBodys[303] = {
   { 0,  0, 0x00},
   { 1,  0, 0x00},
   { 2,  0, 0x00},
@@ -961,7 +961,7 @@ continue_after_set:
       bytewise_extended_oam[oam_pos] = 0;
     }
   }
-  SwordResult sr;
+  struct SwordResult sr;
 
   if (link_picking_throw_state & 4) {
     LinkOam_UnusedWeaponSettings(r4loc, xcoord, ycoord);
@@ -1075,7 +1075,7 @@ continue_after_set:
     if (link_visibility_status != 12) {
       uint8 zcoord = ((int16)link_z_coord >= 0 || BYTE(link_z_coord) < 0xf0) ? BYTE(link_z_coord) : 0;
 
-      const LinkSpriteBody *sp = &kLinkSpriteBodys[j];
+      const struct LinkSpriteBody *sp = &kLinkSpriteBodys[j];
 
       uint8 oam_y = ycoord + sp->y - zcoord;
       uint8 oam_x = xcoord + sp->x;
@@ -1126,7 +1126,7 @@ uint8 FindMostSignificantBit(uint8 v) {  // 8daac3
   return (uint8)i;
 }
 
-bool LinkOam_SetWeaponVRAMOffsets(int r2, SwordResult *sr) {  // 8dab6e
+bool LinkOam_SetWeaponVRAMOffsets(int r2, struct SwordResult *sr) {  // 8dab6e
   uint8 j = kPlayerOam_Main_SwordStuff_array1[r2];
   if ((sr->r6 = j) == 0xff)
     return true;
@@ -1142,7 +1142,7 @@ bool LinkOam_SetWeaponVRAMOffsets(int r2, SwordResult *sr) {  // 8dab6e
   return false;
 }
 
-bool LinkOam_SetEquipmentVRAMOffsets(int r2, SwordResult *sr) {  // 8dabe6
+bool LinkOam_SetEquipmentVRAMOffsets(int r2, struct SwordResult *sr) {  // 8dabe6
   uint8 j = kPlayerOam_ShieldStuff_array1[r2];
   if ((sr->r6 = j) == 0xff)
     return true;
@@ -1188,7 +1188,7 @@ int LinkOam_CalculateSwordSparklePosition(int oam_pos, uint8 oam_x, uint8 oam_y)
 void LinkOam_UnusedWeaponSettings(int r4loc, uint8 oam_x, uint8 oam_y) {  // 8dadb6
   int j = link_var30e * 4;
   int oam_pos = ((draw_water_ripples_or_grass != 0 ? kSwordStuff_oam_index_ptrs_1 : kSwordStuff_oam_index_ptrs_0)[r4loc] + sort_sprites_offset_into_oam_buffer)>>2;
-  OamEnt *oam = &oam_buf[oam_pos];
+  struct OamEnt *oam = &oam_buf[oam_pos];
   for (int i = 0; i != 4; i++, j++) {
     uint8 st = kPlayerOam_DrawOam_Throwing_State[j];
     if (st != 0xff) {
@@ -1250,7 +1250,7 @@ void LinkOam_DrawFootObject(int r4loc, uint8 oam_x, uint8 oam_y) {  // 8daed1
     yv = (5 + secondary_water_grass_timer);
   }
 
-  OamEnt *oam = &oam_buf[oam_pos];
+  struct OamEnt *oam = &oam_buf[oam_pos];
 
   if (yv >= 11) {
     // OOB read

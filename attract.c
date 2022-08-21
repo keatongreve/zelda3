@@ -105,8 +105,8 @@ static const uint8 kAttract_Legendgraphics_3[265+1] = {
   0x3e, 0x35, 0x3f, 0x35, 0x3f, 0x75, 0x3e, 0x75, 0x3d, 0x75, 0x3c, 0x75, 0x3b, 0x75, 0x3a, 0x75,
   0x39, 0x75, 0x38, 0x75, 0x37, 0x75, 0x48, 0x75, 0xff, 0x0
 };
-void Attract_DrawSpriteSet2(const AttractOamInfo *p, int n) {
-  OamEnt *oam = &oam_buf[attract_oam_idx + 64];
+void Attract_DrawSpriteSet2(const struct AttractOamInfo *p, int n) {
+  struct OamEnt *oam = &oam_buf[attract_oam_idx + 64];
   attract_oam_idx += n;
   for (; n--; oam++) {
     oam->x = attract_x_base + p[n].x;
@@ -118,7 +118,7 @@ void Attract_DrawSpriteSet2(const AttractOamInfo *p, int n) {
 }
 
 void Attract_ZeldaPrison_Case0() {
-  static const AttractOamInfo kZeldaPrison_Oams0[] = {
+  static const struct AttractOamInfo kZeldaPrison_Oams0[] = {
     { 5, 25, 0x6c, 0x38, 2},
     {11, 25, 0x6c, 0x38, 2},
     { 0,  0, 0x84, 0x3b, 2},
@@ -138,7 +138,7 @@ void Attract_ZeldaPrison_Case0() {
 
 void Attract_ZeldaPrison_Case1() {
   int k;
-  static const AttractOamInfo kZeldaPrison_Oams1[] = {
+  static const struct AttractOamInfo kZeldaPrison_Oams1[] = {
     { 5, 25, 0x6c, 0x38, 2},
     {11, 25, 0x6c, 0x38, 2},
     { 0,  0, 0x84, 0x3b, 2},
@@ -201,7 +201,7 @@ void Attract_ZeldaPrison_Case1() {
 }
 
 void Attract_ZeldaPrison_DrawA() {
-  OamEnt *oam = &oam_buf[64 + attract_oam_idx];
+  struct OamEnt *oam = &oam_buf[64 + attract_oam_idx];
 
   uint8 ext = attract_x_base_hi ? 3 : 2;
   bytewise_extended_oam[oam - oam_buf] = ext;
@@ -224,7 +224,7 @@ void Attract_MaidenWarp_Case0() {
 }
 
 void Attract_MaidenWarp_Case1() {
-  static const AttractOamInfo kZeldaPrison_MaidenWarpCase1_Oam[] = {
+  static const struct AttractOamInfo kZeldaPrison_MaidenWarpCase1_Oam[] = {
     { 0,  0, 0xce, 0x35, 0},
     {28,  0, 0xce, 0x35, 0},
     {-2,  3, 0x26, 0x75, 0},
@@ -279,7 +279,7 @@ void Attract_MaidenWarp_Case1() {
 
 void Attract_MaidenWarp_Case2() {
   static const uint8 kMaidenWarp_Case2_Num[8] = { 4, 4, 8, 8, 12, 12, 14, 14 };
-  static const AttractOamInfo kAttract_MaidenWarpCase2_Oam[] = {
+  static const struct AttractOamInfo kAttract_MaidenWarpCase2_Oam[] = {
     { 0,  0, 0xce, 0x35, 0},
     {28,  0, 0xce, 0x35, 0},
     {-2,  3, 0x26, 0x75, 0},
@@ -323,7 +323,7 @@ void Attract_MaidenWarp_Case2() {
 }
 
 void Attract_MaidenWarp_Case3() {
-  static const AttractOamInfo kAttract_MaidenWarpCase3_Oam[] = {
+  static const struct AttractOamInfo kAttract_MaidenWarpCase3_Oam[] = {
     { 0,  0, 0xc6, 0x3d, 2},
     { 0,  0, 0x24, 0x35, 2},
     {16,  0, 0x24, 0x75, 2},
@@ -720,7 +720,7 @@ void AttractDramatize_WorldMap() {  // 8cf176
 }
 
 void Attract_ThroneRoom() {  // 8cf1c8
-  static const AttractOamInfo kThroneRoom_Oams[] = {
+  static const struct AttractOamInfo kThroneRoom_Oams[] = {
     {16, 16, 0x2a, 0x7b, 2},
     { 0, 16, 0x2a, 0x3b, 2},
     {16,  0, 0x0a, 0x7b, 2},
@@ -758,7 +758,7 @@ void Attract_ThroneRoom() {  // 8cf1c8
     BG1VOFS_copy--;
   }
   for (int i = 1; i >= 0; i--) {
-    const AttractOamInfo *oamp = &kThroneRoom_Oams[kThroneRoom_OamOffs[i]];
+    const struct AttractOamInfo *oamp = &kThroneRoom_Oams[kThroneRoom_OamOffs[i]];
     int n = kThroneRoom_OamOffs[i + 1] - kThroneRoom_OamOffs[i];
     uint16 y = kAttract_ThroneRoom_Ybase[i] - BG2VOFS_copy;
     if (!sign16(y + 32)) {
@@ -862,7 +862,7 @@ void AttractDramatize_AgahnimAltar() {  // 8cf423
   }
 
   if (attract_var15 == 0) {
-    static const AttractOamInfo kZeldaPrison_MaidenWarp0[] = {
+    static const struct AttractOamInfo kZeldaPrison_MaidenWarp0[] = {
       { 0,  0, 0x03, 0x3d, 2},
       { 8,  0, 0x04, 0x3d, 2},
       { 0,  0, 0x00, 0x3d, 2},
@@ -873,7 +873,7 @@ void AttractDramatize_AgahnimAltar() {  // 8cf423
     attract_y_base = attract_vram_dst;
     Attract_DrawSpriteSet2(kZeldaPrison_MaidenWarp0 + (BYTE(attract_vram_dst) == 0x70 ? 0 : 2), 2);
     static const uint8 kAttract_MaidenWarp_Xbase[8] = { 4, 4, 3, 3, 2, 2, 1, 0 };
-    static const AttractOamInfo kZeldaPrison_MaidenWarp1[] = {
+    static const struct AttractOamInfo kZeldaPrison_MaidenWarp1[] = {
       { 0,  0, 0x6c, 0x38, 2},
       { 0,  0, 0x6c, 0x38, 2},
       { 0,  0, 0x6c, 0x38, 2},
@@ -899,7 +899,7 @@ void AttractDramatize_AgahnimAltar() {  // 8cf423
     Attract_DrawSpriteSet2(kZeldaPrison_MaidenWarp1 + k * 2, 2);
 
   }
-  static const AttractOamInfo kZeldaPrison_MaidenWarp2[] = {
+  static const struct AttractOamInfo kZeldaPrison_MaidenWarp2[] = {
     { 5, 25, 0x6c, 0x38, 2},
     {11, 25, 0x6c, 0x38, 2},
     { 0,  0, 0x82, 0x3b, 2},
@@ -1047,7 +1047,7 @@ void Attract_TriggerBGDMA(uint16 dstv) {  // 8cf879
 }
 
 void Attract_DrawPreloadedSprite(const uint8 *xp, const uint8 *yp, const uint8 *cp, const uint8 *fp, const uint8 *ep, int n) {  // 8cf9b5
-  OamEnt *oam = &oam_buf[attract_oam_idx + 64];
+  struct OamEnt *oam = &oam_buf[attract_oam_idx + 64];
   attract_oam_idx += n + 1;
   do {
     oam->x = attract_x_base + xp[n];
@@ -1059,7 +1059,7 @@ void Attract_DrawPreloadedSprite(const uint8 *xp, const uint8 *yp, const uint8 *
 }
 
 void Attract_DrawZelda() {  // 8cf9e8
-  OamEnt *oam = &oam_buf[64 + attract_oam_idx];
+  struct OamEnt *oam = &oam_buf[64 + attract_oam_idx];
   bytewise_extended_oam[oam - oam_buf] = 2;
   oam[0].x = oam[1].x = 0x60;
   oam[0].y = attract_x_base;

@@ -389,7 +389,7 @@ static const uint8 kSpriteFall_Tab2[32] = {
 };
 static const uint8 kSpriteFall_Tab3[16] = {0xff, 0x3f, 0x1f, 0xf, 0xf, 7, 3, 1, 0xff, 0x3f, 0x1f, 0xf, 7, 3, 1, 0};
 static const int8 kSpriteFall_Tab4[4] = {0, 4, 8, 0};
-static const DrawMultipleData kSpriteDrawFall0Data[12] = {
+static const struct DrawMultipleData kSpriteDrawFall0Data[12] = {
   {0, 0, 0x0146, 2},
   {0, 0, 0x0148, 2},
   {0, 0, 0x014a, 2},
@@ -595,10 +595,10 @@ uint16 Garnish_GetY(int k) {
 void Garnish_SparkleCommon(int k, uint8 shift) {
   static const uint8 kGarnishSparkle_Char[4] = {0x83, 0xc7, 0x80, 0xb7};
   uint8 t = garnish_countdown[k] >> shift;
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = kGarnishSparkle_Char[t];
@@ -610,10 +610,10 @@ void Garnish_SparkleCommon(int k, uint8 shift) {
 void Garnish_DustCommon(int k, uint8 shift) {
   static const uint8 kRunningManDust_Char[3] = {0xdf, 0xcf, 0xa9};
   tmp_counter = garnish_countdown[k] >> shift;
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = kRunningManDust_Char[tmp_counter];
@@ -622,7 +622,7 @@ void Garnish_DustCommon(int k, uint8 shift) {
 }
 
 void SpriteModule_Explode(int k) {
-  static const DrawMultipleData kSpriteExplode_Dmd[32] = {
+  static const struct DrawMultipleData kSpriteExplode_Dmd[32] = {
     { 0,  0, 0x0060, 2},
     { 0,  0, 0x0060, 2},
     { 0,  0, 0x0060, 2},
@@ -700,7 +700,7 @@ void SpriteModule_Explode(int k) {
   if (sprite_delay_main[k] & ((type == 0x92) ? 3 : 7))
     return;
 
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x1c, &info);
   if (j >= 0) {
     static const int8 kSpriteExplode_RandomXY[16] = {0, 4, 8, 12, -4, -8, -12, 0, 0, 8, 16, 24, -24, -16, -8, 0};
@@ -846,7 +846,7 @@ void SpriteStunned_MainEx(int k, bool second_entry) {
       z = sprite_z_vel[k];
       sprite_z_vel[k] = 0;
       int j;
-      SpriteSpawnInfo info;
+      struct SpriteSpawnInfo info;
 
       if (sign8(z - 0xf0) && (j = Sprite_SpawnDynamically(k, 0xec, &info)) >= 0) {
         Sprite_SetSpawnedCoordinates(j, &info);
@@ -905,8 +905,8 @@ bool Sprite_TrackBodyToHead(int k) {  // 85dca2
   return true;
 }
 
-void Sprite_DrawMultiple(int k, const DrawMultipleData *src, int n, PrepOamCoordsRet *info) {  // 85df6c
-  PrepOamCoordsRet info_buf;
+void Sprite_DrawMultiple(int k, const struct DrawMultipleData *src, int n, struct PrepOamCoordsRet *info) {  // 85df6c
+  struct PrepOamCoordsRet info_buf;
   if (!info)
     info = &info_buf;
   if (Sprite_PrepOamCoordOrDoubleRet(k, info))
@@ -917,7 +917,7 @@ void Sprite_DrawMultiple(int k, const DrawMultipleData *src, int n, PrepOamCoord
     a = sprite_unk4[k];
   if (a == 11)
     BYTE(word_7E0CFE) = sprite_unk5[k];
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   do {
     uint16 x = src->x + info->x;
     uint16 y = src->y + info->y;
@@ -931,7 +931,7 @@ void Sprite_DrawMultiple(int k, const DrawMultipleData *src, int n, PrepOamCoord
   } while (src++, oam++, --n);
 }
 
-void Sprite_DrawMultiplePlayerDeferred(int k, const DrawMultipleData *src, int n, PrepOamCoordsRet *info) {  // 85df75
+void Sprite_DrawMultiplePlayerDeferred(int k, const struct DrawMultipleData *src, int n, struct PrepOamCoordsRet *info) {  // 85df75
   Oam_AllocateDeferToPlayer(k);
   Sprite_DrawMultiple(k, src, n, info);
 }
@@ -1008,7 +1008,7 @@ void Prepare_ApplyRumbleToSprites() {  // 8680fa
   static const int8 kApplyRumble_Y[4] = { -32, 32, -24, -24 };
   static const uint8 kApplyRumble_WH[6] = { 0x50, 0x50, 0x20, 0x20, 0x50, 0x50 };
   int j = link_direction_facing >> 1;
-  SpriteHitBox hb;
+  struct SpriteHitBox hb;
   uint16 x = link_x_coord + kApplyRumble_X[j];
   uint16 y = link_y_coord + kApplyRumble_Y[j];
   hb.r0_xlo = x;
@@ -1084,7 +1084,7 @@ void Sprite_SpawnSecret(int k) {  // 868264
     b = 19 + (GetRandomNumber() & 3);
   if (!kSpawnSecretItems[b - 1])
     return;
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, kSpawnSecretItems[b - 1], &info);
   if (j < 0)
     return;
@@ -1241,7 +1241,7 @@ void SpriteModule_Fall1(int k) {  // 86852e
     sprite_state[k] = 0;
     Sprite_ManuallySetDeathFlagUW(k);
   } else {
-    PrepOamCoordsRet info;
+    struct PrepOamCoordsRet info;
     if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
       return;
     SpriteFall_Draw(k, &info);
@@ -1249,7 +1249,7 @@ void SpriteModule_Fall1(int k) {  // 86852e
 }
 
 void SpriteModule_Drown(int k) {  // 86859c
-  static const DrawMultipleData kSpriteDrown_Dmd[8] = {
+  static const struct DrawMultipleData kSpriteDrown_Dmd[8] = {
     {-7, -7, 0x0480, 0},
     {14, -6, 0x0483, 0},
     {-6, -6, 0x04cf, 0},
@@ -1267,7 +1267,7 @@ void SpriteModule_Drown(int k) {  // 86859c
       Oam_AllocateFromRegionC(8);
     sprite_flags3[k] ^= 16;
     SpriteDraw_SingleLarge(k);
-    OamEnt *oam = GetOamCurPtr();
+    struct OamEnt *oam = GetOamCurPtr();
     int j = sprite_delay_main[k];
     if (j == 1)
       sprite_state[k] = 0;
@@ -1309,7 +1309,7 @@ void Sprite_DrawDistress_custom(uint16 xin, uint16 yin, uint8 time) {  // 86a733
   if (!(time & 0x18))
     return;
   int i = 3;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   do {
     uint16 x = xin + kSpriteDistress_X[i];
     uint16 y = yin + kSpriteDistress_Y[i];
@@ -1325,7 +1325,7 @@ void Sprite_CheckIfLifted_permissive(int k) {  // 86aa0c
   Sprite_ReturnIfLiftedPermissive(k);
 }
 
-void Entity_ApplyRumbleToSprites(SpriteHitBox *hb) {  // 86ad03
+void Entity_ApplyRumbleToSprites(struct SpriteHitBox *hb) {  // 86ad03
   for (int j = 15; j >= 0; j--) {
     if (!(sprite_defl_bits[j] & 2) || sprite_E[j] == 0)
       continue;
@@ -1375,7 +1375,7 @@ bool Sprite_ReturnIfPhasingOut(int k) {  // 86d0ed
     sprite_state[k] = 0;
   else if (a >= 0x28 || (a & 1) != 0)
     return false;
-  PrepOamCoordsRet info;
+  struct PrepOamCoordsRet info;
   Sprite_PrepOamCoordOrDoubleRet(k, &info);
   return true;
 }
@@ -1471,10 +1471,10 @@ draw_key:
 
 void Sprite_DrawNumberedAbsorbable(int k, int a) {  // 86d2fa
   a = (a - 1) * 3;
-  PrepOamCoordsRet info;
+  struct PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   int n = (sprite_head_dir[k] < 1) ? 2 : 1;
   do {
     int j = n + a;
@@ -1510,14 +1510,14 @@ bool Sprite_ReturnIfPaused(int k) {  // 86d9f3
 }
 
 void SpriteDraw_SingleLarge(int k) {  // 86dc10
-  PrepOamCoordsRet info;
+  struct PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Sprite_PrepAndDrawSingleLargeNoPrep(k, &info);
 }
 
-void Sprite_PrepAndDrawSingleLargeNoPrep(int k, PrepOamCoordsRet *info) {  // 86dc13
-  OamEnt *oam = GetOamCurPtr();
+void Sprite_PrepAndDrawSingleLargeNoPrep(int k, struct PrepOamCoordsRet *info) {  // 86dc13
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = info->x;
   if ((uint16)(info->y + 0x10) < 0x100) {
     oam->y = info->y;
@@ -1529,7 +1529,7 @@ void Sprite_PrepAndDrawSingleLargeNoPrep(int k, PrepOamCoordsRet *info) {  // 86
     SpriteDraw_Shadow(k, info);
 }
 
-void SpriteDraw_Shadow_custom(int k, PrepOamCoordsRet *info, uint8 a) {  // 86dc5c
+void SpriteDraw_Shadow_custom(int k, struct PrepOamCoordsRet *info, uint8 a) {  // 86dc5c
   uint16 y = Sprite_GetY(k) + a;
   info->y = y;
   if (sprite_pause[k] || sprite_state[k] == 10 && sprite_unk3[k] == 3)
@@ -1538,7 +1538,7 @@ void SpriteDraw_Shadow_custom(int k, PrepOamCoordsRet *info, uint8 a) {  // 86dc
   info->y = y;
   if ((uint16)(y + 0x10) >= 0x100)
     return;
-  OamEnt *oam = GetOamCurPtr() + (sprite_flags2[k] & 0x1f);
+  struct OamEnt *oam = GetOamCurPtr() + (sprite_flags2[k] & 0x1f);
   oam->x = info->x;
   if (sprite_flags3[k] & 0x20) {
     oam->y = y + 1;
@@ -1553,15 +1553,15 @@ void SpriteDraw_Shadow_custom(int k, PrepOamCoordsRet *info, uint8 a) {  // 86dc
   }
 }
 
-void SpriteDraw_Shadow(int k, PrepOamCoordsRet *oam) {  // 86dc64
+void SpriteDraw_Shadow(int k, struct PrepOamCoordsRet *oam) {  // 86dc64
   SpriteDraw_Shadow_custom(k, oam, 10);
 }
 
 void SpriteDraw_SingleSmall(int k) {  // 86dcef
-  PrepOamCoordsRet info;
+  struct PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = info.x;
   if ((uint16)(info.y + 0x10) < 0x100) {
     oam->y = info.y;
@@ -1574,10 +1574,10 @@ void SpriteDraw_SingleSmall(int k) {  // 86dcef
 }
 
 void Sprite_DrawThinAndTall(int k) {  // 86dd40
-  PrepOamCoordsRet info;
+  struct PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam[1].x = oam[0].x = info.x;
   bytewise_extended_oam[oam - oam_buf + 1] = bytewise_extended_oam[oam - oam_buf] = (info.x >= 256);
   oam[0].y = ClampYForOam(info.y);
@@ -1712,7 +1712,7 @@ void ThrownSprite_CheckDamageToSprites(int k) {  // 86e172
 }
 
 void ThrownSprite_CheckDamageToSingleSprite(int k, int j) {  // 86e1b2
-  SpriteHitBox hb;
+  struct SpriteHitBox hb;
   hb.r0_xlo = sprite_x_lo[k];
   hb.r8_xhi = sprite_x_hi[k];
   hb.r2 = 15;
@@ -1775,7 +1775,7 @@ void Sprite_HalveSpeed_XY(int k) {  // 86e26e
 }
 
 void Sprite_SpawnLeapingFish(int k) {  // 86e286
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xd2, &info);
   if (j < 0)
     return;
@@ -1838,10 +1838,10 @@ void SpriteModule_Poof(int k) {  // 86e393
       }
     }
   } else {
-    PrepOamCoordsRet info;
+    struct PrepOamCoordsRet info;
     if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
       return;
-    OamEnt *oam = GetOamCurPtr();
+    struct OamEnt *oam = GetOamCurPtr();
     int j = ((sprite_delay_main[k] >> 1) & ~3) + 3;
     for (int i = 3; i >= 0; i--, j--, oam++) {
       oam->x = kSpritePoof_X[j] + BYTE(dungmap_var7);
@@ -1854,11 +1854,11 @@ void SpriteModule_Poof(int k) {  // 86e393
   }
 }
 
-void Sprite_PrepOamCoord(int k, PrepOamCoordsRet *ret) {  // 86e416
+void Sprite_PrepOamCoord(int k, struct PrepOamCoordsRet *ret) {  // 86e416
   Sprite_PrepOamCoordOrDoubleRet(k, ret);
 }
 
-bool Sprite_PrepOamCoordOrDoubleRet(int k, PrepOamCoordsRet *ret) {  // 86e41e
+bool Sprite_PrepOamCoordOrDoubleRet(int k, struct PrepOamCoordsRet *ret) {  // 86e41e
   sprite_pause[k] = 0;
   uint16 x = cur_sprite_x - BG2HOFS_copy2;
   uint16 y = cur_sprite_y - BG2VOFS_copy2;
@@ -2097,15 +2097,15 @@ void Sprite_MoveZ(int k) {  // 86e96c
   sprite_z[k] = z >> 8;
 }
 
-ProjectSpeedRet Sprite_ProjectSpeedTowardsLink(int k, uint8 vel) {  // 86e991
+struct ProjectSpeedRet Sprite_ProjectSpeedTowardsLink(int k, uint8 vel) {  // 86e991
   if (vel == 0) {
-    ProjectSpeedRet rv = { 0, 0, 0, 0 };
+    struct ProjectSpeedRet rv = { 0, 0, 0, 0 };
     return rv;
   }
-  PairU8 below = Sprite_IsBelowLink(k);
+  struct PairU8 below = Sprite_IsBelowLink(k);
   uint8 r12 = sign8(below.b) ? -below.b : below.b;
 
-  PairU8 right = Sprite_IsRightOfLink(k);
+  struct PairU8 right = Sprite_IsRightOfLink(k);
   uint8 r13 = sign8(right.b) ? -right.b : right.b;
   uint8 t;
   bool swapped = false;
@@ -2122,7 +2122,7 @@ ProjectSpeedRet Sprite_ProjectSpeedTowardsLink(int k, uint8 vel) {  // 86e991
   } while (--vel);
   if (swapped)
     t = xvel, xvel = yvel, yvel = t;
-  ProjectSpeedRet rv = {
+  struct ProjectSpeedRet rv = {
     (uint8)(right.a ? -xvel : xvel),
     (uint8)(below.a ? -yvel : yvel),
     right.b,
@@ -2133,20 +2133,20 @@ ProjectSpeedRet Sprite_ProjectSpeedTowardsLink(int k, uint8 vel) {  // 86e991
 }
 
 void Sprite_ApplySpeedTowardsLink(int k, uint8 vel) {  // 86ea04
-  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, vel);
+  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, vel);
   sprite_x_vel[k] = pt.x;
   sprite_y_vel[k] = pt.y;
 }
 
-ProjectSpeedRet Sprite_ProjectSpeedTowardsLocation(int k, uint16 x, uint16 y, uint8 vel) {  // 86ea2d
+struct ProjectSpeedRet Sprite_ProjectSpeedTowardsLocation(int k, uint16 x, uint16 y, uint8 vel) {  // 86ea2d
   if (vel == 0) {
-    ProjectSpeedRet rv = { 0, 0, 0, 0 };
+    struct ProjectSpeedRet rv = { 0, 0, 0, 0 };
     return rv;
   }
-  PairU8 below = Sprite_IsBelowLocation(k, y);
+  struct PairU8 below = Sprite_IsBelowLocation(k, y);
   uint8 r12 = sign8(below.b) ? -below.b : below.b;
 
-  PairU8 right = Sprite_IsRightOfLocation(k, x);
+  struct PairU8 right = Sprite_IsRightOfLocation(k, x);
   uint8 r13 = sign8(right.b) ? -right.b : right.b;
   uint8 t;
   bool swapped = false;
@@ -2163,7 +2163,7 @@ ProjectSpeedRet Sprite_ProjectSpeedTowardsLocation(int k, uint16 x, uint16 y, ui
   } while (--vel);
   if (swapped)
     t = xvel, xvel = yvel, yvel = t;
-  ProjectSpeedRet rv = {
+  struct ProjectSpeedRet rv = {
     (uint8)(right.a ? -xvel : xvel),
     (uint8)(below.a ? -yvel : yvel),
     right.b,
@@ -2172,9 +2172,9 @@ ProjectSpeedRet Sprite_ProjectSpeedTowardsLocation(int k, uint16 x, uint16 y, ui
   return rv;
 }
 
-uint8 Sprite_DirectionToFaceLink(int k, PointU8 *coords_out) {  // 86eaa4
-  PairU8 below = Sprite_IsBelowLink(k);
-  PairU8 right = Sprite_IsRightOfLink(k);
+uint8 Sprite_DirectionToFaceLink(int k, struct PointU8 *coords_out) {  // 86eaa4
+  struct PairU8 below = Sprite_IsBelowLink(k);
+  struct PairU8 right = Sprite_IsRightOfLink(k);
   uint8 ym = sign8(below.b) ? -below.b : below.b;
   tmp_counter = ym;
   uint8 xm = sign8(right.b) ? -right.b : right.b;
@@ -2183,37 +2183,37 @@ uint8 Sprite_DirectionToFaceLink(int k, PointU8 *coords_out) {  // 86eaa4
   return (xm >= ym) ? right.a : below.a + 2;
 }
 
-PairU8 Sprite_IsRightOfLink(int k) {  // 86ead1
+struct PairU8 Sprite_IsRightOfLink(int k) {  // 86ead1
   uint16 x = link_x_coord - Sprite_GetX(k);
-  PairU8 rv = { (uint8)(sign16(x) ? 1 : 0), (uint8)x };
+  struct PairU8 rv = { (uint8)(sign16(x) ? 1 : 0), (uint8)x };
   return rv;
 }
 
-PairU8 Sprite_IsBelowLink(int k) {  // 86eae8
+struct PairU8 Sprite_IsBelowLink(int k) {  // 86eae8
   int t = BYTE(link_y_coord) + 8;
   int u = (t & 0xff) + sprite_z[k];
   int v = (u & 0xff) - sprite_y_lo[k];
   int w = HIBYTE(link_y_coord) - sprite_y_hi[k] - (v < 0);
   uint8 y = (w & 0xff) + (t >> 8) + (u >> 8);
-  PairU8 rv = { (uint8)(sign8(y) ? 1 : 0), (uint8)v };
+  struct PairU8 rv = { (uint8)(sign8(y) ? 1 : 0), (uint8)v };
   return rv;
 }
 
-PairU8 Sprite_IsRightOfLocation(int k, uint16 x) {  // 86eb0a
+struct PairU8 Sprite_IsRightOfLocation(int k, uint16 x) {  // 86eb0a
   uint16 xv = x - Sprite_GetX(k);
-  PairU8 rv = { (uint8)(sign16(xv) ? 1 : 0), (uint8)xv };
+  struct PairU8 rv = { (uint8)(sign16(xv) ? 1 : 0), (uint8)xv };
   return rv;
 }
 
-PairU8 Sprite_IsBelowLocation(int k, uint16 y) {  // 86eb1d
+struct PairU8 Sprite_IsBelowLocation(int k, uint16 y) {  // 86eb1d
   uint16 yv = y - Sprite_GetY(k);
-  PairU8 rv = { (uint8)(sign16(yv) ? 1 : 0), (uint8)yv };
+  struct PairU8 rv = { (uint8)(sign16(yv) ? 1 : 0), (uint8)yv };
   return rv;
 }
 
 uint8 Sprite_DirectionToFaceLocation(int k, uint16 x, uint16 y) {  // 86eb30
-  PairU8 below = Sprite_IsBelowLocation(k, y);
-  PairU8 right = Sprite_IsRightOfLocation(k, x);
+  struct PairU8 below = Sprite_IsBelowLocation(k, y);
+  struct PairU8 right = Sprite_IsRightOfLocation(k, x);
   uint8 ym = sign8(below.b) ? -below.b : below.b;
   tmp_counter = ym;
   uint8 xm = sign8(right.b) ? -right.b : right.b;
@@ -2223,7 +2223,7 @@ uint8 Sprite_DirectionToFaceLocation(int k, uint16 x, uint16 y) {  // 86eb30
 void Guard_ParrySwordAttacks(int k) {  // 86eb5e
   if (link_is_on_lower_level != sprite_floor[k] || link_incapacitated_timer | link_auxiliary_state || sign8(sprite_hit_timer[k]))
     return;
-  SpriteHitBox hb;
+  struct SpriteHitBox hb;
   Sprite_DoHitBoxesFast(k, &hb);
   if (link_position_mode & 0x10 || player_oam_y_offset == 0x80) {
     Sprite_AttemptDamageToLinkWithCollisionCheck(k);
@@ -2241,7 +2241,7 @@ void Guard_ParrySwordAttacks(int k) {  // 86eb5e
   if (sprite_type[k] != 0x6a)
     sprite_F[k] = kSprite_Func1_Tab[GetRandomNumber() & 7];
   link_incapacitated_timer = kSprite_Func1_Tab2[GetRandomNumber() & 7];
-  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, sign8(button_b_frames - 9) ? 32 : 24);
+  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, sign8(button_b_frames - 9) ? 32 : 24);
   sprite_x_recoil[k] = -pt.x;
   sprite_y_recoil[k] = -pt.y;
   Sprite_ApplyRecoilToLink(k, sign8(button_b_frames - 9) ? 8 : 16);
@@ -2258,7 +2258,7 @@ void Sprite_AttemptZapDamage(int k) {  // 86ec02
       Sprite_AttemptDamageToLinkPlusRecoil(k);
     }
   } else {
-    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, sign8(button_b_frames - 9) ? 0x50 : 0x40);
+    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, sign8(button_b_frames - 9) ? 0x50 : 0x40);
     sprite_x_recoil[k] = -pt.x;
     sprite_y_recoil[k] = -pt.y;
     Sprite_CalculateSwordDamage(k);
@@ -2366,8 +2366,9 @@ void AgahnimBalls_DamageAgahnim(int k, uint8 dmg, uint8 r0_hit_timer) {  // 86ed
                 sprite_flags5[k] & 0x10 ? 0x1c : 8;
     sound_effect_2 = sfx | Sprite_CalculateSfxPan(k);
   }
+  uint8 type;
 flag4:
-  uint8 type = sprite_type[k];
+  type = sprite_type[k];
   sprite_F[k] = (damage_type_determiner >= 13) ? 0 :
                 (type == 9) ? 20 :
                 (type == 0x53 || type == 0x18) ? 11 : 15;
@@ -2556,7 +2557,7 @@ bool Sprite_CheckDamageToLink_same_layer(int k) {  // 86f154
 bool Sprite_CheckDamageToLink_ignore_layer(int k) {  // 86f15c
   uint8 carry, t;
   if (sprite_flags4[k]) {
-    SpriteHitBox hitbox;
+    struct SpriteHitBox hitbox;
     Link_SetupHitBox(&hitbox);
     Sprite_SetupHitBox(k, &hitbox);
     carry = CheckIfHitBoxesOverlap(&hitbox);
@@ -2626,7 +2627,7 @@ bool Sprite_ReturnIfLiftedPermissive(int k) {  // 86f257
   if (link_is_running)
     return false;
   if ((uint8)(flag_is_sprite_to_pick_up_cached - 1) != cur_object_index) {
-    SpriteHitBox hb;
+    struct SpriteHitBox hb;
     Link_SetupHitBox_conditional(&hb);
     Sprite_SetupHitBox(k, &hb);
     if (CheckIfHitBoxesOverlap(&hb))
@@ -2650,7 +2651,7 @@ uint8 Sprite_CheckDamageFromLink(int k) {  // 86f2b4
   if (sprite_hit_timer[k] & 0x80 || sprite_floor[k] != link_is_on_lower_level || player_oam_y_offset == 0x80)
     return 0;
 
-  SpriteHitBox hb;
+  struct SpriteHitBox hb;
   Player_SetupActionHitBox(&hb);
   Sprite_SetupHitBox(k, &hb);
   if (!CheckIfHitBoxesOverlap(&hb))
@@ -2724,7 +2725,7 @@ getting_out:
 void Sprite_AttemptDamageToLinkWithCollisionCheck(int k) {  // 86f3ca
   if ((k ^ frame_counter) & 1)
     return;
-  SpriteHitBox hb;
+  struct SpriteHitBox hb;
   Sprite_DoHitBoxesFast(k, &hb);
   Link_SetupHitBox_conditional(&hb);
   if (CheckIfHitBoxesOverlap(&hb))
@@ -2744,7 +2745,7 @@ void Sprite_AttemptDamageToLinkPlusRecoil(int k) {  // 86f3db
   }
 }
 
-void Player_SetupActionHitBox(SpriteHitBox *hb) {  // 86f5e0
+void Player_SetupActionHitBox(struct SpriteHitBox *hb) {  // 86f5e0
   if (link_is_running) {
     int j = link_direction_facing >> 1;
     int x = link_x_coord + (kPlayerActionBoxRun_XLo[j] | kPlayerActionBoxRun_XHi[j] << 8);
@@ -2784,7 +2785,7 @@ void Player_SetupActionHitBox(SpriteHitBox *hb) {  // 86f5e0
   }
 }
 
-void Sprite_DoHitBoxesFast(int k, SpriteHitBox *hb) {  // 86f645
+void Sprite_DoHitBoxesFast(int k, struct SpriteHitBox *hb) {  // 86f645
   if (HIBYTE(dungmap_var8) == 0x80) {
     hb->r10_spr_xhi = 0x80;
     return;
@@ -2800,7 +2801,7 @@ void Sprite_DoHitBoxesFast(int k, SpriteHitBox *hb) {  // 86f645
 }
 
 void Sprite_ApplyRecoilToLink(int k, uint8 vel) {  // 86f688
-  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, vel);
+  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, vel);
   link_actual_vel_x = pt.x;
   link_actual_vel_y = pt.y;
   g_ram[0xc7] = link_actual_vel_z = vel >> 1;
@@ -2837,14 +2838,14 @@ void Sprite_PlaceRupulseSpark_2(int k) {  // 86f6d5
   repulsespark_floor_status = sprite_floor[k];
 }
 
-void Link_SetupHitBox_conditional(SpriteHitBox *hb) {  // 86f705
+void Link_SetupHitBox_conditional(struct SpriteHitBox *hb) {  // 86f705
   if (link_disable_sprite_damage)
     hb->r9_yhi = 0x80;
   else
     Link_SetupHitBox(hb);
 }
 
-void Link_SetupHitBox(SpriteHitBox *hb) {  // 86f70a
+void Link_SetupHitBox(struct SpriteHitBox *hb) {  // 86f70a
   hb->r3 = hb->r2 = 8;
   uint16 x = link_x_coord + 4;
   hb->r0_xlo = x;
@@ -2854,7 +2855,7 @@ void Link_SetupHitBox(SpriteHitBox *hb) {  // 86f70a
   hb->r9_yhi = y >> 8;
 }
 
-void Sprite_SetupHitBox(int k, SpriteHitBox *hb) {  // 86f7ef
+void Sprite_SetupHitBox(int k, struct SpriteHitBox *hb) {  // 86f7ef
   if (sign8(sprite_z[k])) {
     hb->r10_spr_xhi = 0x80;
     return;
@@ -2879,7 +2880,7 @@ void Sprite_SetupHitBox(int k, SpriteHitBox *hb) {  // 86f7ef
 }
 
 // Returns the carry flag
-bool CheckIfHitBoxesOverlap(SpriteHitBox *hb) {  // 86f836
+bool CheckIfHitBoxesOverlap(struct SpriteHitBox *hb) {  // 86f836
   int t, u;
   uint8 r15, r12;
 
@@ -2910,10 +2911,10 @@ bool CheckIfHitBoxesOverlap(SpriteHitBox *hb) {  // 86f836
 void Oam_AllocateDeferToPlayer(int k) {  // 86f86c
   if (sprite_floor[k] != link_is_on_lower_level)
     return;
-  PairU8 right = Sprite_IsRightOfLink(k);
+  struct PairU8 right = Sprite_IsRightOfLink(k);
   if ((uint8)(right.b + 0x10) >= 0x20)
     return;
-  PairU8 below = Sprite_IsBelowLink(k);
+  struct PairU8 below = Sprite_IsBelowLink(k);
   if ((uint8)(below.b + 0x20) >= 0x48)
     return;
   uint8 nslots = ((sprite_flags2[k] & 0x1f) + 1) << 2;
@@ -3023,10 +3024,10 @@ void SpriteDeath_Func4(int k) {  // 86fa25
 void SpriteDeath_DrawPoof(int k) {  // 86fb2a
   if (dung_hdr_collision == 4)
     sprite_obj_prio[k] = 0x30;
-  PrepOamCoordsRet info;
+  struct PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   uint8 r12 = (sprite_flags3[k] & 0x20) >> 3;
   int i = ((sprite_delay_main[k] & 0x1c) ^ 0x1c) + 3, n = 3;
   do {
@@ -3053,7 +3054,7 @@ void SpriteModule_Fall2(int k) {  // 86fbea
       if (!(delay & 7 | submodule_index | flag_unk1))
         SpriteSfx_QueueSfx3WithPan(k, 0x31);
       SpriteActive_Main(k);
-      PrepOamCoordsRet info;
+      struct PrepOamCoordsRet info;
       if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
         return;
       Sprite_DrawDistress_custom(info.x, info.y - 8, delay + 20);
@@ -3090,20 +3091,20 @@ void SpriteModule_Fall2(int k) {  // 86fbea
 }
 
 void SpriteDraw_FallingHelmaBeetle(int k) {  // 86fd17
-  PrepOamCoordsRet info;
-  const DrawMultipleData *src = kSpriteDrawFall0Data + sprite_graphics[k];
+  struct PrepOamCoordsRet info;
+  const struct DrawMultipleData *src = kSpriteDrawFall0Data + sprite_graphics[k];
   if (sprite_type[k] == 0x13)
     src += 6;
   Sprite_DrawMultiple(k, src, 1, &info);
 }
 
 void SpriteDraw_FallingHumanoid(int k) {  // 86fe5b
-  PrepOamCoordsRet info;
+  struct PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
 
   int q = sprite_graphics[k];
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   int n = (q < 12 && (q & 3) == 0) ? 3 : 0, nn = n;
   do {
     int i = q * 4 + n;
@@ -3117,7 +3118,7 @@ void SpriteDraw_FallingHumanoid(int k) {  // 86fe5b
 }
 
 void Sprite_CorrectOamEntries(int k, int n, uint8 islarge) {  // 86febc
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   uint8 *extp = &g_ram[oam_ext_cur_ptr];
   uint16 spr_x = Sprite_GetX(k);
   uint16 spr_y = Sprite_GetY(k);
@@ -3174,7 +3175,7 @@ bool Sprite_CheckIfLinkIsBusy() {  // 87f4d0
   return false;
 }
 
-void Sprite_SetSpawnedCoordinates(int k, SpriteSpawnInfo *info) {  // 89ae64
+void Sprite_SetSpawnedCoordinates(int k, struct SpriteSpawnInfo *info) {  // 89ae64
   sprite_x_lo[k] = info->r0_x;
   sprite_x_hi[k] = info->r0_x >> 8;
   sprite_y_lo[k] = info->r2_y;
@@ -3216,7 +3217,7 @@ void Sprite_InitializeMirrorPortal() {  // 89af89
       sprite_state[k] = 0;
   }
 
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(0xff, 0x6c, &info);
   if (j < 0)
     j = 0;
@@ -3294,10 +3295,10 @@ void Garnish15_ArrghusSplash(int k) {  // 89b178
   static const uint8 kArrghusSplash_Flags[8] = {0x34, 0x74, 0x34, 0x74, 0x34, 0x74, 0x34, 0x74};
   static const uint8 kArrghusSplash_Ext[8] = {0, 0, 2, 2, 2, 2, 2, 2};
 
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   int g = (garnish_countdown[k] >> 1) & 6;
   for (int i = 1; i >= 0; i--) {
     int j = i + g;
@@ -3311,7 +3312,7 @@ void Garnish15_ArrghusSplash(int k) {  // 89b178
 }
 
 void Garnish13_PyramidDebris(int k) {  // 89b216
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
 
   int y = (garnish_y_lo[k] << 8) + garnish_y_subpixel[k] + ((int8)garnish_y_vel[k] << 4);
   garnish_y_subpixel[k] = y;
@@ -3342,10 +3343,10 @@ void Garnish11_WitheringGanonBatFlame(int k) {  // 89b2b2
   if ((submodule_index | flag_unk1) == 0) {
     Garnish_SetY(k, Garnish_GetY(k) - 1);
   }
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam[0].x = pt.x;
   oam[0].y = pt.y;
   oam[1].x = pt.x + 8;
@@ -3368,10 +3369,10 @@ void Garnish10_GanonBatFlame(int k) {  // 89b306
 
   if (garnish_countdown[k] == 8)
     garnish_type[k] = 0x11;
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   int j = kGanonBatFlame_Idx[garnish_countdown[k] >> 3];
@@ -3388,11 +3389,11 @@ void Garnish0C_TrinexxIceBreath(int k) {  // 89b34f
   if (garnish_countdown[k] == 0x50 && (submodule_index | flag_unk1) == 0) {
     Dungeon_UpdateTileMapWithCommonTile(Garnish_GetX(k), Garnish_GetY(k) - 16, 18);
   }
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
 
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = kTrinexxIce_Char[garnish_countdown[k] >> 4];
@@ -3411,10 +3412,10 @@ void Garnish_WaterTrail(int k) {  // 89b3c2
 void Garnish0A_CannonSmoke(int k) {  // 89b3ee
   static const uint8 kGarnish_CannonPoof_Char[2] = { 0x8a, 0x86 };
   static const uint8 kGarnish_CannonPoof_Flags[4] = { 0x20, 0x10, 0x30, 0x30 };
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = kGarnish_CannonPoof_Char[garnish_countdown[k] >> 3];
@@ -3426,10 +3427,10 @@ void Garnish0A_CannonSmoke(int k) {  // 89b3ee
 void Garnish09_LightningTrail(int k) {  // 89b429
   static const uint8 kLightningTrail_Char[8] = {0xcc, 0xec, 0xce, 0xee, 0xcc, 0xec, 0xce, 0xee};
   static const uint8 kLightningTrail_Flags[8] = {0x31, 0x31, 0x31, 0x31, 0x71, 0x71, 0x71, 0x71};
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   int j = garnish_sprite[k];
@@ -3456,10 +3457,10 @@ void Garnish_CheckPlayerCollision(int k, int x, int y) {  // 89b459
 void Garnish07_BabasuFlash(int k) {  // 89b49e
   static const uint8 kBabusuFlash_Char[4] = {0xa8, 0x8a, 0x86, 0x86};
   static const uint8 kBabusuFlash_Flags[4] = {0x2d, 0x2c, 0x2c, 0x2c};
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   int j = garnish_countdown[k] >> 3;
@@ -3472,10 +3473,10 @@ void Garnish08_KholdstareTrail(int k) {  // 89b4c6
   static const int8 kGarnish_Nebule_XY[3] = { -1, -1, 0 };
   static const uint8 kGarnish_Nebule_Char[3] = { 0x9c, 0x9d, 0x8d };
 
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   int i = garnish_countdown[k] >> 2;
   oam->x = pt.x + kGarnish_Nebule_XY[i];
   oam->y = pt.y + kGarnish_Nebule_XY[i];
@@ -3486,10 +3487,10 @@ void Garnish08_KholdstareTrail(int k) {  // 89b4c6
 }
 
 void Garnish06_ZoroTrail(int k) {  // 89b4fb
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = 0x75;
@@ -3508,10 +3509,10 @@ void Garnish_SimpleSparkle(int k) {  // 89b526
 
 void Garnish0E_TrinexxFireBreath(int k) {  // 89b55d
   static const uint8 kTrinexxLavaBubble_Char[4] = {0x83, 0xc7, 0x80, 0x9d};
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum =  kTrinexxLavaBubble_Char[garnish_countdown[k] >> 3];
@@ -3523,10 +3524,10 @@ void Garnish0E_TrinexxFireBreath(int k) {  // 89b55d
 
 void Garnish0F_BlindLaserTrail(int k) {  // 89b591
   static const uint8 kBlindLaserTrail_Char[4] = {0x61, 0x71, 0x70, 0x60};
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = kBlindLaserTrail_Char[garnish_oam_flags[k] - 7];
@@ -3537,10 +3538,10 @@ void Garnish0F_BlindLaserTrail(int k) {  // 89b591
 
 void Garnish04_LaserTrail(int k) {  // 89b5bb
   static const uint8 kLaserBeamTrail_Char[2] = {0xd2, 0xf3};
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = kLaserBeamTrail_Char[garnish_oam_flags[k]];
@@ -3548,7 +3549,7 @@ void Garnish04_LaserTrail(int k) {  // 89b5bb
   bytewise_extended_oam[oam - oam_buf] = 0;
 }
 
-bool Garnish_ReturnIfPrepFails(int k, Point16U *pt) {  // 89b5de
+bool Garnish_ReturnIfPrepFails(int k, struct Point16U *pt) {  // 89b5de
   uint16 x = Garnish_GetX(k) - BG2HOFS_copy2;
   uint16 y = Garnish_GetY(k) - BG2VOFS_copy2;
 
@@ -3576,7 +3577,7 @@ void Garnish03_FallingTile(int k) {  // 89b627
   uint16 y = Garnish_GetY(k) + kCrumbleTile_XY[j] - BG2VOFS_copy2;
 
   if (x < 256 && y < 256) {
-    OamEnt *oam = GetOamCurPtr();
+    struct OamEnt *oam = GetOamCurPtr();
     oam->x = x;
     oam->y = y - 16;
     oam->charnum = kCrumbleTile_Char[j];
@@ -3586,10 +3587,10 @@ void Garnish03_FallingTile(int k) {  // 89b627
 }
 
 void Garnish01_FireSnakeTail(int k) {  // 89b6c0
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = pt.x;
   oam->y = pt.y;
   oam->charnum = 0x28;
@@ -3599,7 +3600,7 @@ void Garnish01_FireSnakeTail(int k) {  // 89b6c0
 }
 
 void Garnish02_MothulaBeamTrail(int k) {  // 89b6e1
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = garnish_x_lo[k] - BG2HOFS_copy2;
   oam->y = garnish_y_lo[k] - BG2VOFS_copy2;
   oam->charnum = 0xaa;
@@ -3912,7 +3913,7 @@ void Overworld_LoadProximaSpriteIfAlive(uint16 blk) {  // 89c739
 
 void SpriteExplode_SpawnEA(int k) {  // 89ee4c
   tmp_counter = sprite_type[k];
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0xea, &info, 14);
   Sprite_SetSpawnedCoordinates(j, &info);
   sprite_z_vel[j] = 32;
@@ -3967,7 +3968,7 @@ void Garnish16_ThrownItemDebris(int k) {  // 89f0cb
     0x40, 0x40, 0x40,    0, 0x40, 0x40, 0x40,    0, 0x40, 0x40,    0,    0, 0x80,    0, 0x40, 0x40,
     0x40,    0, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,    0,    0, 0x40,    0,    0,    0,
   };
-  Point16U pt;
+  struct Point16U pt;
   if (Garnish_ReturnIfPrepFails(k, &pt))
     return;
   uint8 r5 = garnish_oam_flags[k];
@@ -3977,7 +3978,7 @@ void Garnish16_ThrownItemDebris(int k) {  // 89f0cb
     ScatterDebris_Draw(k, pt);
     return;
   }
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   tmp_counter = garnish_sprite[k];
   uint8 base = ((garnish_countdown[k] >> 2) ^ 7) << 2;
   if (tmp_counter == 4 || tmp_counter == 2 && !player_is_indoors)
@@ -3995,7 +3996,7 @@ void Garnish16_ThrownItemDebris(int k) {  // 89f0cb
   }
 }
 
-void ScatterDebris_Draw(int k, Point16U pt) {  // 89f198
+void ScatterDebris_Draw(int k, struct Point16U pt) {  // 89f198
   static const int8 kScatterDebris_Draw_X2[12] = {-8, 8, 16, -5, 8, 15, -1, 7, 11, 1, 3, 8};
   static const int8 kScatterDebris_Draw_Y2[12] = {7, 2, 12, 9, 2, 10, 11, 2, 11, 7, 3, 8};
   static const uint8 kScatterDebris_Draw_Char2[12] = {0xe2, 0xe2, 0xe2, 0xe2, 0xf2, 0xf2, 0xf2, 0xe2, 0xe2, 0xf2, 0xe2, 0xe2};
@@ -4004,7 +4005,7 @@ void ScatterDebris_Draw(int k, Point16U pt) {  // 89f198
   if (garnish_countdown[k] == 16)
     garnish_type[k] = 0;
 
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   int base = ((garnish_countdown[k] & 0xf) >> 2) * 3;
 
   for (int i = 2; i >= 0; i--) {
@@ -4312,11 +4313,11 @@ uint8 Sprite_ConvertVelocityToAngle(uint8 x, uint8 y) {  // 9df614
   }
 }
 
-int Sprite_SpawnDynamically(int k, uint8 what, SpriteSpawnInfo *info) {  // 9df65d
+int Sprite_SpawnDynamically(int k, uint8 what, struct SpriteSpawnInfo *info) {  // 9df65d
   return Sprite_SpawnDynamicallyEx(k, what, info, 15);
 }
 
-int Sprite_SpawnDynamicallyEx(int k, uint8 what, SpriteSpawnInfo *info, int j) {  // 9df65f
+int Sprite_SpawnDynamicallyEx(int k, uint8 what, struct SpriteSpawnInfo *info, int j) {  // 9df65f
   do {
     if (sprite_state[j] == 0) {
       sprite_type[j] = what;
@@ -4342,9 +4343,9 @@ int Sprite_SpawnDynamicallyEx(int k, uint8 what, SpriteSpawnInfo *info, int j) {
   return j;
 }
 
-void SpriteFall_Draw(int k, PrepOamCoordsRet *info) {  // 9dffc5
+void SpriteFall_Draw(int k, struct PrepOamCoordsRet *info) {  // 9dffc5
   static const uint8 kSpriteFall_Char[8] = {0x83, 0x83, 0x83, 0x80, 0x80, 0x80, 0xb7, 0xb7};
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   oam->x = info->x + 4;
   oam->y = info->y + 4;
   oam->charnum = kSpriteFall_Char[sprite_delay_main[k] >> 2];
@@ -4375,7 +4376,7 @@ void Sprite_HaltAllMovement() {  // 9ef508
 }
 
 int ReleaseFairy() {  // 9efe33
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(0, 0xe3, &info), i;
   if (j >= 0) {
     sprite_floor[j] = link_is_on_lower_level;

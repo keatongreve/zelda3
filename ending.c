@@ -67,7 +67,7 @@ static PlayerHandlerFunc *const kEndSequence0_Funcs[3] = {
 &Credits_LoadScene_Overworld_Overlay,
 &Credits_LoadScene_Overworld_LoadMap,
 };
-static PrepOamCoordsRet g_ending_coords;
+static struct PrepOamCoordsRet g_ending_coords;
 static const uint16 kEnding1_TargetScrollY[16] = { 0x6f2, 0x210, 0x72c, 0xc00, 0x10c, 0xa9b, 0x10, 0x510, 0x89, 0xa8e, 0x222c, 0x2510, 0x826, 0x5c, 0x20a, 0x30 };
 static const uint16 kEnding1_TargetScrollX[16] = { 0x77f, 0x480, 0x193, 0xaa, 0x878, 0x847, 0x4fd, 0xc57, 0x40f, 0x478, 0xa00, 0x200, 0x201, 0xaa1, 0x26f, 0 };
 static const int8 kEnding1_Yvel[16] = { -1, -1, 1, -1, 1, 1, 0, 1, 0, -1, -1, 0, 0, 0, 1, -1 };
@@ -243,7 +243,7 @@ void Credits_LoadScene_Dungeon() {  // 8286fd
 
   int i = submodule_index >> 1;
   sprite_graphics_index = kEnding_SpritePack[i];
-  const DungPalInfo *dpi = GetDungPalInfo(kEnding_SpritePal[i] & 0x3f);
+  const struct DungPalInfo *dpi = GetDungPalInfo(kEnding_SpritePal[i] & 0x3f);
   sprite_aux1_palette = dpi->pal2;
   sprite_aux2_palette = dpi->pal3;
   misc_sprites_graphics_index = 10;
@@ -764,7 +764,7 @@ void Intro_SpriteType_B_0(int k) {  // 8cc5b1
 }
 
 void AnimateSceneSprite_DrawTriangle(int k) {  // 8cc70f
-  static const IntroSpriteEnt kIntroSprite0_Left_Ents[16] = {
+  static const struct IntroSpriteEnt kIntroSprite0_Left_Ents[16] = {
     { 0,  0, 0x80, 0x1b, 2},
     {16,  0, 0x82, 0x1b, 2},
     {32,  0, 0x84, 0x1b, 2},
@@ -782,7 +782,7 @@ void AnimateSceneSprite_DrawTriangle(int k) {  // 8cc70f
     {32, 48, 0xac, 0x1b, 2},
     {48, 48, 0xae, 0x1b, 2},
   };
-  static const IntroSpriteEnt kIntroSprite0_Right_Ents[16] = {
+  static const struct IntroSpriteEnt kIntroSprite0_Right_Ents[16] = {
     {48,  0, 0x80, 0x5b, 2},
     {32,  0, 0x82, 0x5b, 2},
     {16,  0, 0x84, 0x5b, 2},
@@ -804,7 +804,7 @@ void AnimateSceneSprite_DrawTriangle(int k) {  // 8cc70f
 }
 
 void Intro_CopySpriteType4ToOam(int k) {  // 8cc82f
-  static const IntroSpriteEnt kIntroTriforceOam_Left[16] = {
+  static const struct IntroSpriteEnt kIntroTriforceOam_Left[16] = {
     { 0,  0, 0x80, 0x2b, 2},
     {16,  0, 0x82, 0x2b, 2},
     {32,  0, 0x84, 0x2b, 2},
@@ -822,7 +822,7 @@ void Intro_CopySpriteType4ToOam(int k) {  // 8cc82f
     {32, 48, 0xac, 0x2b, 2},
     {48, 48, 0xae, 0x2b, 2},
   };
-  static const IntroSpriteEnt kIntroTriforceOam_Right[16] = {
+  static const struct IntroSpriteEnt kIntroTriforceOam_Right[16] = {
     {48,  0, 0x80, 0x6b, 2},
     {32,  0, 0x82, 0x6b, 2},
     {16,  0, 0x84, 0x6b, 2},
@@ -856,7 +856,7 @@ void InitializeSceneSprite_Copyright(int k) {  // 8cc850
 }
 
 void AnimateSceneSprite_Copyright(int k) {  // 8cc864
-  static const IntroSpriteEnt kIntroSprite2_Ents[13] = {
+  static const struct IntroSpriteEnt kIntroSprite2_Ents[13] = {
     { 0, 0, 0x40, 0x0a, 0},
     { 8, 0, 0x41, 0x0a, 0},
     {16, 0, 0x42, 0x0a, 0},
@@ -884,7 +884,7 @@ void InitializeSceneSprite_Sparkle(int k) {  // 8cc8e2
 }
 
 void AnimateSceneSprite_Sparkle(int k) {  // 8cc90d
-  static const IntroSpriteEnt kIntroSprite3_Ents[4] = {
+  static const struct IntroSpriteEnt kIntroSprite3_Ents[4] = {
     { 0,  0, 0x80, 0x34, 0},
     { 0,  0, 0xb7, 0x34, 0},
     {-4, -3, 0x64, 0x38, 2},
@@ -899,10 +899,10 @@ void AnimateSceneSprite_Sparkle(int k) {  // 8cc90d
   intro_y_lo[k] = kIntroSprite3_Y[j];
 }
 
-void AnimateSceneSprite_AddObjectsToOamBuffer(int k, const IntroSpriteEnt *src, int num) {  // 8cc972
+void AnimateSceneSprite_AddObjectsToOamBuffer(int k, const struct IntroSpriteEnt *src, int num) {  // 8cc972
   uint16 x = intro_x_hi[k] << 8 | intro_x_lo[k];
   uint16 y = intro_y_hi[k] << 8 | intro_y_lo[k];
-  OamEnt *oam = (OamEnt *)&g_ram[intro_sprite_alloc];
+  struct OamEnt *oam = (struct OamEnt *)&g_ram[intro_sprite_alloc];
   intro_sprite_alloc += num * 4;
   do {
     uint16 xcur = x + src->x;
@@ -1119,7 +1119,7 @@ void AnimateSceneSprite_CreditsTriangle(int k) {  // 8ccd3e
 void Intro_DisplayLogo() {  // 8ced82
   static const uint8 kIntroLogo_X[4] = { 0x60, 0x70, 0x80, 0x88 };
   static const uint8 kIntroLogo_Tile[4] = { 0x69, 0x6b, 0x6d, 0x6e };
-  OamEnt *oam = oam_buf;
+  struct OamEnt *oam = oam_buf;
   for (int i = 0; i < 4; i++) {
     oam[i].x = kIntroLogo_X[i];
     oam[i].y = 0x68;
@@ -1149,7 +1149,7 @@ void Intro_PeriodicSwordAndIntroFlash() {  // 8cfe56
     }
     intro_times_pal_flash--;
   }
-  OamEnt *oam = oam_buf + 0x52;
+  struct OamEnt *oam = oam_buf + 0x52;
   for (int j = 9; j >= 0; j--) {
     static const uint8 kIntroSword_Char[10] = { 0, 2, 0x20, 0x22, 4, 6, 8, 0xa, 0xc, 0xe };
     static const uint8 kIntroSword_X[10] = { 0x40, 0x40, 0x30, 0x50, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40 };
@@ -1912,7 +1912,7 @@ void Credits_SpriteDraw_PreexistingSpriteDraw(int k, uint8 a) {  // 8ea6b3
 }
 
 void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
-  static const DrawMultipleData kEndSequence_Dmd0[12] = {
+  static const struct DrawMultipleData kEndSequence_Dmd0[12] = {
     { 0, -8, 0x072a, 2},
     { 0, -8, 0x072a, 2},
     { 0,  0, 0x4fca, 2},
@@ -1926,7 +1926,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0, -8, 0x072a, 2},
     { 0,  0, 0x4fca, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd1[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd1[6] = {
     {14,  -7, 0x0d48, 2},
     { 0,  -6, 0x0944, 2},
     { 0,   0, 0x094e, 2},
@@ -1934,7 +1934,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0,  -8, 0x0944, 2},
     { 0,   0, 0x0946, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd2[16] = {
+  static const struct DrawMultipleData kEndSequence_Dmd2[16] = {
     {-2, -16, 0x3d78, 0},
     { 0, -24, 0x3d24, 2},
     { 0, -16, 0x3dc2, 2},
@@ -1952,7 +1952,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0,  -6, 0x326c, 2},
     {64,  -6, 0x326c, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd3[12] = {
+  static const struct DrawMultipleData kEndSequence_Dmd3[12] = {
     { 0,  0, 0x0022, 2},
     {48,  0, 0x0064, 2},
     { 0, 10, 0x016c, 2},
@@ -1966,7 +1966,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0, 10, 0x016c, 2},
     {48, 10, 0x016c, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd4[8] = {
+  static const struct DrawMultipleData kEndSequence_Dmd4[8] = {
     {10,   8, 0x8a32, 0},
     {10,  16, 0x8a22, 0},
     { 0, -10, 0x0800, 2},
@@ -1976,7 +1976,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {0, -10, 0x082a, 2},
     {0,   0, 0x0828, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd5[10] = {
+  static const struct DrawMultipleData kEndSequence_Dmd5[10] = {
     {10,  16, 0x8a05, 0},
     {10,   8, 0x8a15, 0},
     {-4,   2, 0x0a07, 2},
@@ -1988,12 +1988,12 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0,  -7, 0x0e00, 2},
     { 0,   1, 0x0e02, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd6[3] = {
+  static const struct DrawMultipleData kEndSequence_Dmd6[3] = {
     {-6, -2, 0x0706, 2},
     { 0, -9, 0x090e, 2},
     { 0, -1, 0x0908, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd7[10] = {
+  static const struct DrawMultipleData kEndSequence_Dmd7[10] = {
     {0, -10, 0x082a, 2},
     {0,   0, 0x0828, 2},
     {10,  16, 0x8a05, 0},
@@ -2005,22 +2005,22 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {10, -12, 0x0a15, 0},
     {-7,   1, 0x4a07, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd8[1] = {
+  static const struct DrawMultipleData kEndSequence_Dmd8[1] = {
     {0, -19, 0x39af, 0},
   };
-  static const DrawMultipleData kEndSequence_Dmd9[4] = {
+  static const struct DrawMultipleData kEndSequence_Dmd9[4] = {
     {-16, -24, 0x3704, 2},
     {-16, -16, 0x3764, 2},
     {-16, -24, 0x3762, 2},
     {-16, -16, 0x3764, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd10[4] = {
+  static const struct DrawMultipleData kEndSequence_Dmd10[4] = {
     {0, 0, 0x0c0c, 2},
     {0, 0, 0x0c0a, 2},
     {0, 0, 0x0cc5, 2},
     {0, 0, 0x0ce1, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd11[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd11[6] = {
     {1,  4, 0x002a, 0},
     {1, 12, 0x003a, 0},
     {4,  0, 0x0026, 2},
@@ -2028,7 +2028,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {8,  9, 0x4024, 2},
     {4, 20, 0x016c, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd12[21] = {
+  static const struct DrawMultipleData kEndSequence_Dmd12[21] = {
     { 0, -7, 0x0d00, 2},
     { 0, -7, 0x0d00, 2},
     { 0,  0, 0x0d06, 2},
@@ -2051,7 +2051,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0, -8, 0x0d02, 2},
     { 0,  0, 0x0d2c, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd13[16] = {
+  static const struct DrawMultipleData kEndSequence_Dmd13[16] = {
     {0, -7, 0x0e00, 2},
     {0,  1, 0x4e02, 2},
     {0, -8, 0x0e00, 2},
@@ -2069,7 +2069,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {0, -7, 0x0e00, 2},
     {0,  1, 0x4e02, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd14[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd14[6] = {
     {0, 0, 0, 0},
     {0, 0, 0x34c7, 0},
     {0, 0, 0x3480, 0},
@@ -2077,7 +2077,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {0, 0, 0x34b7, 0},
     {0, 0, 0x34a6, 0},
   };
-  static const DrawMultipleData kEndSequence_Dmd15[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd15[6] = {
     {-3, 17, 0x002b, 0},
     {-3, 25, 0x003b, 0},
     { 0,  0, 0x000e, 2},
@@ -2085,20 +2085,20 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0, 16, 0x002e, 2},
     {16, 16, 0x402e, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd16[3] = {
+  static const struct DrawMultipleData kEndSequence_Dmd16[3] = {
     { 8,  5, 0x0a04, 2},
     { 0, 16, 0x0806, 2},
     {16, 16, 0x4806, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd17[2] = {
+  static const struct DrawMultipleData kEndSequence_Dmd17[2] = {
     {0,  0, 0x0000, 2},
     {0, 11, 0x0002, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd18[2] = {
+  static const struct DrawMultipleData kEndSequence_Dmd18[2] = {
     {0,  0, 0x000e, 2},
     {0, 64, 0x006c, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd19[8] = {
+  static const struct DrawMultipleData kEndSequence_Dmd19[8] = {
     {0, 0, 0x0882, 2},
     {0, 7, 0x0a4e, 2},
     {0, 0, 0x4880, 2},
@@ -2108,7 +2108,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {0, 0, 0x0880, 2},
     {0, 7, 0x0a4e, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd20[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd20[6] = {
     {-4,  1, 0x0c68, 0},
     { 0, -8, 0x0c40, 2},
     { 0,  1, 0x0c42, 2},
@@ -2116,7 +2116,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0, -8, 0x0c40, 2},
     { 0,  1, 0x0c42, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd21[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd21[6] = {
     {8,   5, 0x0679, 0},
     {0, -10, 0x088e, 2},
     {0,   0, 0x066e, 2},
@@ -2124,7 +2124,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {0, -10, 0x088e, 2},
     {0,   0, 0x066e, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd22[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd22[6] = {
     {11,  -3, 0x0869, 0},
     { 0, -12, 0x0804, 2},
     { 0,   0, 0x0860, 2},
@@ -2132,7 +2132,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0, -12, 0x0804, 2},
     { 0,   0, 0x0860, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd23[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd23[6] = {
     {-2,  1, 0x0868, 0},
     { 0, -8, 0x08c0, 2},
     { 0,  0, 0x08c2, 2},
@@ -2140,19 +2140,19 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     { 0, -8, 0x08c0, 2},
     { 0,  0, 0x08c2, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd24[4] = {
+  static const struct DrawMultipleData kEndSequence_Dmd24[4] = {
     {0, -10, 0x084c, 2},
     {0,   0, 0x0a6c, 2},
     {0,  -9, 0x084c, 2},
     {0,   0, 0x0aa8, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd25[4] = {
+  static const struct DrawMultipleData kEndSequence_Dmd25[4] = {
     {0, -7, 0x084a, 2},
     {0,  0, 0x0c6a, 2},
     {0, -7, 0x084a, 2},
     {0,  0, 0x0ca6, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd26[12] = {
+  static const struct DrawMultipleData kEndSequence_Dmd26[12] = {
     {-18, -24, 0x39a4, 2},
     {-16, -16, 0x39a8, 2},
     {-18, -24, 0x39a4, 2},
@@ -2166,7 +2166,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {-16, -24, 0x39a0, 2},
     {-16, -16, 0x39aa, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd27[6] = {
+  static const struct DrawMultipleData kEndSequence_Dmd27[6] = {
     { 0,  -4, 0x30aa, 2},
     { 0,  -4, 0x30aa, 2},
     {-4,  -8, 0x3090, 0},
@@ -2174,7 +2174,7 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {-6, -10, 0x3091, 0},
     {14, -10, 0x7091, 0},
   };
-  static const DrawMultipleData kEndSequence_Dmd28[8] = {
+  static const struct DrawMultipleData kEndSequence_Dmd28[8] = {
     {0,  0, 0x0722, 2},
     {0, -8, 0x09c2, 2},
     {0,  0, 0x4722, 2},
@@ -2184,18 +2184,18 @@ void Credits_SpriteDraw_Single(int k, uint8 a, uint8 j) {  // 8ea703
     {0, -9, 0x0924, 2},
     {0,  0, 0x0722, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd29[3] = {
+  static const struct DrawMultipleData kEndSequence_Dmd29[3] = {
     {-16, -12, 0x3f08, 2},
     {  0, -12, 0x3f20, 2},
     { 16, -12, 0x3f20, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd30[1] = {
+  static const struct DrawMultipleData kEndSequence_Dmd30[1] = {
     {0, 0, 0x0086, 2},
   };
-  static const DrawMultipleData kEndSequence_Dmd31[1] = {
+  static const struct DrawMultipleData kEndSequence_Dmd31[1] = {
     {0, 0, 0x8060, 2},
   };
-  static const DrawMultipleData *const kEndSequence_Dmds[] = {
+  static const struct DrawMultipleData *const kEndSequence_Dmds[] = {
     kEndSequence_Dmd0, kEndSequence_Dmd1, kEndSequence_Dmd2, kEndSequence_Dmd3,
     kEndSequence_Dmd4, kEndSequence_Dmd5, kEndSequence_Dmd6, kEndSequence_Dmd7,
     kEndSequence_Dmd8, kEndSequence_Dmd9, kEndSequence_Dmd10, kEndSequence_Dmd11,
@@ -2289,7 +2289,11 @@ void Credits_HandleCameraScrollControl() {  // 8eaea6
       *which -= 0x10;
       overworld_screen_trans_dir_bits2 |= sign8(yvel) ? 8 : 4;
     }
-    (sign8(yvel) ? overworld_unk1_neg : overworld_unk1) = -*which;
+    if (sign8(yvel)) {
+      overworld_unk1_neg = -*which;
+    } else {
+      overworld_unk1 = -*which;
+    }
     uint16 r4 = (int8)yvel, subp;
     WORD(byte_7E069E[0]) = r4;
     uint8 oi = BYTE(overlay_index);
@@ -2321,7 +2325,11 @@ void Credits_HandleCameraScrollControl() {  // 8eaea6
       *which -= 0x10;
       overworld_screen_trans_dir_bits2 |= sign8(xvel) ? 2 : 1;
     }
-    (sign8(xvel) ? overworld_unk3_neg : overworld_unk3) = -*which;
+    if (sign8(xvel)) {
+      overworld_unk3_neg = -*which;
+    } else {
+      overworld_unk3 = -*which;
+    }
 
     uint16 r4 = (int8)xvel, subp;
     WORD(byte_7E069E[1]) = r4;
@@ -2582,7 +2590,7 @@ void Credits_FadeInTheEnd() {  // 8ec3d5
 }
 
 void Credits_HangForever() {  // 8ec41a
-  static const OamEntSigned kEndSequence37_Oams[4] = {
+  static const struct OamEntSigned kEndSequence37_Oams[4] = {
     {-96, -72, 0x00, 0x3b},
     {-80, -72, 0x02, 0x3b},
     {-64, -72, 0x04, 0x3b},

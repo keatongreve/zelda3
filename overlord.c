@@ -69,7 +69,7 @@ void Overlord_SpawnBoulder() {  // 89b714
   if (sign8((BG2VOFS_copy2 >> 8) - (sprcoll_y_base >> 8) - 2))
     return;
 
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(0, 0xc2, &info);
   if (j >= 0) {
     Sprite_SetX(j, BG2HOFS_copy2 + (GetRandomNumber() & 127) + 64);
@@ -179,7 +179,7 @@ void Overlord18_InvisibleStalfos(int k) {  // 89b7f5
   overlord_type[k] = 0;
   tmp_counter = 3;
   do {
-    SpriteSpawnInfo info;
+    struct SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamicallyEx(k, 0xa7, &info, 12);
     if (j < 0)
       return;
@@ -212,7 +212,7 @@ void Overlord16_ZoroSpawner(int k) {  // 89b8d1
     return;
   if (overlord_gen2[k] >= 0x18 || (overlord_gen2[k] & 3) != 0)
     return;
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x9c, &info, 12);
   if (j >= 0) {
     Sprite_SetX(j, info.r5_overlord_x + kOverlordZoroFactory_X[GetRandomNumber() & 7] + 8);
@@ -242,7 +242,7 @@ void Overlord15_WizzrobeSpawner(int k) {  // 89b986
   }
   overlord_gen2[k] = 127;
   for (int i = 3; i >= 0; i--) {
-    SpriteSpawnInfo info;
+    struct SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamicallyEx(k, 0x9b, &info, 12);
     if (j >= 0) {
       Sprite_SetX(j, link_x_coord + kOverlordWizzrobe_X[i]);
@@ -282,7 +282,7 @@ int TileRoom_SpawnTile(int k) {  // 89ba56
     0x80, 0x80, 0x70, 0x90, 0x70, 0x90, 0x60, 0xa0, 0x60, 0xa0, 0x60, 0xb0, 0x60, 0xb0, 0x80, 0x90,
     0x80, 0x90, 0x70, 0x90, 0x70, 0x90,
   };
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x94, &info);
   if (j < 0)
     return j;
@@ -319,7 +319,7 @@ void Overlord10_PirogusuSpawner_left(int k) {  // 89baac
   }
   if (n >= 5)
     return;
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x94, &info, 12);
   if (j >= 0) {
     Sprite_SetX(j, info.r5_overlord_x);
@@ -397,7 +397,7 @@ void Overlord09_WallmasterSpawner(int k) {  // 89bc7b
     return;
   }
   overlord_gen2[k] = 127;
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x90, &info, 12);
   if (j < 0)
     return;
@@ -422,7 +422,7 @@ void Overlord08_BlobSpawner(int k) {  // 89bcc3
   if (n >= 5)
     return;
 
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x8f, &info, 12);
   if (j >= 0) {
     static const int8 kOverlordZol_X[4] = { 0, 0, -48, 48 };
@@ -478,7 +478,7 @@ void Overlord05_FallingStalfos(int k) {  // 89be0f
   }
   if (overlord_gen1[k]++ == kStalfosTrap_Trigger[k]) {
     overlord_type[k] = 0;
-    SpriteSpawnInfo info;
+    struct SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamicallyEx(k, 0x85, &info, 12);
     if (j < 0)
       return;
@@ -505,7 +505,7 @@ void Overlord06_BadSwitchSnake(int k) {  // 89be75
   if (a != kSnakeTrapOverlord_Tab1[k])
     return;
 
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x6e, &info);
   if (j < 0)
     return;
@@ -573,7 +573,7 @@ void Overlord03_VerticalCannon(int k) {  // 89bf5b
 void Overlord_SpawnCannonBall(int k, int xd) {  // 89bfaf
   static const int8 kOverlordSpawnBall_Xvel[4] = { 24, -24, 0, 0 };
   static const int8 kOverlordSpawnBall_Yvel[4] = { 0, 0, 24, -24 };
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x50, &info);
   if (j < 0)
     return;

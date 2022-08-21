@@ -34,7 +34,7 @@ struct Apu {
   Timer timer[3];
   uint8_t cpuCyclesLeft;
   union {
-    DspRegWriteHistory hist;
+    struct DspRegWriteHistory hist;
     void *padpad;
   };
 };

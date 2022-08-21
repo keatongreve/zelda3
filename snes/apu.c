@@ -157,7 +157,7 @@ void apu_cpuWrite(Apu* apu, uint16_t adr, uint8_t val) {
       int i = apu->hist.count;
       if (i != 256) {
         apu->hist.count = i + 1;
-        apu->hist.addr[i] = (DspReg)apu->dspAdr;
+        apu->hist.addr[i] = (enum DspReg)apu->dspAdr;
         apu->hist.val[i] = val;
       }
       if(apu->dspAdr < 0x80) dsp_write(apu->dsp, apu->dspAdr, val);

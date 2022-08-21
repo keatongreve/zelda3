@@ -50,8 +50,8 @@ struct RoomBounds {
   };
 };
 
-#define room_bounds_y (*(RoomBounds*)(g_ram+0x600))
-#define room_bounds_x (*(RoomBounds*)(g_ram+0x608))
+#define room_bounds_y (*(struct RoomBounds*)(g_ram+0x600))
+#define room_bounds_x (*(struct RoomBounds*)(g_ram+0x608))
 
 extern const uint8 kDungAnimatedTiles[24];
 uint16 *DstoPtr(uint16 d);
@@ -65,10 +65,10 @@ void Object_DrawNx3_BothBgs(int n, const uint16 *src, int dsto);
 void LoadType1ObjectSubtype2(uint8 idx, uint16 *dst, uint16 dsto);
 void Object_BombableFloorHelper(uint16 a, const uint16 *src, const uint16 *src_below, uint16 *dst, uint16 dsto);
 void LoadType1ObjectSubtype3(uint8 idx, uint16 *dst, uint16 dsto);
-void RoomBounds_AddA(RoomBounds *r);
-void RoomBounds_AddB(RoomBounds *r);
-void RoomBounds_SubB(RoomBounds *r);
-void RoomBounds_SubA(RoomBounds *r);
+void RoomBounds_AddA(struct RoomBounds *r);
+void RoomBounds_AddB(struct RoomBounds *r);
+void RoomBounds_SubB(struct RoomBounds *r);
+void RoomBounds_SubA(struct RoomBounds *r);
 void Dungeon_StartInterRoomTrans_Left();
 void Dung_StartInterRoomTrans_Left_Plus();
 void Dungeon_StartInterRoomTrans_Up();
@@ -90,7 +90,7 @@ void Sprite_HandlePushedBlocks_One(int i);
 void Object_Draw_DoorLeft_3x4(uint16 src, int door);
 void Object_Draw_DoorRight_3x4(uint16 src, int door);
 void Dungeon_OpeningLockedDoor_Combined(bool skip_anim);
-const DungPalInfo *GetDungPalInfo(int idx);
+const struct DungPalInfo *GetDungPalInfo(int idx);
 uint16 Dungeon_GetTeleMsg(int room);
 uint8 GetEntranceMusicTrack(int entrance);
 bool Dungeon_IsPitThatHurtsPlayer();
@@ -252,10 +252,10 @@ uint16 Dungeon_CheckForAndIDLiftableTile();
 void Dungeon_PushBlock_Handler();
 void RoomDraw_16x16Single(uint8 index);
 void PushBlock_CheckForPit(uint8 y);
-uint8 Dungeon_LiftAndReplaceLiftable(Point16U *pt);
-uint8 ThievesAttic_DrawLightenedHole(uint16 pos6, uint16 a, Point16U *pt);
+uint8 Dungeon_LiftAndReplaceLiftable(struct Point16U *pt);
+uint8 ThievesAttic_DrawLightenedHole(uint16 pos6, uint16 a, struct Point16U *pt);
 uint8 HandleItemTileAction_Dungeon(uint16 x, uint16 y);
-void ManipBlock_Something(Point16U *pt);
+void ManipBlock_Something(struct Point16U *pt);
 void RevealPotItem(uint16 pos6, uint16 pos4);
 void Dungeon_UpdateTileMapWithCommonTile(int x, int y, uint8 v);
 void Dungeon_PrepSpriteInducedDma(int x, int y, uint8 v);

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ZELDA_RTL
+#define ZELDA_RTL
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +11,6 @@
 #include "types.h"
 #include "snes_regs.h"
 
-
 struct ZeldaEnv {
   uint8 *ram;
   uint8 *sram;
@@ -18,27 +19,18 @@ struct ZeldaEnv {
   struct SpcPlayer *player;
   struct Dma *dma;
 };
-extern ZeldaEnv g_zenv;
+extern struct ZeldaEnv g_zenv;
 // it's here so that the variables.h can access it
 extern uint8 g_ram[131072];
+extern const uint16 kUpperBitmasks[];
+extern const uint8 kLitTorchesColorPlus[];
+extern const uint8 kDungeonCrystalPendantBit[];
+extern const int8 kGetBestActionToPerformOnTile_x[];
+extern const int8 kGetBestActionToPerformOnTile_y[];
 
 
 
 static inline void zelda_snes_dummy_write(uint32_t adr, uint8_t val) {}
-
-
-
-
-
-
-
-
-
-const uint16 kUpperBitmasks[] = { 0x8000, 0x4000, 0x2000, 0x1000, 0x800, 0x400, 0x200, 0x100, 0x80, 0x40, 0x20, 0x10, 8, 4, 2, 1 };
-const uint8 kLitTorchesColorPlus[] = {31, 8, 4, 0};
-const uint8 kDungeonCrystalPendantBit[13] = {0, 0, 4, 2, 0, 16, 2, 1, 64, 4, 1, 32, 8};
-const int8 kGetBestActionToPerformOnTile_x[4] = { 7, 7, -3, 16 };
-const int8 kGetBestActionToPerformOnTile_y[4] = { 6, 24, 12, 12 };
 
 struct MovableBlockData {
   uint16 room;
@@ -52,8 +44,8 @@ struct OamEntSigned {
 
 
 
-#define movable_block_datas ((MovableBlockData*)(g_ram+0xf940))
-#define oam_buf ((OamEnt*)(g_ram+0x800))
+#define movable_block_datas ((struct MovableBlockData*)(g_ram+0xf940))
+#define oam_buf ((struct OamEnt*)(g_ram+0x800))
 
 
 
@@ -62,10 +54,10 @@ struct OwScrollVars {
   uint16 ystart, yend, xstart, xend;
 };
 
-#define ow_scroll_vars0 (*(OwScrollVars*)(g_ram+0x600))
-#define ow_scroll_vars1 (*(OwScrollVars*)(g_ram+0x608))
+#define ow_scroll_vars0 (*(struct OwScrollVars*)(g_ram+0x600))
+#define ow_scroll_vars1 (*(struct OwScrollVars*)(g_ram+0x608))
 
-#define ow_scroll_vars0_exit (*(OwScrollVars*)(g_ram+0xC154))
+#define ow_scroll_vars0_exit (*(struct OwScrollVars*)(g_ram+0xC154))
 
 
 
@@ -151,11 +143,11 @@ struct MirrorHdmaVars {
 
 
 #define turn_on_off_water_ctr (*(uint8*)(g_ram+0x424))
-#define mirror_vars (*(MirrorHdmaVars*)(g_ram+0x6A0))
+#define mirror_vars (*(struct MirrorHdmaVars*)(g_ram+0x6A0))
 #define sprite_N_word ((uint16*)(g_ram+0xBC0))
 #define sprite_where_in_overworld ((uint8*)(g_ram+0x1DF80))
 #define alt_sprite_B ((uint8*)(g_ram+0x1FA5C))
-#define uvram_screen (*(UploadVram_32x32*)&g_ram[0x1000])
+#define uvram_screen (*(struct UploadVram_32x32*)&g_ram[0x1000])
 #define vram_upload_offset (*(uint16*)(g_ram+0x1000))
 #define vram_upload_data ((uint16*)(g_ram+0x1002))
 #define vram_upload_tile_buf ((uint16*)(g_ram+0x1100))
@@ -195,3 +187,5 @@ void ZeldaRunFrame(uint16 input);
 void ClearOamBuffer();
 void Startup_InitializeMemory();
 void LoadSongBank(const uint8 *p);
+
+#endif

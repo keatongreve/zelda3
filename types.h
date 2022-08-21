@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #pragma once
 
 typedef uint8_t uint8;
@@ -58,7 +59,7 @@ struct UploadVram_Row {
 };
 
 struct UploadVram_32x32 {
-  UploadVram_Row row[32];
+  struct UploadVram_Row row[32];
 };
 
 struct UploadVram_3 {
@@ -66,11 +67,7 @@ struct UploadVram_3 {
   uint16 data[4];
 };
 
-union UploadVram {
-  UploadVram_3 t3;
-};
-
-#define uvram (*(UploadVram*)(&g_ram[0x1000]))
+#define uvram (*(struct UploadVram_3*)(&g_ram[0x1000]))
 
 typedef void PlayerHandlerFunc();
 typedef void HandlerFuncK(int k);

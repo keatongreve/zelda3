@@ -12,8 +12,8 @@
 
 
 
-static inline OamEnt *GetOamCurPtr() {
-  return (OamEnt *)&g_ram[oam_cur_ptr];
+static inline struct OamEnt *GetOamCurPtr() {
+  return (struct OamEnt *)&g_ram[oam_cur_ptr];
 }
 
 static inline int FindInByteArray(const uint8 *data, uint8 lookfor, size_t size) {

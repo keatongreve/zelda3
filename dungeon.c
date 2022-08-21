@@ -126,7 +126,7 @@ static const uint16 kDungeon_QueryIfTileLiftable_rv[16] = { 0x5252, 0x5050, 0x54
 static const uint16 kDoor_BlastWallUp_Dsts[] = { 0xd8a, 0xdaa, 0xdca, 0x2b6, 0xab6, 0x12b6 };
 #define adjacent_doors_flags (*(uint16*)(g_ram+0x1100))
 #define adjacent_doors ((uint16*)(g_ram+0x1110))
-static const DungPalInfo kDungPalinfos[41] = {
+static const struct DungPalInfo kDungPalinfos[41] = {
   { 0,  0,  3,  1},
   { 2,  0,  3,  1},
   { 4,  0, 10,  1},
@@ -2030,22 +2030,22 @@ door28:
   }
 }
 
-void RoomBounds_AddA(RoomBounds *r) {
+void RoomBounds_AddA(struct RoomBounds *r) {
   r->a0 += 0x100;
   r->a1 += 0x100;
 }
 
-void RoomBounds_AddB(RoomBounds *r) {
+void RoomBounds_AddB(struct RoomBounds *r) {
   r->b0 += 0x200;
   r->b1 += 0x200;
 }
 
-void RoomBounds_SubB(RoomBounds *r) {
+void RoomBounds_SubB(struct RoomBounds *r) {
   r->b0 -= 0x200;
   r->b1 -= 0x200;
 }
 
-void RoomBounds_SubA(RoomBounds *r) {
+void RoomBounds_SubA(struct RoomBounds *r) {
   r->a0 -= 0x100;
   r->a1 -= 0x100;
 }
@@ -2331,7 +2331,7 @@ void Object_Draw_DoorRight_3x4(uint16 src, int door) {
 
 void Dungeon_OpeningLockedDoor_Combined(bool skip_anim) {
   uint8 ctr = 2;
-  int k, dma_ptr;
+  int m, k, dma_ptr;
 
   if (skip_anim) {
     door_animation_step_indicator = 16;
@@ -2343,7 +2343,7 @@ void Dungeon_OpeningLockedDoor_Combined(bool skip_anim) {
     if (door_animation_step_indicator != 12)
       goto middle;
 step12:
-    int m = kUpperBitmasks[dung_bg2_attr_table[dung_cur_door_pos] & 7];
+    m = kUpperBitmasks[dung_bg2_attr_table[dung_cur_door_pos] & 7];
     dung_door_opened_incl_adjacent |= m;
     dung_door_opened |= m;
     ctr = 4;
@@ -2369,7 +2369,7 @@ middle:
   }
 }
 
-const DungPalInfo *GetDungPalInfo(int idx) {
+const struct DungPalInfo *GetDungPalInfo(int idx) {
   return &kDungPalinfos[idx];
 }
 
@@ -2395,7 +2395,7 @@ void Dungeon_PrepareNextRoomQuadrantUpload() {  // 80913f
   uint16 *src = &dung_bg2[kUploadBgSrcs[ofs] / 2];
   int p = 0;
   do {
-    UploadVram_32x32 *d = (UploadVram_32x32 *)&g_ram[0x1000 + p * 2];
+    struct UploadVram_32x32 *d = (struct UploadVram_32x32 *)&g_ram[0x1000 + p * 2];
     do {
       d->row[0].col[0] = src[XY(0, 0)];
       d->row[0].col[1] = src[XY(1, 0)];
@@ -2405,7 +2405,7 @@ void Dungeon_PrepareNextRoomQuadrantUpload() {  // 80913f
       d->row[2].col[1] = src[XY(1, 2)];
       d->row[3].col[0] = src[XY(0, 3)];
       d->row[3].col[1] = src[XY(1, 3)];
-      d = (UploadVram_32x32 *)((uint16 *)d + 2);
+      d = (struct UploadVram_32x32 *)((uint16 *)d + 2);
       src += 2, p += 2;
     } while (p & 0x1f);
     src += 224;
@@ -2429,7 +2429,7 @@ void TileMapPrep_NotWaterOnTag() {  // 8091d3
   uint16 *src = &dung_bg1[kUploadBgSrcs[ofs] / 2];
   int p = 0;
   do {
-    UploadVram_32x32 *d = (UploadVram_32x32 *)&g_ram[0x1000 + p * 2];
+    struct UploadVram_32x32 *d = (struct UploadVram_32x32 *)&g_ram[0x1000 + p * 2];
     do {
       d->row[0].col[0] = src[XY(0, 0)];
       d->row[0].col[1] = src[XY(1, 0)];
@@ -2439,7 +2439,7 @@ void TileMapPrep_NotWaterOnTag() {  // 8091d3
       d->row[2].col[1] = src[XY(1, 2)];
       d->row[3].col[0] = src[XY(0, 3)];
       d->row[3].col[1] = src[XY(1, 3)];
-      d = (UploadVram_32x32 *)((uint16 *)d + 2);
+      d = (struct UploadVram_32x32 *)((uint16 *)d + 2);
       src += 2, p += 2;
     } while (p & 0x1f);
     src += 224;
@@ -2631,7 +2631,7 @@ void Dungeon_LoadRoom() {  // 81873a
   RoomDraw_DrawAllObjects(cur_p0);  // Draw Layer 3 objects to BG2
 
   for (dung_load_ptr_offs = 0; dung_load_ptr_offs != 0x18C; dung_load_ptr_offs += 4) {
-    MovableBlockData &m = movable_block_datas[dung_load_ptr_offs >> 2];
+    struct MovableBlockData m = movable_block_datas[dung_load_ptr_offs >> 2];
     if (m.room == dungeon_room_index)
       DrawObjects_PushableBlock(m.tilemap, dung_load_ptr_offs);
   }
@@ -3697,7 +3697,7 @@ void Dungeon_LoadHeader() {  // 81b564
   dung_hdr_collision = (hdr_ptr[0] >> 2) & 7;
   dung_want_lights_out_copy = dung_want_lights_out;
   dung_want_lights_out = hdr_ptr[0] & 1;
-  const DungPalInfo *dpi = &kDungPalinfos[hdr_ptr[1]];
+  const struct DungPalInfo *dpi = &kDungPalinfos[hdr_ptr[1]];
   dung_hdr_palette_1 = dpi->pal0;
   overworld_palette_sp0 = dpi->pal1;
   sprite_aux1_palette = dpi->pal2;
@@ -5167,15 +5167,16 @@ void Bomb_CheckForDestructibles(uint16 x, uint16 y, uint8 r14) {  // 81d1f4
 handle_62:
       if (dungeon_room_index == 0x65)
         dung_savegame_state_bits |= 0x1000;
-      Point16U pt;
+      struct Point16U pt;
       printf("Wtf is R6\n");
       ThievesAttic_DrawLightenedHole(0, 0, &pt);
       sound_effect_2 = 0x1b;
       return;
     }
     if ((a & 0xf0) == 0xf0) {
+      int j;
 handle_f0:
-      int j = a & 0xf;
+      j = a & 0xf;
       a = door_type_and_slot[j] & 0xfe;
       if (a != kDoorType_BreakableWall && a != 0x2A && a != 0x2E)
         return;
@@ -5500,7 +5501,7 @@ void PushBlock_CheckForPit(uint8 y) {  // 81d8d4
   Dungeon_Store2x2(p, 0x922, 0x932, 0x923, 0x933, 0x27);
 }
 
-uint8 Dungeon_LiftAndReplaceLiftable(Point16U *pt) {  // 81d9ec
+uint8 Dungeon_LiftAndReplaceLiftable(struct Point16U *pt) {  // 81d9ec
   uint16 x = link_x_coord + kDungeon_QueryIfTileLiftable_x[link_direction_facing >> 1];
   uint16 y = link_y_coord + kDungeon_QueryIfTileLiftable_y[link_direction_facing >> 1];
   pt->x = x;
@@ -5534,7 +5535,7 @@ uint8 Dungeon_LiftAndReplaceLiftable(Point16U *pt) {  // 81d9ec
   return 0;
 }
 
-uint8 ThievesAttic_DrawLightenedHole(uint16 pos6, uint16 a, Point16U *pt) {  // 81da71
+uint8 ThievesAttic_DrawLightenedHole(uint16 pos6, uint16 a, struct Point16U *pt) {  // 81da71
   dung_misc_objs_index = a;
   RevealPotItem(pos6, dung_object_tilemap_pos[a >> 1]);
   RoomDraw_16x16Single(a);
@@ -5560,7 +5561,7 @@ uint8 HandleItemTileAction_Dungeon(uint16 x, uint16 y) {  // 81dabb
       dung_misc_objs_index = (tile & 0xf) * 2;
       RevealPotItem(pos, dung_object_tilemap_pos[tile & 0xf]);
       RoomDraw_16x16Single(dung_misc_objs_index);
-      Point16U pt;
+      struct Point16U pt;
       ManipBlock_Something(&pt);
       BYTE(dung_secrets_unk1) |= 0x80;
       Sprite_SpawnImmediatelySmashedTerrain(1, pt.x, pt.y);
@@ -5570,7 +5571,7 @@ uint8 HandleItemTileAction_Dungeon(uint16 x, uint16 y) {  // 81dabb
   return 0;
 }
 
-void ManipBlock_Something(Point16U *pt) {  // 81db41
+void ManipBlock_Something(struct Point16U *pt) {  // 81db41
   uint16 pos = dung_object_tilemap_pos[dung_misc_objs_index >> 1];
   pt->x = (link_x_coord & 0xfe00) | ((pos & 0x007e) << 2);
   pt->y = (link_y_coord & 0xfe00) | ((pos & 0x1f80) >> 4);
@@ -5739,8 +5740,9 @@ uint8 OpenChestForItem(uint8 tile, int *chest_position) {  // 81eb66
           overworld_tileattr[pos + 1] = ptr[2];
           overworld_tileattr[pos + 65] = ptr[3];
 
+          uint8 attr;
 afterStoreCrap:
-          uint8 attr = (loc < 0x8000) ? 0x27 : 0x00;
+          attr = (loc < 0x8000) ? 0x27 : 0x00;
 
           dung_bg2_attr_table[pos + 0] = attr;
           dung_bg2_attr_table[pos + 64] = attr;
@@ -6131,7 +6133,7 @@ void ClearAndStripeExplodingWall(uint16 dsto) {  // 81f811
   if (!(dung_door_direction[dung_cur_door_idx >> 1] & 2))
     r6++;
 
-  uint16 *uvdata = &uvram.t3.data[0];
+  uint16 *uvdata = &uvram.data[0];
   for (;;) {
     const uint16 *bg2 = &dung_bg2[dsto];
     do {
@@ -8532,7 +8534,11 @@ void PushBlock_HandleCollision(uint8 i, uint16 x, uint16 y) {  // 87efb9
       bitmask_of_dragstate |= index_of_changable_dungeon_objs[i] ? 4 : 1;
     if (dir & 1 ? (r8 >= r10 && (uint16)(r8 - r10) < 8) : (uint16)(r8 - r10) >= 0xfff8) {
       *coord_p -= r8 - r10;
-      (dir & 2 ? link_x_vel : link_y_vel) -= r8 - r10;
+      if(dir & 2) {
+        link_x_vel -= r8 - r10;
+      } else {
+        link_y_vel -= r8 - r10;
+      }
     }
   }
   HandleIndoorCameraAndDoors();
@@ -8759,7 +8765,7 @@ void CrystalCutscene_Initialize() {  // 9ecce3
 
 void CrystalCutscene_SpawnMaiden() {  // 9ecd48
   memset(sprite_state, 0, 16);
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(0, 0xab, &info);
   sprite_x_hi[j] = link_x_coord >> 8;
   sprite_y_hi[j] = link_y_coord >> 8;

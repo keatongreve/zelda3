@@ -16,7 +16,7 @@ static const uint8 kTagalong_Tab4[15] = {0, 0, 3, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 
 static const uint8 kTagalong_Tab0[3] = {5, 9, 0xa};
 static const uint16 kTagalong_Tab1[3] = {0xdf3, 0x6f9, 0xdf3};
 static const uint16 kTagalong_Msg[3] = {0x20, 0x108, 0x11d};
-static const TagalongMessageInfo kTagalong_IndoorInfos[12] = {
+static const struct TagalongMessageInfo kTagalong_IndoorInfos[12] = {
   {0x1ef0, 0x288, 1, 0x99, 4},
   {0x1e58, 0x2f0, 2, 0x9a, 4},
   {0x1ea8, 0x3b8, 4, 0x9b, 4},
@@ -30,7 +30,7 @@ static const TagalongMessageInfo kTagalong_IndoorInfos[12] = {
   {0x1520, 0x167c, 1, 0x124, 6},
   {0x5ac, 0x4fc, 1, 0x29, 1},
 };
-static const TagalongMessageInfo kTagalong_OutdoorInfos[5] = {
+static const struct TagalongMessageInfo kTagalong_OutdoorInfos[5] = {
   {0x3c0, 0x730, 1, 0x9d, 4},
   {0x648, 0xf50, 0, 0xffff, 0xa},
   {0x6c8, 0xd78, 1, 0xffff, 0xa},
@@ -48,7 +48,7 @@ struct TagalongDmaFlags {
   uint8 dma6, dma7;
   uint8 flags;
 };
-static const TagalongSprXY kTagalongDraw_SprXY[56] = {
+static const struct TagalongSprXY kTagalongDraw_SprXY[56] = {
   {-2, 0, 0, 0},
   {-2, 0, 0, 0},
   {-2, 0, 0, 0},
@@ -106,7 +106,7 @@ static const TagalongSprXY kTagalongDraw_SprXY[56] = {
   {3, -1, 1, 0},
   {3, 1, 1, 0},
 };
-static const TagalongDmaFlags kTagalongDmaAndFlags[16] = {
+static const struct TagalongDmaFlags kTagalongDmaAndFlags[16] = {
   {0x20, 0xc0, 0x00},
   {0x00, 0xa0, 0x00},
   {0x40, 0x60, 0x00},
@@ -157,7 +157,7 @@ void Follower_MoveTowardsLink() {  // 88f91a
     ancilla_x_lo[k] = tagalong_x_lo[j];
     ancilla_x_hi[k] = tagalong_x_hi[j];
 
-    ProjectSpeedRet pt = Ancilla_ProjectSpeedTowardsPlayer(k, 24);
+    struct ProjectSpeedRet pt = Ancilla_ProjectSpeedTowardsPlayer(k, 24);
     ancilla_x_vel[k] = pt.x;
     ancilla_y_vel[k] = pt.y;
     Ancilla_MoveY(k);
@@ -393,8 +393,8 @@ void Follower_BasicMover() {  // 89a197
   }
 
   if (link_x_vel | link_y_vel) {
-label_e:
     uint8 t;
+label_e:
     t = tagalong_var1 - 15;
     if (sign8(t))
       t += 20;
@@ -522,7 +522,7 @@ void Follower_HandleTrigger() {  // 89a59e
   if (submodule_index)
     return;
 
-  const TagalongMessageInfo *tmi, *tmi_end;
+  const struct TagalongMessageInfo *tmi, *tmi_end;
   if (player_is_indoors) {
     int j = FindInWordArray(kTagalong_IndoorRooms, dungeon_room_index, 7);
     if (j < 0)
@@ -609,7 +609,7 @@ void Follower_AnimateMovement_preserved(uint8 ain, uint16 xin, uint16 yin) {  //
   oam_ext_cur_ptr = 0xa20 + spr_offs;
   oam_cur_ptr = 0x800 + spr_offs * 4;
 
-  OamEnt *oam = GetOamCurPtr();
+  struct OamEnt *oam = GetOamCurPtr();
   uint16 scrolly = yin - BG2VOFS_copy2;
   uint16 scrollx = xin - BG2HOFS_copy2;
 
@@ -643,17 +643,17 @@ incr:
     bytewise_extended_oam[oam - oam_buf] = ext;
     oam++;
   }
+  uint8 pal;
 skip_first_sprites:
-
-  uint8 pal = kTagalongDraw_Pals[savegame_tagalong];
+  pal = kTagalongDraw_Pals[savegame_tagalong];
   if (pal == 7 && overworld_palette_swap_flag)
     pal = 0;
 
   if (savegame_tagalong == 13 && super_bomb_indicator_unk2 == 1)
     pal = (frame_counter & 7);
 
-  const TagalongSprXY *sprd = kTagalongDraw_SprXY + frame + (kTagalongDraw_Offs[savegame_tagalong] >> 3);
-  const TagalongDmaFlags *sprf = kTagalongDmaAndFlags + frame;
+  const struct TagalongSprXY *sprd = kTagalongDraw_SprXY + frame + (kTagalongDraw_Offs[savegame_tagalong] >> 3);
+  const struct TagalongDmaFlags *sprf = kTagalongDmaAndFlags + frame;
 
   if (savegame_tagalong != 12 && savegame_tagalong != 13) {
     uint16 y = scrolly + sprd->y1, x = scrollx + sprd->x1, ext = 0;
@@ -676,7 +676,7 @@ skip_first_sprites:
   }
 }
 
-bool Follower_CheckForTrigger(const TagalongMessageInfo *info) {  // 89ac26
+bool Follower_CheckForTrigger(const struct TagalongMessageInfo *info) {  // 89ac26
   uint16 x = link_x_coord + 12 - (info->x + 8);
   uint16 y = link_y_coord + 12 - (info->y + 8);
   if (sign16(x))
@@ -713,7 +713,7 @@ void Kiki_RevertToSprite(int k) {  // 9ee66b
 }
 
 int Kiki_SpawnHandlerMonke(int k) {  // 9ee67a
-  SpriteSpawnInfo info;
+  struct SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xb6, &info);
   if (j >= 0) {
     sprite_head_dir[j] = tagalong_layerbits[k] & 3;
