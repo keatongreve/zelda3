@@ -52,7 +52,8 @@ int main(int argc, char** argv) {
     printf("Failed to init SDL: %s\n", SDL_GetError());
     return 1;
   }
-  SDL_Window* window = SDL_CreateWindow("Zelda3", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 512, 480, 0);
+  uint32_t win_flags = SDL_WINDOWPOS_UNDEFINED;
+  SDL_Window* window = SDL_CreateWindow("Zelda3", SDL_WINDOWPOS_UNDEFINED, win_flags, 512, 480, 0);
   if(window == NULL) {
     printf("Failed to create window: %s\n", SDL_GetError());
     return 1;
@@ -138,6 +139,8 @@ int main(int argc, char** argv) {
             case SDLK_t:
               turbo = !turbo;
               break;
+            case SDLK_F11:
+              SDL_SetWindowFullscreen(window, win_flags ^= SDL_WINDOW_FULLSCREEN);
           }
           handleInput(event.key.keysym.sym, event.key.keysym.mod, true);
           break;
