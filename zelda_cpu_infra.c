@@ -814,17 +814,11 @@ static const char *const kReferenceSaves[] = {
 
 void SaveLoadSlot(int cmd, int which) {
   char name[128];
-  if (which & 256) {
-    if (cmd == kSaveLoad_Save)
-      return;
-    sprintf(name, "saves/ref/%s", kReferenceSaves[which - 256]);
-  } else {
-    sprintf(name, "saves/save%d.sav", which);
-  }
+  sprintf(name, "saves/save%d.sav", which);
   FILE *f = fopen(name, cmd != kSaveLoad_Save ? "rb" : "wb");
   if (f) {
-    printf("*** %s slot %d\n", 
-      cmd==kSaveLoad_Save ? "Saving" : cmd==kSaveLoad_Load ? "Loading" : "Replaying", which);
+    char* mode = cmd==kSaveLoad_Save ? "Saving" : cmd==kSaveLoad_Load ? "Loading" : "Replaying";
+    printf("*** %s slot %d\n", mode, which);
 
     if (cmd != kSaveLoad_Save)
       StateRecorderLoad(f, cmd == kSaveLoad_Replay);

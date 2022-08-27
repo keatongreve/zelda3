@@ -1,0 +1,33 @@
+# SNES to Key config file
+# SDL list at https://github.com/libsdl-org/SDL/blob/main/include/SDL_keycode.h
+# Symbols need a 0x40000000 mask over they value
+
+# AZERTY example
+#A:      120 # 'x'
+#B:      119 # 'w'
+#X:      115 # 's'
+#Y:      113 # 'q'
+#Up:     0x40000052
+#Down:   0x40000051
+#Left:   0x40000050
+#Right:  0x4000004F
+#Select: 0x400000e5
+#Start:  13  # ENTER
+#L:      100 # 'd'
+#R:      99  # 'c'
+
+
+# default (same as removing this file)
+A:      120 # 'x'
+B:      122 # 'z'
+X:      115 # 's'
+Y:      97  # 'a'
+Up:     0x40000052 # UP
+Down:   0x40000051 # DOWN
+Left:   0x40000050 # LEFT
+Right:  0x4000004F # RIGHT
+Select: 0x400000e5 # RSHIFT
+Start:  13  # ENTER
+L:      100 # 'd'
+R:      99  # 'c'
+

@@ -14,24 +14,12 @@
 #include "variables.h"
 
 #include "zelda_rtl.h"
+#include "zelda_cpu_infra.h"
 
+extern struct Ppu *GetPpuForRendering();
+extern struct Dsp *GetDspForRendering();
 extern uint8 g_emulated_ram[0x20000];
 bool g_run_without_emu = false;
-
-void PatchRom(uint8_t *rom);
-void SetSnes(Snes *snes);
-void RunAudioPlayer();
-void CopyStateAfterSnapshotRestore(bool is_reset);
-void SaveLoadSlot(int cmd, int which);
-void PatchCommand(char cmd);
-bool RunOneFrame(Snes *snes, int input_state, bool turbo);
-
-static uint8_t* readFile(char* name, size_t* length);
-static bool loadRom(char* name, Snes* snes);
-static bool checkExtention(const char* name, bool forZip);
-static void playAudio(Snes *snes, SDL_AudioDeviceID device, int16_t* audioBuffer);
-static void renderScreen(SDL_Renderer* renderer, SDL_Texture* texture);
-static void handleInput(int keyCode, int modCode, bool pressed);
 
 int input1_current_state;
 
@@ -44,11 +32,132 @@ void setButtonState(int button, bool pressed) {
   }
 }
 
+int gamepad_map[] = {SDLK_z, SDLK_a, SDLK_RSHIFT, SDLK_RETURN, // B Y Sel Sta
+                     SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT,
+                     SDLK_x, SDLK_s, SDLK_d, SDLK_c}; // A X L R
+int joypad_map[] = {
+  SDL_CONTROLLER_BUTTON_A, // B
+  SDL_CONTROLLER_BUTTON_X, // Y
+  SDL_CONTROLLER_BUTTON_BACK,
+  SDL_CONTROLLER_BUTTON_START,
+  SDL_CONTROLLER_BUTTON_DPAD_UP,
+  SDL_CONTROLLER_BUTTON_DPAD_DOWN,
+  SDL_CONTROLLER_BUTTON_DPAD_LEFT,
+  SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
+  SDL_CONTROLLER_BUTTON_B, // A
+  SDL_CONTROLLER_BUTTON_Y, // X
+  SDL_CONTROLLER_BUTTON_LEFTSHOULDER,
+  SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,
+};
+
+static uint8_t* readFile(char* name, size_t* length) {
+  FILE* f = fopen(name, "rb");
+  if(f == NULL) {
+    return NULL;
+  }
+  fseek(f, 0, SEEK_END);
+  int size = ftell(f);
+  rewind(f);
+  uint8_t* buffer = (uint8_t *)malloc(size);
+  fread(buffer, size, 1, f);
+  fclose(f);
+  *length = size;
+  return buffer;
+}
+
+void parseKeyconf(char* buf) {
+  char* names[] = {
+    "\nB:", "\nY:", "\nSelect:", "\nStart:",
+    "\nUp:", "\nDown:", "\nLeft:", "\nRight:",
+    "\nA:", "\nX:", "\nL:", "\nR:", NULL
+  };
+  for (int i = 0; names[i]; i++) {
+    char* found = strstr(buf, names[i]);
+    if (!found) {
+      //printf("'%s' not found in key mapping\n");
+      continue; // keep default value
+    }
+    gamepad_map[i] = strtol(found + strlen(names[i]), NULL, 0);
+    //printf("Map %s%i\n",names[i]+1, gamepad_map[i]);
+  }
+}
+
+static bool loadRom(char* name, Snes* snes) {
+  // zip library from https://github.com/kuba--/zip
+  size_t length = 0;
+  uint8_t* file = NULL;
+  file = readFile(name, &length);
+  if(file == NULL) {
+    puts("Failed to read file");
+    return false;
+  }
+
+  PatchRom(file);
+
+  bool result = snes_loadRom(snes, file, length);
+  free(file);
+  return result;
+}
+
+static void handleInputPad(SDL_GameControllerButton button, bool pressed) {
+  for (int i = 0; i <= 11; i++) {
+    if (button == joypad_map[i]) {
+      setButtonState(i, pressed);
+      return;
+    }
+  }
+}
+
+static void handleInput(int keyCode, int keyMod, bool pressed) {
+  // lookup if each 0..11 SNES button has it corresponding SDL_<key> pressed
+  for (int i = 0; i <= 11; i++) {
+    if (keyCode == gamepad_map[i]) {
+      setButtonState(i, pressed);
+      return;
+    }
+  }
+  // handle F1..10
+  if (SDLK_F1 <= keyCode && keyCode <= SDLK_F10 && pressed) {
+    SaveLoadSlot((keyMod & KMOD_CTRL) ? kSaveLoad_Replay : 
+                 (keyMod & KMOD_SHIFT) ? kSaveLoad_Save :
+                 kSaveLoad_Load, keyCode - SDLK_F1);
+  }
+}
+
+static void playAudio(Snes *snes, SDL_AudioDeviceID device, int16_t* audioBuffer) {
+  // generate enough samples
+  if (!kIsOrigEmu && snes) {
+    while (snes->apu->dsp->sampleOffset < 534)
+      apu_cycle(snes->apu);
+    snes->apu->dsp->sampleOffset = 0;
+  }
+
+  dsp_getSamples(GetDspForRendering(), audioBuffer, 735);
+  if(SDL_GetQueuedAudioSize(device) <= 735 * 4 * 6) {
+    // don't queue audio if buffer is still filled
+    SDL_QueueAudio(device, audioBuffer, 735 * 4);
+  } else {
+    printf("Skipping audio!\n");
+  }
+}
+
+static void renderScreen(SDL_Renderer* renderer, SDL_Texture* texture) {
+  void* pixels = NULL;
+  int pitch = 0;
+  if(SDL_LockTexture(texture, NULL, &pixels, &pitch) != 0) {
+    printf("Failed to lock texture: %s\n", SDL_GetError());
+    return;
+  }
+
+  ppu_putPixels(GetPpuForRendering(), (uint8_t*) pixels);
+  SDL_UnlockTexture(texture);
+  SDL_RenderCopy(renderer, texture, NULL, NULL);
+}
 
 #undef main
 int main(int argc, char** argv) {
   // set up SDL
-  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0) {
     printf("Failed to init SDL: %s\n", SDL_GetError());
     return 1;
   }
@@ -68,6 +177,12 @@ int main(int argc, char** argv) {
     printf("Failed to create texture: %s\n", SDL_GetError());
     return 1;
   }
+  SDL_GameController* handle = NULL;
+  for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+    if (SDL_IsGameController(i))
+      handle = SDL_GameControllerOpen(i);
+  }
+
   SDL_AudioSpec want, have;
   SDL_AudioDeviceID device;
   SDL_memset(&want, 0, sizeof(want));
@@ -81,8 +196,17 @@ int main(int argc, char** argv) {
     printf("Failed to open audio device: %s\n", SDL_GetError());
     return 1;
   }
-  int16_t* audioBuffer = (int16_t * )malloc(735 * 4); // *2 for stereo, *2 for sizeof(int16)
+  int16_t* audioBuffer = (int16_t * )malloc(735 * sizeof(int16) * 2); // stereo
   SDL_PauseAudioDevice(device, 0);
+
+  size_t keyconf_length;
+  char* keyconf_file = (char*)readFile("keyconf.yaml", &keyconf_length);
+  if (keyconf_file) {
+    printf("using keyconf\n");
+    keyconf_file = realloc(keyconf_file, keyconf_length + 1); // add ending NUL
+    keyconf_file[keyconf_length] = '\0';
+    parseKeyconf(keyconf_file);
+  }
 
   Snes *snes = snes_init(g_emulated_ram), *snes_run = NULL;
   if (argc >= 2 && !g_run_without_emu) {
@@ -119,36 +243,46 @@ int main(int argc, char** argv) {
     while(SDL_PollEvent(&event)) {
       switch(event.type) {
         case SDL_KEYDOWN: {
-          switch(event.key.keysym.sym) {
-            case SDLK_e:
-              if (snes) {
-                snes_reset(snes, event.key.keysym.sym == SDLK_e);
-                CopyStateAfterSnapshotRestore(true);
-              }
-              break;
-            case SDLK_p: paused ^= true; break;
-            case SDLK_w:
+          SDL_Keycode key = event.key.keysym.sym;
+          bool ctrl = event.key.keysym.mod & KMOD_CTRL;
+          if (key == SDLK_F11) {
+            SDL_SetWindowFullscreen(window, win_flags ^= SDL_WINDOW_FULLSCREEN);
+          } else if (key == SDLK_ESCAPE) {
+            running = false;
+          } else if (ctrl && key == SDLK_e && snes) {
+            snes_reset(snes, event.key.keysym.sym == SDLK_e);
+            CopyStateAfterSnapshotRestore(true);
+          } else if (ctrl && key == SDLK_p) {
+            paused = !paused;
+          } else if (ctrl && key == SDLK_t) {
+            turbo = !turbo;
+          } else if (ctrl && key == SDLK_w) {
               PatchCommand('w');
-              break;
-            case SDLK_o:
+          } else if (ctrl && key == SDLK_o) {
               PatchCommand('o');
-              break;
-            case SDLK_k:
+          } else if (ctrl && key == SDLK_t) {
               PatchCommand('k');
-              break;
-            case SDLK_t:
-              turbo = !turbo;
-              break;
-            case SDLK_F11:
-              SDL_SetWindowFullscreen(window, win_flags ^= SDL_WINDOW_FULLSCREEN);
+          } else {
+            handleInput(event.key.keysym.sym, event.key.keysym.mod, true);
           }
-          handleInput(event.key.keysym.sym, event.key.keysym.mod, true);
           break;
         }
-        case SDL_KEYUP: {
+        case SDL_KEYUP:
           handleInput(event.key.keysym.sym, event.key.keysym.mod, false);
           break;
+        case SDL_CONTROLLERDEVICEADDED: {
+          if (handle) {
+            SDL_GameControllerClose(handle);
+          }
+          handle = SDL_GameControllerOpen(event.cdevice.which);
+          break;
         }
+        case SDL_CONTROLLERBUTTONDOWN:
+          handleInputPad(event.cbutton.button, event.cbutton.state == SDL_PRESSED);
+          break;
+        case SDL_CONTROLLERBUTTONUP:
+          handleInputPad(event.cbutton.button, event.cbutton.state == SDL_PRESSED);
+          break;
         case SDL_QUIT: {
           running = false;
           break;
@@ -202,144 +336,4 @@ int main(int argc, char** argv) {
   SDL_DestroyWindow(window);
   SDL_Quit();
   return 0;
-}
-
-extern struct Ppu *GetPpuForRendering();
-extern struct Dsp *GetDspForRendering();
-
-static void playAudio(Snes *snes, SDL_AudioDeviceID device, int16_t* audioBuffer) {
-  // generate enough samples
-  if (!kIsOrigEmu && snes) {
-    while (snes->apu->dsp->sampleOffset < 534)
-      apu_cycle(snes->apu);
-    snes->apu->dsp->sampleOffset = 0;
-  }
-
-  dsp_getSamples(GetDspForRendering(), audioBuffer, 735);
-  if(SDL_GetQueuedAudioSize(device) <= 735 * 4 * 6) {
-    // don't queue audio if buffer is still filled
-    SDL_QueueAudio(device, audioBuffer, 735 * 4);
-  } else {
-    printf("Skipping audio!\n");
-  }
-}
-
-static void renderScreen(SDL_Renderer* renderer, SDL_Texture* texture) {
-  void* pixels = NULL;
-  int pitch = 0;
-  if(SDL_LockTexture(texture, NULL, &pixels, &pitch) != 0) {
-    printf("Failed to lock texture: %s\n", SDL_GetError());
-    return;
-  }
-
-  ppu_putPixels(GetPpuForRendering(), (uint8_t*) pixels);
-  SDL_UnlockTexture(texture);
-  SDL_RenderCopy(renderer, texture, NULL, NULL);
-}
-
-
-static void handleInput(int keyCode, int keyMod, bool pressed) {
-  switch(keyCode) {
-    case SDLK_z: setButtonState(0, pressed); break;
-    case SDLK_a: setButtonState(1, pressed); break;
-    case SDLK_RSHIFT: setButtonState(2, pressed); break;
-    case SDLK_RETURN: setButtonState(3, pressed); break;
-    case SDLK_UP: setButtonState(4, pressed); break;
-    case SDLK_DOWN: setButtonState(5, pressed); break;
-    case SDLK_LEFT: setButtonState(6, pressed); break;
-    case SDLK_RIGHT: setButtonState(7, pressed); break;
-    case SDLK_x: setButtonState(8, pressed); break;
-    case SDLK_s: setButtonState(9, pressed); break;
-    case SDLK_d: setButtonState(10, pressed); break;
-    case SDLK_c: setButtonState(11, pressed); break;
-    case SDLK_BACKSPACE:
-    case SDLK_1:
-    case SDLK_2:
-    case SDLK_3:
-    case SDLK_4:
-    case SDLK_5:
-    case SDLK_6:
-    case SDLK_7:
-    case SDLK_8:
-    case SDLK_9:
-    case SDLK_0:
-    case SDLK_MINUS:
-    case SDLK_EQUALS:
-      if (pressed) {
-        SaveLoadSlot(
-          (keyMod & KMOD_CTRL) != 0 ? kSaveLoad_Replay : kSaveLoad_Load,
-          256 + (keyCode == SDLK_0 ? 9 : 
-                 keyCode == SDLK_MINUS ? 10 : 
-                 keyCode == SDLK_EQUALS ? 11 :
-                 keyCode == SDLK_BACKSPACE ? 12 :
-                 keyCode - SDLK_1));
-      }
-      break;
-
-    case SDLK_F1: 
-    case SDLK_F2: 
-    case SDLK_F3: 
-    case SDLK_F4: 
-    case SDLK_F5: 
-    case SDLK_F6: 
-    case SDLK_F7: 
-    case SDLK_F8: 
-    case SDLK_F9: 
-    case SDLK_F10: 
-      if (pressed) {
-        SaveLoadSlot(
-          (keyMod & KMOD_CTRL) != 0 ? kSaveLoad_Replay : 
-          (keyMod & KMOD_SHIFT) != 0 ? kSaveLoad_Save : kSaveLoad_Load,
-          keyCode - SDLK_F1);
-      }
-      break;
-  }
-}
-
-static bool checkExtention(const char* name, bool forZip) {
-  if(name == NULL) return false;
-  int length = strlen(name);
-  if(length < 4) return false;
-  if(forZip) {
-    if(strcmp(name + length - 4, ".zip") == 0) return true;
-    if(strcmp(name + length - 4, ".ZIP") == 0) return true;
-  } else {
-    if(strcmp(name + length - 4, ".smc") == 0) return true;
-    if(strcmp(name + length - 4, ".SMC") == 0) return true;
-    if(strcmp(name + length - 4, ".sfc") == 0) return true;
-    if(strcmp(name + length - 4, ".SFC") == 0) return true;
-  }
-  return false;
-}
-
-static bool loadRom(char* name, Snes* snes) {
-  // zip library from https://github.com/kuba--/zip
-  size_t length = 0;
-  uint8_t* file = NULL;
-  file = readFile(name, &length);
-  if(file == NULL) {
-    puts("Failed to read file");
-    return false;
-  }
-
-  PatchRom(file);
-
-  bool result = snes_loadRom(snes, file, length);
-  free(file);
-  return result;
-}
-
-static uint8_t* readFile(char* name, size_t* length) {
-  FILE* f = fopen(name, "rb");
-  if(f == NULL) {
-    return NULL;
-  }
-  fseek(f, 0, SEEK_END);
-  int size = ftell(f);
-  rewind(f);
-  uint8_t* buffer = (uint8_t *)malloc(size);
-  fread(buffer, size, 1, f);
-  fclose(f);
-  *length = size;
-  return buffer;
 }
