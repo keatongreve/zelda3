@@ -1,10 +1,15 @@
 import array
 import sys
 import hashlib
+import os
+
+PATH = os.path.dirname(__file__)
+DEFAULT_ROM_PATH = os.path.join(PATH, 'zelda3.sfc')
 
 class LoadedRom:
-  def __init__(self, name = 'zelda3.sfc'):
-    self.ROM = open(name, 'rb').read()
+  def __init__(self, path = DEFAULT_ROM_PATH):
+    rom_path = DEFAULT_ROM_PATH if path is None else path
+    self.ROM = open(rom_path, 'rb').read()
     hash = hashlib.sha256(self.ROM).hexdigest() 
     if hash != '66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb':
       raise Exception('Wrong ROM version. Expecting Legend of Zelda - A Link to the Past, The (NA) (1.0).sfc')

@@ -4,7 +4,12 @@ import heapq, sys
 import yaml
 import time
 import util
+import os
 
+PATH = os.path.dirname(__file__)
+
+def get_full_path(relative_path):
+  return os.path.join(PATH, relative_path)
 
 def load_sound_bank(rom, ea, mem_in = None):
   memory = list(mem_in) if mem_in else [None]*65536
@@ -297,8 +302,8 @@ def dump_brr_audio():
     return r, [get_byte(start+x) for x in range(len(r)//16 * 9)], get_byte(start)&0x2 != 0
   for audio_idx in range(25):
     sound_data, brr_data, brr_repeat = decode_brr(audio_idx)
-    open('sound/sound%d.pcm.brr' % audio_idx, 'wb').write(bytes(brr_data))
-    open('sound/sound%d.pcm' % audio_idx, 'wb').write(sound_data)
+    open(get_full_path('sound/sound%d.pcm.brr' % audio_idx), 'wb').write(bytes(brr_data))
+    open(get_full_path('sound/sound%d.pcm' % audio_idx), 'wb').write(sound_data)
 
 def dump_music_info():
   music_info = {}
@@ -350,7 +355,7 @@ def dump_music_info():
     music_info['sfx_instruments'].append(info)  
 
   s = yaml.dump(music_info, default_flow_style=None, sort_keys=False)
-  open('music_info.yaml', 'w').write(s)
+  open(get_full_path('music_info.yaml'), 'w').write(s)
 
 def decode_sfx(ea, next_addr):
   r = []
@@ -451,12 +456,12 @@ def print_all_sfx(f):
 def extract_sound_data(rom):
   for song in ['intro', 'indoor', 'ending']:
     load_song(rom, song)
-    open('sound/%s.spc' % song, 'wb').write(bytes((0 if a == None else a) for a in memory))
-    print_song(song, open('sound_%s.txt' % song, 'w'))
+    open(get_full_path('sound/%s.spc' % song), 'wb').write(bytes((0 if a == None else a) for a in memory))
+    print_song(song, open(get_full_path('sound_%s.txt' % song), 'w'))
     if song == 'intro':
       dump_brr_audio()
       dump_music_info()
-      print_all_sfx(open('sfx.txt', 'w'))
+      print_all_sfx(open(get_full_path('sfx.txt'), 'w'))
 
 if __name__ == "__main__":
   ROM = util.LoadedRom()

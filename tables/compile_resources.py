@@ -1,6 +1,7 @@
 import sys
 import text_compression
 import util
+import os
 from PIL import Image
 import yaml
 import tables
@@ -8,7 +9,10 @@ import compile_music
 
 print_int_array = util.print_int_array
 
-PATH = ''
+PATH = os.path.dirname(__file__)
+
+def get_full_path(relative_path):
+  return os.path.join(PATH, relative_path)
 
 def flatten(xss):
     return [x for xs in xss for x in xs]
@@ -17,9 +21,9 @@ def invert_dict(xs):
   return {s:i for i,s in xs.items()}
     
 def print_map32_to_map16():
-  f = open(PATH+'generated_map32_to_map16.h', 'w')
+  f = open(get_full_path('generated_map32_to_map16.h'), 'w')
   tab = {}
-  for line in open(PATH + 'map32_to_map16.txt'):
+  for line in open(get_full_path('map32_to_map16.txt')):
     line = line.strip()
     x, xs = line.split(':', 1)
     tab[int(x)] = [int(t) for t in xs.split(',')]
@@ -46,10 +50,10 @@ def print_map32_to_map16():
   f.close()
   
 def print_dialogue():
-  f = open(PATH+'generated_dialogue.h', 'w')
+  f = open(get_full_path('generated_dialogue.h'), 'w')
   new_r = []
   offs = []
-  for line in open(PATH + 'dialogue.txt'):
+  for line in open(get_full_path('dialogue.txt')):
     line = line.strip('\n')
     a, b = line.split(': ', 1)
     index = int(a)
@@ -113,7 +117,7 @@ def compress_store(r):
   
 def print_images():
   rall = []
-  f = open(PATH+'generated_images.h', 'w')
+  f = open(get_full_path('generated_images.h'), 'w')
   for i in range(12):
     r = ROM.get_bytes(kCompSpritePtrs[i], 0x600)
     rall.append('kSprGfx_%d' % i)
@@ -144,30 +148,30 @@ def print_images():
 
 
 def print_misc():
-  f = open(PATH+'generated_overworld_map.h', 'w')
+  f = open(get_full_path('generated_overworld_map.h'), 'w')
   print_int_array('kOverworldMapGfx', ROM.get_bytes(0x18c000, 0x4000), 'uint8', True, 64, file = f)
   print_int_array('kLightOverworldTilemap', ROM.get_bytes(0xac727, 4096), 'uint8', True, 64, file = f)
   print_int_array('kDarkOverworldTilemap', ROM.get_bytes(0xaD727, 1024), 'uint8', True, 64, file = f)
   f.close()
 
-  f = open(PATH+'generated_predefined_tiles.h', 'w')
+  f = open(get_full_path('generated_predefined_tiles.h'), 'w')
   print_int_array('kPredefinedTileData', ROM.get_words(0x9B52, 6438), 'uint16', False, 16, file = f)
   f.close()
 
-  f = open(PATH+'generated_font.h', 'w')
+  f = open(get_full_path('generated_font.h'), 'w')
   print_int_array('kFontData', ROM.get_words(0xe8000, 2048), 'uint16', False, 16, file = f)
   f.close()
 
-  f = open(PATH+'generated_map16_to_map8.h', 'w')
+  f = open(get_full_path('generated_map16_to_map8.h'), 'w')
   print_int_array('kMap16ToMap8', ROM.get_words(0x8f8000, 3752 * 4), 'uint16', False, 16, file = f)
   f.close()
 
-  f = open(PATH+'generated_ancilla.h', 'w')
+  f = open(get_full_path('generated_ancilla.h'), 'w')
   print_int_array('kGeneratedWishPondItem', ROM.get_bytes(0x888450, 256), 'uint8', False, 16, file = f)
   print_int_array('kGeneratedBombosArr', ROM.get_bytes(0x8890FC, 256), 'uint8', False, 16, file = f)
   f.close()
 
-  f = open(PATH+'generated_ending.h', 'w')
+  f = open(get_full_path('generated_ending.h'), 'w')
   print_int_array('kGeneratedEndSequence15', ROM.get_bytes(0x8ead25, 256), 'uint8', False, 16, file = f)
   print_int_array('kEnding_Credits_Text', ROM.get_bytes(0x8EB178, 1989), 'uint8', False, 16, file = f)
   print_int_array('kEnding_Credits_Offs', ROM.get_words(0x8EB93d, 394), 'uint16', False, 16, file = f)
@@ -176,7 +180,7 @@ def print_misc():
   print_int_array('kEnding0_Data', ROM.get_bytes(0x8EBF4C, 917), 'uint8', False, 16, file = f)
   f.close()
 
-  f = open(PATH+'generated_palettes.h', 'w')
+  f = open(get_full_path('generated_palettes.h'), 'w')
   print_int_array('kPalette_DungBgMain', ROM.get_words(0x9BD734, 1800), 'uint16', False, 15, file = f)
   print_int_array('kPalette_MainSpr', ROM.get_words(0x9BD218, 120), 'uint16', False, 15, file = f)
 
@@ -202,12 +206,12 @@ def print_misc():
 g_overworld_yaml_cache = {}
 def load_overworld_yaml(room):
   if room not in g_overworld_yaml_cache:
-    g_overworld_yaml_cache[room] = yaml.safe_load(open(PATH+'overworld/overworld-%d.yaml' % room, 'r'))
+    g_overworld_yaml_cache[room] = yaml.safe_load(open(get_full_path('overworld/overworld-%d.yaml' % room), 'r'))
   return g_overworld_yaml_cache[room]
     
 
 def print_overworld():
-  f = open(PATH+'generated_overworld.h', 'w')
+  f = open(get_full_path('generated_overworld.h'), 'w')
 
   r = []
   for i in range(160):
@@ -447,7 +451,7 @@ def print_overworld_tables():
   do_sprite_range(0, 64, 'Sprites.SecondPart', [2], 2)
   do_sprite_range(64, 144, 'Sprites', [1, 2], 3)
 
-  f = open(PATH+'generated_overworld_tables.h', 'w')
+  f = open(get_full_path('generated_overworld_tables.h'), 'w')
   A.write(f)
   print_int_array('kMap8DataToTileAttr', ROM.get_bytes(0x8E9459, 512), 'uint8', False, 16, file = f)
   print_int_array('kSomeTileAttr', ROM.get_bytes(0x9bf110, 3824), 'uint8', False, 16, file = f)
@@ -455,7 +459,7 @@ def print_overworld_tables():
 
 
 def print_dungeon_map():
-  f = open(PATH+'generated_dungeon_map.h', 'w')
+  f = open(get_full_path('generated_dungeon_map.h'), 'w')
 
   r, r2 = [], []
   name = 'kDungMap_FloorLayout'
@@ -481,7 +485,7 @@ def print_dungeon_map():
 g_dungeon_yaml_cache = {}
 def load_dungeon_yaml(room):
   if room not in g_dungeon_yaml_cache:
-    g_dungeon_yaml_cache[room] = yaml.safe_load(open(PATH+'dungeon/dungeon-%d.yaml' % room, 'r'))
+    g_dungeon_yaml_cache[room] = yaml.safe_load(open(get_full_path('dungeon/dungeon-%d.yaml' % room), 'r'))
   return g_dungeon_yaml_cache[room]
   
 def print_dungeon_sprites():
@@ -517,7 +521,7 @@ def print_dungeon_sprites():
         data.extend(kDropTypesToCode[s[-1]])
         
     data.append(0xff)
-  f = open(PATH+'generated_dungeon_sprites.h', 'w')
+  f = open(get_full_path('generated_dungeon_sprites.h'), 'w')
   print_int_array('kDungeonSprites', data, 'uint8', True, 16, file = f)
   print_int_array('kDungeonSpriteOffs', offsets, 'uint16', True, 16, file=f)
   f.close()
@@ -701,7 +705,7 @@ def print_dungeon_rooms():
     print_int_array(prefix+'musicTrack', [m[a['music']] for a in entrances], 'uint8', True, 16, file = f)
     
 
-  f = open(PATH+'generated_dungeon_rooms.h', 'w')
+  f = open(get_full_path('generated_dungeon_rooms.h'), 'w')
   print_int_array('kDungeonRoom', data, 'uint8', True, 16, file = f)
   print_int_array('kDungeonRoomOffs', offsets, 'uint16', True, 16, file = f)
   print_int_array('kDungeonRoomDoorOffs', door_offsets, 'uint16', True, 16, file = f)
@@ -716,7 +720,7 @@ def print_dungeon_rooms():
 
   data = []
   offsets = [0] * 8
-  default_yaml = yaml.safe_load(open(PATH+'dungeon/default_rooms.yaml', 'r'))
+  default_yaml = yaml.safe_load(open(get_full_path('dungeon/default_rooms.yaml'), 'r'))
   for i in range(len(offsets)):
     offsets[i] = len(data)
     print_layer(default_yaml['Default%d' % i], None)
@@ -725,7 +729,7 @@ def print_dungeon_rooms():
 
   data = []
   offsets = [0] * 19
-  overlay_yaml = yaml.safe_load(open(PATH+'dungeon/overlay_rooms.yaml', 'r'))
+  overlay_yaml = yaml.safe_load(open(get_full_path('dungeon/overlay_rooms.yaml'), 'r'))
   for i in range(len(offsets)):
     offsets[i] = len(data)
     print_layer(overlay_yaml['Overlay%d' % i], None)
@@ -746,13 +750,13 @@ def print_dungeon_rooms():
 
  
 def print_enemy_damage_data():
-  f = open(PATH+'generated_enemy_damage_data.h', 'w')
+  f = open(get_full_path('generated_enemy_damage_data.h'), 'w')
   decomp, comp_len = util.decomp(0x83e800, ROM.get_byte, True, True)
   print_int_array('kEnemyDamageData', decomp, 'uint8', False, 32, file = f)
   f.close()
 
 def print_tilemaps():
-  f = open(PATH+'generated_bg_tilemaps.h', 'w')
+  f = open(get_full_path('generated_bg_tilemaps.h'), 'w')
   kSrcs = [0xcdd6d, 0xce7bf, 0xce2a8, 0xce63c, 0xce456, 0xeda9c]
   def decode_one(p):
     p_org = p
@@ -768,8 +772,8 @@ def print_tilemaps():
   f.close()
 
 def print_link_graphics():
-  f = open(PATH+'generated_link_graphics.h', 'w')
-  image = Image.open(PATH+'linksprite.png')
+  f = open(get_full_path('generated_link_graphics.h'), 'w')
+  image = Image.open(get_full_path('linksprite.png'))
   data = image.tobytes()
   def encode_4bit_sprite(data, offset, pitch):
     b = [0] * 32
@@ -790,7 +794,7 @@ def print_link_graphics():
   f.close()
 
 def print_sound_banks():
-  f = open(PATH+'generated_sound_banks.h', 'w')
+  f = open(get_full_path('generated_sound_banks.h'), 'w')
   for song in ['intro', 'indoor', 'ending']:
     compile_music.print_song(song, f)
   f.close()
