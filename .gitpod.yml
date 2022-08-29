@@ -1,2 +1,2 @@
 image:
-  file: docker/Dockerfile
+  file: Dockerfile
