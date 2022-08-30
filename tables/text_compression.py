@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 kTextAlphabet = [
   "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",

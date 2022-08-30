@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 def invert_dict(xs):
   return {s:i for i,s in xs.items()}
 

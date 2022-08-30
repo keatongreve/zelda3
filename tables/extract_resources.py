@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from ast import literal_eval as make_tuple
 import sys
 import text_compression
