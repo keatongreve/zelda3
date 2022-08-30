@@ -120,13 +120,23 @@ def print_images():
   f = open(get_full_path('generated_images.h'), 'w')
   for i in range(12):
     r = ROM.get_bytes(kCompSpritePtrs[i], 0x600)
+    print('i = %s' % i)
+    print('first bytes from ROM = ' + str(r[0:24]))
+    file_name = 'img/%.3d - %s.png' % (i, 'misc')
+    
+    print('load sprite ' + file_name)
+    image = Image.open(file_name, mode='r')
+    pixels = list(image.getdata())
+    print('first bytes from Image = ' + str(pixels[0:24]))
+
     rall.append('kSprGfx_%d' % i)
-    print_int_array('kSprGfx_%d' % i, r, 'uint8', True, 64, file = f)
+    print_int_array('kSprGfx_%d' % i, pixels, 'uint8', True, 64, file = f)
 
   for i in range(12, 108):
     decomp, comp_len = util.decomp(kCompSpritePtrs[i], ROM.get_byte, False, True)
     r = ROM.get_bytes(kCompSpritePtrs[i], comp_len)
-
+    #file_name = 'img/%.3d - %s.png' % (i, 'misc')
+    #print('load sprite ' + file_name)
     #print('%d: %d -> %d' % (i, len(compress_store(decomp)), comp_len))
     rall.append('kSprGfx_%d' % i)
     print_int_array('kSprGfx_%d' % i, r, 'uint8', True, 64, file = f)
