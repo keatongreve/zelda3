@@ -3366,7 +3366,7 @@ void Overworld_PickHammerSfx(uint16 a) {  // 9bbf1e
   sound_effect_1 = y;
 }
 
-uint16 Overworld_GetLinkMap16Coords(struct Point16U *xy) {  // 9bbf64
+uint16 Overworld_GetLinkMap16Coords(Point16U *xy) {  // 9bbf64
   uint16 x = (link_x_coord + kGetBestActionToPerformOnTile_x[link_direction_facing >> 1]) & ~0xf;
   uint16 y = (link_y_coord + kGetBestActionToPerformOnTile_y[link_direction_facing >> 1]) & ~0xf;
   xy->x = x;
@@ -3375,9 +3375,9 @@ uint16 Overworld_GetLinkMap16Coords(struct Point16U *xy) {  // 9bbf64
   return rv + (((x >> 3) - overworld_offset_base_x) & overworld_offset_mask_x);
 }
 
-uint8 Overworld_HandleLiftableTiles(struct Point16U *pt_arg) {  // 9bbf9d
+uint8 Overworld_HandleLiftableTiles(Point16U *pt_arg) {  // 9bbf9d
   uint16 pos = Overworld_GetLinkMap16Coords(pt_arg);
-  struct Point16U pt = *pt_arg;
+  Point16U pt = *pt_arg;
   uint16 a = overworld_tileattr[pos >> 1], y;
   if ((y = 0, a == 0x36d) || (y = 1, a == 0x36e) || (y = 2, a == 0x374) || (y = 3, a == 0x375) ||
       (y = 0, a == 0x23b) || (y = 1, a == 0x23c) || (y = 2, a == 0x23d) || (y = 3, a == 0x23e)) {
@@ -3390,7 +3390,7 @@ uint8 Overworld_HandleLiftableTiles(struct Point16U *pt_arg) {  // 9bbf9d
   }
 }
 
-uint8 Overworld_LiftingSmallObj(uint16 a, uint16 pos, uint16 y, struct Point16U pt) {  // 9bc008
+uint8 Overworld_LiftingSmallObj(uint16 a, uint16 pos, uint16 y, Point16U pt) {  // 9bc008
   uint16 secret = Overworld_RevealSecret(pos);
   if (secret != 0)
     y = secret;
@@ -3402,7 +3402,7 @@ uint8 Overworld_LiftingSmallObj(uint16 a, uint16 pos, uint16 y, struct Point16U 
   return kMap8DataToTileAttr[GetMap16toMap8Table()[t] & 0x1ff];
 }
 
-int Overworld_SmashRockPile(bool down_one_tile, struct Point16U *pt) {  // 9bc055
+int Overworld_SmashRockPile(bool down_one_tile, Point16U *pt) {  // 9bc055
   uint16 bak = link_y_coord;
   link_y_coord += down_one_tile ? 8 : 0;
   uint16 pos = Overworld_GetLinkMap16Coords(pt);
@@ -3418,7 +3418,7 @@ int Overworld_SmashRockPile(bool down_one_tile, struct Point16U *pt) {  // 9bc05
   }
 }
 
-uint8 SmashRockPile_fromLift(uint16 a, uint16 pos, uint16 y, struct Point16U pt) {  // 9bc09f
+uint8 SmashRockPile_fromLift(uint16 a, uint16 pos, uint16 y, Point16U pt) {  // 9bc09f
   static const int8 kBigRockTab1[] = { 0, -1, -64, -65 };
   static const int8 kBigRockTabY[] = { 0, 0, -64, -64 };
   static const int8 kBigRockTabX[] = { 0, -1, 0, -1 };

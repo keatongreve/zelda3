@@ -3379,7 +3379,7 @@ void Link_PerformThrow() {  // 87b11c
     if (interacting_with_liftable_tile_x1 == 5 || interacting_with_liftable_tile_x1 == 6) {
       player_handler_timer = 1;
     } else {
-      struct Point16U pt;
+      Point16U pt;
       uint8 attr = player_is_indoors ? Dungeon_LiftAndReplaceLiftable(&pt) : Overworld_HandleLiftableTiles(&pt);
 
       i = 8;
@@ -3448,7 +3448,7 @@ void Link_APress_LiftCarryThrow() {  // 87b1ca
         some_animation_timer_steps = kLiftTab1[player_handler_timer];
         if (player_handler_timer == 6) {
           BYTE(dung_secrets_unk1) = 0;
-          struct Point16U pt;
+          Point16U pt;
           uint8 what = (player_is_indoors) ? Dungeon_LiftAndReplaceLiftable(&pt) : Overworld_HandleLiftableTiles(&pt);
           link_player_handler_state = 24;
           flag_is_sprite_to_pick_up = 1;
@@ -4470,7 +4470,7 @@ void Link_BonkAndSmash() {  // 87c1a1
   if (!link_is_running || (link_dash_ctr == 64) || !(bitmask_for_dashable_tiles & 0x70))
     return;
   for (int i = 0; i < 2; i++) {
-    struct Point16U pt;
+    Point16U pt;
     int j = Overworld_SmashRockPile(i != 0, &pt);
     if (j >= 0) {
       int k = FindInByteArray(kLink_Lift_tab, (uint8)j, 9);
@@ -6066,7 +6066,7 @@ void Sprite_Dungeon_DrawSinglePushBlock(int j) {  // 87f0d9
   static const uint8 kPushedblock_Char[4] = { 0xc, 0xc, 0xc, 0xff };
   j >>= 1;
   Oam_AllocateFromRegionB(4);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int y = (uint8)pushedblocks_y_lo[j] | (uint8)pushedblocks_y_hi[j] << 8;
   int x = (uint8)pushedblocks_x_lo[j] | (uint8)pushedblocks_x_hi[j] << 8;
   y -= BG2VOFS_copy2 + 1;
@@ -6229,7 +6229,7 @@ void SomariaBlock_HandlePlayerInteraction(int k) {  // 88e7e6
       link_speed_setting = 0;
     }
 
-    struct CheckPlayerCollOut coll_out;
+    CheckPlayerCollOut coll_out;
     if (!Ancilla_CheckLinkCollision(k, 4, &coll_out) || ancilla_floor[k] != link_is_on_lower_level)
       return;
 
@@ -6471,7 +6471,7 @@ void DiggingGameGuy_AttemptPrizeSpawn() {  // 9dfd5c
   default:
     return;
   }
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   j = Sprite_SpawnDynamically(4, item_to_spawn, &info); // zelda bug: 4 wtf...
   if (j >= 0) {
     int i = link_direction_facing != 4;

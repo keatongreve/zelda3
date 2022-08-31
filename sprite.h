@@ -3,13 +3,13 @@
 #include "variables.h"
 
 
-struct PrepOamCoordsRet {
+typedef struct PrepOamCoordsRet {
   uint16 x, y;
   uint8 r4;
   uint8 flags;
-};
+} PrepOamCoordsRet;
 
-struct SpriteHitBox {
+typedef struct SpriteHitBox {
   uint8 r0_xlo;
   uint8 r8_xhi;
   uint8 r1_ylo;
@@ -23,25 +23,23 @@ struct SpriteHitBox {
   uint8 r11_spr_yhi;
   uint8 r6_spr_xsize;
   uint8 r7_spr_ysize;
-};
+} SpriteHitBox;
 
-struct SpriteSpawnInfo {
+typedef struct SpriteSpawnInfo {
   uint16 r0_x;
   uint16 r2_y;
   uint8 r4_z;
   uint16 r5_overlord_x;
   uint16 r7_overlord_y;
-};
+} SpriteSpawnInfo;
 
 extern const uint8 kAbsorbBigKey[2];
 
-
-
-struct DrawMultipleData {
+typedef struct DrawMultipleData {
   int8 x, y;
   uint16 char_flags;
   uint8 ext;
-};
+} DrawMultipleData;
 
 
 
@@ -118,8 +116,8 @@ void Ancilla_SpawnFallingPrize(uint8 item);
 bool Sprite_CheckDamageToAndFromLink(int k);
 uint8 Sprite_CheckTileCollision(int k);
 bool Sprite_TrackBodyToHead(int k);
-void Sprite_DrawMultiple(int k, const struct DrawMultipleData *src, int n, struct PrepOamCoordsRet *info);
-void Sprite_DrawMultiplePlayerDeferred(int k, const struct DrawMultipleData *src, int n, struct PrepOamCoordsRet *info);
+void Sprite_DrawMultiple(int k, const DrawMultipleData *src, int n, PrepOamCoordsRet *info);
+void Sprite_DrawMultiplePlayerDeferred(int k, const DrawMultipleData *src, int n, PrepOamCoordsRet *info);
 int Sprite_ShowSolicitedMessage(int k, uint16 msg);
 int Sprite_ShowMessageOnContact(int k, uint16 msg);
 void Sprite_ShowMessageUnconditional(uint16 msg);
@@ -140,7 +138,7 @@ void SpriteModule_Fall1(int k);
 void SpriteModule_Drown(int k);
 void Sprite_DrawDistress_custom(uint16 xin, uint16 yin, uint8 time);
 void Sprite_CheckIfLifted_permissive(int k);
-void Entity_ApplyRumbleToSprites(struct SpriteHitBox *hb);
+void Entity_ApplyRumbleToSprites(SpriteHitBox *hb);
 void Sprite_ZeroVelocity_XY(int k);
 bool Sprite_HandleDraggingByAncilla(int k);
 bool Sprite_ReturnIfPhasingOut(int k);
@@ -153,9 +151,9 @@ void Sprite_InvertSpeed_XY(int k);
 bool Sprite_ReturnIfInactive(int k);
 bool Sprite_ReturnIfPaused(int k);
 void SpriteDraw_SingleLarge(int k);
-void Sprite_PrepAndDrawSingleLargeNoPrep(int k, struct PrepOamCoordsRet *info);
-void SpriteDraw_Shadow_custom(int k, struct PrepOamCoordsRet *info, uint8 a);
-void SpriteDraw_Shadow(int k, struct PrepOamCoordsRet *oam);
+void Sprite_PrepAndDrawSingleLargeNoPrep(int k, PrepOamCoordsRet *info);
+void SpriteDraw_Shadow_custom(int k, PrepOamCoordsRet *info, uint8 a);
+void SpriteDraw_Shadow(int k, PrepOamCoordsRet *oam);
 void SpriteDraw_SingleSmall(int k);
 void Sprite_DrawThinAndTall(int k);
 void SpriteModule_Carried(int k);
@@ -175,8 +173,8 @@ void Sprite_HalveSpeed_XY(int k);
 void Sprite_SpawnLeapingFish(int k);
 void SpriteStunned_Main_Func1(int k);
 void SpriteModule_Poof(int k);
-void Sprite_PrepOamCoord(int k, struct PrepOamCoordsRet *ret);
-bool Sprite_PrepOamCoordOrDoubleRet(int k, struct PrepOamCoordsRet *ret);
+void Sprite_PrepOamCoord(int k, PrepOamCoordsRet *ret);
+bool Sprite_PrepOamCoordOrDoubleRet(int k, PrepOamCoordsRet *ret);
 void Sprite_CheckTileCollision2(int k);
 void Sprite_CheckTileCollisionSingleLayer(int k);
 void Sprite_CheckForTileInDirection_horizontal(int k, int yy);
@@ -191,10 +189,10 @@ void Sprite_MoveXY(int k);
 void Sprite_MoveX(int k);
 void Sprite_MoveY(int k);
 void Sprite_MoveZ(int k);
-struct ProjectSpeedRet Sprite_ProjectSpeedTowardsLink(int k, uint8 vel);
+ProjectSpeedRet Sprite_ProjectSpeedTowardsLink(int k, uint8 vel);
 void Sprite_ApplySpeedTowardsLink(int k, uint8 vel);
-struct ProjectSpeedRet Sprite_ProjectSpeedTowardsLocation(int k, uint16 x, uint16 y, uint8 vel);
-uint8 Sprite_DirectionToFaceLink(int k, struct PointU8 *coords_out);
+ProjectSpeedRet Sprite_ProjectSpeedTowardsLocation(int k, uint16 x, uint16 y, uint8 vel);
+uint8 Sprite_DirectionToFaceLink(int k, PointU8 *coords_out);
 struct PairU8 Sprite_IsRightOfLink(int k);
 struct PairU8 Sprite_IsBelowLink(int k);
 struct PairU8 Sprite_IsRightOfLocation(int k, uint16 x);
@@ -220,16 +218,16 @@ bool Sprite_ReturnIfLiftedPermissive(int k);
 uint8 Sprite_CheckDamageFromLink(int k);
 void Sprite_AttemptDamageToLinkWithCollisionCheck(int k);
 void Sprite_AttemptDamageToLinkPlusRecoil(int k);
-void Player_SetupActionHitBox(struct SpriteHitBox *hb);
-void Sprite_DoHitBoxesFast(int k, struct SpriteHitBox *hb);
+void Player_SetupActionHitBox(SpriteHitBox *hb);
+void Sprite_DoHitBoxesFast(int k, SpriteHitBox *hb);
 void Sprite_ApplyRecoilToLink(int k, uint8 vel);
 void Link_PlaceWeaponTink();
 void Sprite_PlaceWeaponTink(int k);
 void Sprite_PlaceRupulseSpark_2(int k);
-void Link_SetupHitBox_conditional(struct SpriteHitBox *hb);
-void Link_SetupHitBox(struct SpriteHitBox *hb);
-void Sprite_SetupHitBox(int k, struct SpriteHitBox *hb);
-bool CheckIfHitBoxesOverlap(struct SpriteHitBox *hb);
+void Link_SetupHitBox_conditional(SpriteHitBox *hb);
+void Link_SetupHitBox(SpriteHitBox *hb);
+void Sprite_SetupHitBox(int k, SpriteHitBox *hb);
+bool CheckIfHitBoxesOverlap(SpriteHitBox *hb);
 void Oam_AllocateDeferToPlayer(int k);
 void SpriteModule_Die(int k);
 void Sprite_DoTheDeath(int k);
@@ -243,7 +241,7 @@ void SpriteDraw_FallingHumanoid(int k);
 void Sprite_CorrectOamEntries(int k, int n, uint8 islarge);
 bool Sprite_ReturnIfRecoiling(int k);
 bool Sprite_CheckIfLinkIsBusy();
-void Sprite_SetSpawnedCoordinates(int k, struct SpriteSpawnInfo *info);
+void Sprite_SetSpawnedCoordinates(int k, SpriteSpawnInfo *info);
 bool Sprite_CheckIfScreenIsClear();
 bool Sprite_CheckIfRoomIsClear();
 bool Sprite_CheckIfOverlordsClear();
@@ -270,7 +268,7 @@ void Garnish_SimpleSparkle(int k);
 void Garnish0E_TrinexxFireBreath(int k);
 void Garnish0F_BlindLaserTrail(int k);
 void Garnish04_LaserTrail(int k);
-bool Garnish_ReturnIfPrepFails(int k, struct Point16U *pt);
+bool Garnish_ReturnIfPrepFails(int k, Point16U *pt);
 void Garnish03_FallingTile(int k);
 void Garnish01_FireSnakeTail(int k);
 void Garnish02_MothulaBeamTrail(int k);
@@ -295,7 +293,7 @@ void Overworld_LoadProximaSpriteIfAlive(uint16 blk);
 void SpriteExplode_SpawnEA(int k);
 void Sprite_KillFriends();
 void Garnish16_ThrownItemDebris(int k);
-void ScatterDebris_Draw(int k, struct Point16U pt);
+void ScatterDebris_Draw(int k, Point16U pt);
 void Sprite_KillSelf(int k);
 void SpritePrep_LoadProperties(int k);
 void SpritePrep_LoadPalette(int k);
@@ -314,9 +312,9 @@ uint8 Sprite_BounceFromTileCollision(int k);
 void ExecuteCachedSprites();
 void UncacheAndExecuteSprite(int k);
 uint8 Sprite_ConvertVelocityToAngle(uint8 x, uint8 y);
-int Sprite_SpawnDynamically(int k, uint8 what, struct SpriteSpawnInfo *info);
-int Sprite_SpawnDynamicallyEx(int k, uint8 what, struct SpriteSpawnInfo *info, int j);
-void SpriteFall_Draw(int k, struct PrepOamCoordsRet *info);
+int Sprite_SpawnDynamically(int k, uint8 what, SpriteSpawnInfo *info);
+int Sprite_SpawnDynamicallyEx(int k, uint8 what, SpriteSpawnInfo *info, int j);
+void SpriteFall_Draw(int k, PrepOamCoordsRet *info);
 void Sprite_GarnishSpawn_Sparkle_limited(int k, uint16 x, uint16 y);
 int Sprite_GarnishSpawn_Sparkle(int k, uint16 x, uint16 y);
 void Sprite_BehaveAsBarrier(int k);

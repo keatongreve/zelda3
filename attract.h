@@ -1,13 +1,13 @@
 #pragma once
-struct AttractOamInfo {
+typedef struct AttractOamInfo {
   int8 x, y;
   uint8 c, f, e;
-};
+} AttractOamInfo;
 
 
 extern const uint16 kMapMode_Zooms1[224];
 extern const uint16 kMapMode_Zooms2[224];
-void Attract_DrawSpriteSet2(const struct AttractOamInfo *p, int n);
+void Attract_DrawSpriteSet2(const AttractOamInfo *p, int n);
 void Attract_ZeldaPrison_Case0();
 void Attract_ZeldaPrison_Case1();
 void Attract_ZeldaPrison_DrawA();

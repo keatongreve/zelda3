@@ -11,137 +11,137 @@
 
 #include "spc_player.h"
 #include "dsp_regs.h"
-const struct MemMap kChannel_Maps[] = {
-{offsetof(struct Channel, pattern_order_ptr_for_chan), 0x8030},
-{offsetof(struct Channel, note_ticks_left), 0x70},
-{offsetof(struct Channel, note_keyoff_ticks_left), 0x71},
-{offsetof(struct Channel, subroutine_num_loops), 0x80},
-{offsetof(struct Channel, volume_fade_ticks), 0x90},
-{offsetof(struct Channel, pan_num_ticks), 0x91},
-{offsetof(struct Channel, pitch_slide_length), 0xa0},
-{offsetof(struct Channel, pitch_slide_delay_left), 0xa1},
-{offsetof(struct Channel, vibrato_hold_count), 0xb0},
-{offsetof(struct Channel, vib_depth), 0xb1},
-{offsetof(struct Channel, tremolo_hold_count), 0xc0},
-{offsetof(struct Channel, tremolo_depth), 0xc1},
-{offsetof(struct Channel, vibrato_change_count), 0x100},
-{offsetof(struct Channel, note_length), 0x200},
-{offsetof(struct Channel, note_gate_off_fixedpt), 0x201},
-{offsetof(struct Channel, channel_volume_master), 0x210},
-{offsetof(struct Channel, instrument_id), 0x211},
-{offsetof(struct Channel, instrument_pitch_base), 0x8220},
-{offsetof(struct Channel, saved_pattern_ptr), 0x8230},
-{offsetof(struct Channel, pattern_start_ptr), 0x8240},
-{offsetof(struct Channel, pitch_envelope_num_ticks), 0x280},
-{offsetof(struct Channel, pitch_envelope_delay), 0x281},
-{offsetof(struct Channel, pitch_envelope_direction), 0x290},
-{offsetof(struct Channel, pitch_envelope_slide_value), 0x291},
-{offsetof(struct Channel, vibrato_count), 0x2a0},
-{offsetof(struct Channel, vibrato_rate), 0x2a1},
-{offsetof(struct Channel, vibrato_delay_ticks), 0x2b0},
-{offsetof(struct Channel, vibrato_fade_num_ticks), 0x2b1},
-{offsetof(struct Channel, vibrato_fade_add_per_tick), 0x2c0},
-{offsetof(struct Channel, vibrato_depth_target), 0x2c1},
-{offsetof(struct Channel, tremolo_count), 0x2d0},
-{offsetof(struct Channel, tremolo_rate), 0x2d1},
-{offsetof(struct Channel, tremolo_delay_ticks), 0x2e0},
-{offsetof(struct Channel, channel_transposition), 0x2f0},
-{offsetof(struct Channel, channel_volume), 0x8300},
-{offsetof(struct Channel, volume_fade_addpertick), 0x8310},
-{offsetof(struct Channel, volume_fade_target), 0x320},
-{offsetof(struct Channel, final_volume), 0x321},
-{offsetof(struct Channel, pan_value), 0x8330},
-{offsetof(struct Channel, pan_add_per_tick), 0x8340},
-{offsetof(struct Channel, pan_target_value), 0x350},
-{offsetof(struct Channel, pan_flag_with_phase_invert), 0x351},
-{offsetof(struct Channel, pitch), 0x8360},
-{offsetof(struct Channel, pitch_add_per_tick), 0x8370},
-{offsetof(struct Channel, pitch_target), 0x380},
-{offsetof(struct Channel, fine_tune), 0x381},
-{offsetof(struct Channel, sfx_sound_ptr), 0x8390},
-{offsetof(struct Channel, sfx_which_sound), 0x3a0},
-{offsetof(struct Channel, sfx_arr_countdown), 0x3a1},
-{offsetof(struct Channel, sfx_note_length_left), 0x3b0},
-{offsetof(struct Channel, sfx_note_length), 0x3b1},
-{offsetof(struct Channel, sfx_pan), 0x3d0},
+const MemMap kChannel_Maps[] = {
+{offsetof(Channel, pattern_order_ptr_for_chan), 0x8030},
+{offsetof(Channel, note_ticks_left), 0x70},
+{offsetof(Channel, note_keyoff_ticks_left), 0x71},
+{offsetof(Channel, subroutine_num_loops), 0x80},
+{offsetof(Channel, volume_fade_ticks), 0x90},
+{offsetof(Channel, pan_num_ticks), 0x91},
+{offsetof(Channel, pitch_slide_length), 0xa0},
+{offsetof(Channel, pitch_slide_delay_left), 0xa1},
+{offsetof(Channel, vibrato_hold_count), 0xb0},
+{offsetof(Channel, vib_depth), 0xb1},
+{offsetof(Channel, tremolo_hold_count), 0xc0},
+{offsetof(Channel, tremolo_depth), 0xc1},
+{offsetof(Channel, vibrato_change_count), 0x100},
+{offsetof(Channel, note_length), 0x200},
+{offsetof(Channel, note_gate_off_fixedpt), 0x201},
+{offsetof(Channel, channel_volume_master), 0x210},
+{offsetof(Channel, instrument_id), 0x211},
+{offsetof(Channel, instrument_pitch_base), 0x8220},
+{offsetof(Channel, saved_pattern_ptr), 0x8230},
+{offsetof(Channel, pattern_start_ptr), 0x8240},
+{offsetof(Channel, pitch_envelope_num_ticks), 0x280},
+{offsetof(Channel, pitch_envelope_delay), 0x281},
+{offsetof(Channel, pitch_envelope_direction), 0x290},
+{offsetof(Channel, pitch_envelope_slide_value), 0x291},
+{offsetof(Channel, vibrato_count), 0x2a0},
+{offsetof(Channel, vibrato_rate), 0x2a1},
+{offsetof(Channel, vibrato_delay_ticks), 0x2b0},
+{offsetof(Channel, vibrato_fade_num_ticks), 0x2b1},
+{offsetof(Channel, vibrato_fade_add_per_tick), 0x2c0},
+{offsetof(Channel, vibrato_depth_target), 0x2c1},
+{offsetof(Channel, tremolo_count), 0x2d0},
+{offsetof(Channel, tremolo_rate), 0x2d1},
+{offsetof(Channel, tremolo_delay_ticks), 0x2e0},
+{offsetof(Channel, channel_transposition), 0x2f0},
+{offsetof(Channel, channel_volume), 0x8300},
+{offsetof(Channel, volume_fade_addpertick), 0x8310},
+{offsetof(Channel, volume_fade_target), 0x320},
+{offsetof(Channel, final_volume), 0x321},
+{offsetof(Channel, pan_value), 0x8330},
+{offsetof(Channel, pan_add_per_tick), 0x8340},
+{offsetof(Channel, pan_target_value), 0x350},
+{offsetof(Channel, pan_flag_with_phase_invert), 0x351},
+{offsetof(Channel, pitch), 0x8360},
+{offsetof(Channel, pitch_add_per_tick), 0x8370},
+{offsetof(Channel, pitch_target), 0x380},
+{offsetof(Channel, fine_tune), 0x381},
+{offsetof(Channel, sfx_sound_ptr), 0x8390},
+{offsetof(Channel, sfx_which_sound), 0x3a0},
+{offsetof(Channel, sfx_arr_countdown), 0x3a1},
+{offsetof(Channel, sfx_note_length_left), 0x3b0},
+{offsetof(Channel, sfx_note_length), 0x3b1},
+{offsetof(Channel, sfx_pan), 0x3d0},
 };
-const struct MemMapSized kSpcPlayer_Maps[] = {
-{offsetof(struct SpcPlayer, new_value_from_snes), 0x0, 4},
-{offsetof(struct SpcPlayer, port_to_snes), 0x4, 4},
-{offsetof(struct SpcPlayer, last_value_from_snes), 0x8, 4},
-{offsetof(struct SpcPlayer, counter_sf0c), 0xc, 1},
-{offsetof(struct SpcPlayer, _always_zero), 0xe, 2},
-{offsetof(struct SpcPlayer, temp_accum), 0x10, 2},
-{offsetof(struct SpcPlayer, ttt), 0x12, 1},
-{offsetof(struct SpcPlayer, did_affect_volumepitch_flag), 0x13, 1},
-{offsetof(struct SpcPlayer, addr0), 0x14, 2},
-{offsetof(struct SpcPlayer, addr1), 0x16, 2},
-{offsetof(struct SpcPlayer, lfsr_value), 0x18, 2},
-{offsetof(struct SpcPlayer, is_chan_on), 0x1a, 1},
-{offsetof(struct SpcPlayer, fast_forward), 0x1b, 1},
-{offsetof(struct SpcPlayer, sfx_start_arg_pan), 0x20, 1},
-{offsetof(struct SpcPlayer, sfx_sound_ptr_cur), 0x2c, 2},
-{offsetof(struct SpcPlayer, music_ptr_toplevel), 0x40, 2},
-{offsetof(struct SpcPlayer, block_count), 0x42, 1},
-{offsetof(struct SpcPlayer, sfx_timer_accum), 0x43, 1},
-{offsetof(struct SpcPlayer, chn), 0x44, 1},
-{offsetof(struct SpcPlayer, key_ON), 0x45, 1},
-{offsetof(struct SpcPlayer, key_OFF), 0x46, 1},
-{offsetof(struct SpcPlayer, cur_chan_bit), 0x47, 1},
-{offsetof(struct SpcPlayer, reg_FLG), 0x48, 1},
-{offsetof(struct SpcPlayer, reg_NON), 0x49, 1},
-{offsetof(struct SpcPlayer, reg_EON), 0x4a, 1},
-{offsetof(struct SpcPlayer, reg_PMON), 0x4b, 1},
-{offsetof(struct SpcPlayer, echo_stored_time), 0x4c, 1},
-{offsetof(struct SpcPlayer, echo_parameter_EDL), 0x4d, 1},
-{offsetof(struct SpcPlayer, reg_EFB), 0x4e, 1},
-{offsetof(struct SpcPlayer, global_transposition), 0x50, 1},
-{offsetof(struct SpcPlayer, main_tempo_accum), 0x51, 1},
-{offsetof(struct SpcPlayer, tempo), 0x52, 2},
-{offsetof(struct SpcPlayer, tempo_fade_num_ticks), 0x54, 1},
-{offsetof(struct SpcPlayer, tempo_fade_final), 0x55, 1},
-{offsetof(struct SpcPlayer, tempo_fade_add), 0x56, 2},
-{offsetof(struct SpcPlayer, master_volume), 0x58, 2},
-{offsetof(struct SpcPlayer, master_volume_fade_ticks), 0x5a, 1},
-{offsetof(struct SpcPlayer, master_volume_fade_target), 0x5b, 1},
-{offsetof(struct SpcPlayer, master_volume_fade_add_per_tick), 0x5c, 2},
-{offsetof(struct SpcPlayer, vol_dirty), 0x5e, 1},
-{offsetof(struct SpcPlayer, percussion_base_id), 0x5f, 1},
-{offsetof(struct SpcPlayer, echo_volume_left), 0x60, 2},
-{offsetof(struct SpcPlayer, echo_volume_right), 0x62, 2},
-{offsetof(struct SpcPlayer, echo_volume_fade_add_left), 0x64, 2},
-{offsetof(struct SpcPlayer, echo_volume_fade_add_right), 0x66, 2},
-{offsetof(struct SpcPlayer, echo_volume_fade_ticks), 0x68, 1},
-{offsetof(struct SpcPlayer, echo_volume_fade_target_left), 0x69, 1},
-{offsetof(struct SpcPlayer, echo_volume_fade_target_right), 0x6a, 1},
-{offsetof(struct SpcPlayer, sfx_channel_index), 0x3c0, 1},
-{offsetof(struct SpcPlayer, current_bit), 0x3c1, 1},
-{offsetof(struct SpcPlayer, dsp_register_index), 0x3c2, 1},
-{offsetof(struct SpcPlayer, echo_channels), 0x3c3, 1},
-{offsetof(struct SpcPlayer, byte_3C4), 0x3c4, 1},
-{offsetof(struct SpcPlayer, byte_3C5), 0x3c5, 1},
-{offsetof(struct SpcPlayer, echo_fract_incr), 0x3c7, 1},
-{offsetof(struct SpcPlayer, sfx_channel_index2), 0x3c8, 1},
-{offsetof(struct SpcPlayer, sfx_channel_bit), 0x3c9, 1},
-{offsetof(struct SpcPlayer, pause_music_ctr), 0x3ca, 1},
-{offsetof(struct SpcPlayer, port2_active), 0x3cb, 1},
-{offsetof(struct SpcPlayer, port2_current_bit), 0x3cc, 1},
-{offsetof(struct SpcPlayer, port3_active), 0x3cd, 1},
-{offsetof(struct SpcPlayer, port3_current_bit), 0x3ce, 1},
-{offsetof(struct SpcPlayer, port1_active), 0x3cf, 1},
-{offsetof(struct SpcPlayer, port1_current_bit), 0x3e0, 1},
-{offsetof(struct SpcPlayer, byte_3E1), 0x3e1, 1},
-{offsetof(struct SpcPlayer, sfx_play_echo_flag), 0x3e2, 1},
-{offsetof(struct SpcPlayer, sfx_channels_echo_mask2), 0x3e3, 1},
-{offsetof(struct SpcPlayer, port1_counter), 0x3e4, 1},
-{offsetof(struct SpcPlayer, channel_67_volume), 0x3e5, 1},
-{offsetof(struct SpcPlayer, cutk_always_zero), 0x3ff, 1},
+const MemMapSized kSpcPlayer_Maps[] = {
+{offsetof(SpcPlayer, new_value_from_snes), 0x0, 4},
+{offsetof(SpcPlayer, port_to_snes), 0x4, 4},
+{offsetof(SpcPlayer, last_value_from_snes), 0x8, 4},
+{offsetof(SpcPlayer, counter_sf0c), 0xc, 1},
+{offsetof(SpcPlayer, _always_zero), 0xe, 2},
+{offsetof(SpcPlayer, temp_accum), 0x10, 2},
+{offsetof(SpcPlayer, ttt), 0x12, 1},
+{offsetof(SpcPlayer, did_affect_volumepitch_flag), 0x13, 1},
+{offsetof(SpcPlayer, addr0), 0x14, 2},
+{offsetof(SpcPlayer, addr1), 0x16, 2},
+{offsetof(SpcPlayer, lfsr_value), 0x18, 2},
+{offsetof(SpcPlayer, is_chan_on), 0x1a, 1},
+{offsetof(SpcPlayer, fast_forward), 0x1b, 1},
+{offsetof(SpcPlayer, sfx_start_arg_pan), 0x20, 1},
+{offsetof(SpcPlayer, sfx_sound_ptr_cur), 0x2c, 2},
+{offsetof(SpcPlayer, music_ptr_toplevel), 0x40, 2},
+{offsetof(SpcPlayer, block_count), 0x42, 1},
+{offsetof(SpcPlayer, sfx_timer_accum), 0x43, 1},
+{offsetof(SpcPlayer, chn), 0x44, 1},
+{offsetof(SpcPlayer, key_ON), 0x45, 1},
+{offsetof(SpcPlayer, key_OFF), 0x46, 1},
+{offsetof(SpcPlayer, cur_chan_bit), 0x47, 1},
+{offsetof(SpcPlayer, reg_FLG), 0x48, 1},
+{offsetof(SpcPlayer, reg_NON), 0x49, 1},
+{offsetof(SpcPlayer, reg_EON), 0x4a, 1},
+{offsetof(SpcPlayer, reg_PMON), 0x4b, 1},
+{offsetof(SpcPlayer, echo_stored_time), 0x4c, 1},
+{offsetof(SpcPlayer, echo_parameter_EDL), 0x4d, 1},
+{offsetof(SpcPlayer, reg_EFB), 0x4e, 1},
+{offsetof(SpcPlayer, global_transposition), 0x50, 1},
+{offsetof(SpcPlayer, main_tempo_accum), 0x51, 1},
+{offsetof(SpcPlayer, tempo), 0x52, 2},
+{offsetof(SpcPlayer, tempo_fade_num_ticks), 0x54, 1},
+{offsetof(SpcPlayer, tempo_fade_final), 0x55, 1},
+{offsetof(SpcPlayer, tempo_fade_add), 0x56, 2},
+{offsetof(SpcPlayer, master_volume), 0x58, 2},
+{offsetof(SpcPlayer, master_volume_fade_ticks), 0x5a, 1},
+{offsetof(SpcPlayer, master_volume_fade_target), 0x5b, 1},
+{offsetof(SpcPlayer, master_volume_fade_add_per_tick), 0x5c, 2},
+{offsetof(SpcPlayer, vol_dirty), 0x5e, 1},
+{offsetof(SpcPlayer, percussion_base_id), 0x5f, 1},
+{offsetof(SpcPlayer, echo_volume_left), 0x60, 2},
+{offsetof(SpcPlayer, echo_volume_right), 0x62, 2},
+{offsetof(SpcPlayer, echo_volume_fade_add_left), 0x64, 2},
+{offsetof(SpcPlayer, echo_volume_fade_add_right), 0x66, 2},
+{offsetof(SpcPlayer, echo_volume_fade_ticks), 0x68, 1},
+{offsetof(SpcPlayer, echo_volume_fade_target_left), 0x69, 1},
+{offsetof(SpcPlayer, echo_volume_fade_target_right), 0x6a, 1},
+{offsetof(SpcPlayer, sfx_channel_index), 0x3c0, 1},
+{offsetof(SpcPlayer, current_bit), 0x3c1, 1},
+{offsetof(SpcPlayer, dsp_register_index), 0x3c2, 1},
+{offsetof(SpcPlayer, echo_channels), 0x3c3, 1},
+{offsetof(SpcPlayer, byte_3C4), 0x3c4, 1},
+{offsetof(SpcPlayer, byte_3C5), 0x3c5, 1},
+{offsetof(SpcPlayer, echo_fract_incr), 0x3c7, 1},
+{offsetof(SpcPlayer, sfx_channel_index2), 0x3c8, 1},
+{offsetof(SpcPlayer, sfx_channel_bit), 0x3c9, 1},
+{offsetof(SpcPlayer, pause_music_ctr), 0x3ca, 1},
+{offsetof(SpcPlayer, port2_active), 0x3cb, 1},
+{offsetof(SpcPlayer, port2_current_bit), 0x3cc, 1},
+{offsetof(SpcPlayer, port3_active), 0x3cd, 1},
+{offsetof(SpcPlayer, port3_current_bit), 0x3ce, 1},
+{offsetof(SpcPlayer, port1_active), 0x3cf, 1},
+{offsetof(SpcPlayer, port1_current_bit), 0x3e0, 1},
+{offsetof(SpcPlayer, byte_3E1), 0x3e1, 1},
+{offsetof(SpcPlayer, sfx_play_echo_flag), 0x3e2, 1},
+{offsetof(SpcPlayer, sfx_channels_echo_mask2), 0x3e3, 1},
+{offsetof(SpcPlayer, port1_counter), 0x3e4, 1},
+{offsetof(SpcPlayer, channel_67_volume), 0x3e5, 1},
+{offsetof(SpcPlayer, cutk_always_zero), 0x3ff, 1},
 };
 
-static void PlayNote(struct SpcPlayer *p, struct Channel *c, uint8 note);
+static void PlayNote(SpcPlayer *p, Channel *c, uint8 note);
 
-static void Dsp_Write(struct SpcPlayer *p, uint8_t reg, uint8 value) {
-  struct DspRegWriteHistory *hist = p->reg_write_history;
+static void Dsp_Write(SpcPlayer *p, uint8_t reg, uint8 value) {
+  DspRegWriteHistory *hist = p->reg_write_history;
   if (hist) {
     if (hist->count < 256) {
       hist->addr[hist->count] = (enum DspReg)reg;
@@ -175,7 +175,7 @@ static inline void Chan_DoAnyFade(uint16 *p, uint16 add, uint8 target, uint8 con
     *p += add;
 }
 
-static void SetupEchoParameter_EDL(struct SpcPlayer *p, uint8 a) {
+static void SetupEchoParameter_EDL(SpcPlayer *p, uint8 a) {
   p->echo_parameter_EDL = a;
   if (a != p->last_written_edl) {
     a = (p->last_written_edl & 0xf) ^ 0xff;
@@ -195,7 +195,7 @@ static void SetupEchoParameter_EDL(struct SpcPlayer *p, uint8 a) {
   Dsp_Write(p, ESA, (p->echo_parameter_EDL * 8 ^ 0xff) + 0xd1);
 }
 
-static void WriteVolumeToDsp(struct SpcPlayer *p, struct Channel *c, uint16 volume) {
+static void WriteVolumeToDsp(SpcPlayer *p, Channel *c, uint16 volume) {
   static const uint8 kVolumeTable[22] = {0, 1, 3, 7, 13, 21, 30, 41, 52, 66, 81, 94, 103, 110, 115, 119, 122, 124, 125, 126, 127, 127};
   if (p->is_chan_on & p->cur_chan_bit)
     return;
@@ -217,7 +217,7 @@ static void WriteVolumeToDsp(struct SpcPlayer *p, struct Channel *c, uint16 volu
   }
 }
 
-static void WritePitch(struct SpcPlayer *p, struct Channel *c, uint16 pitch) {
+static void WritePitch(SpcPlayer *p, Channel *c, uint16 pitch) {
   static const uint16 kBaseNoteFreqs[13] = {2143, 2270, 2405, 2548, 2700, 2860, 3030, 3211, 3402, 3604, 3818, 4045, 4286};
   if ((pitch >> 8) >= 0x34) {
     pitch += (pitch >> 8) - 0x34;
@@ -240,8 +240,8 @@ static void WritePitch(struct SpcPlayer *p, struct Channel *c, uint16 pitch) {
   }
 }
 
-static void Music_ResetChan(struct SpcPlayer *p) {
-  struct Channel *c = &p->channel[7];
+static void Music_ResetChan(SpcPlayer *p) {
+  Channel *c = &p->channel[7];
   p->cur_chan_bit = 0x80;
   do {
     HIBYTE(c->channel_volume) = 0xff;
@@ -264,7 +264,7 @@ static void Music_ResetChan(struct SpcPlayer *p) {
   HIBYTE(p->tempo) = 0x20;
 }
 
-static void Channel_SetInstrument(struct SpcPlayer *p, struct Channel *c, uint8 instrument) {
+static void Channel_SetInstrument(SpcPlayer *p, Channel *c, uint8 instrument) {
   c->instrument_id = instrument;
   if (instrument & 0x80)
     instrument = instrument + 54 + p->percussion_base_id;
@@ -286,12 +286,12 @@ static void Channel_SetInstrument(struct SpcPlayer *p, struct Channel *c, uint8 
   c->instrument_pitch_base = ip[4] << 8 | ip[5];
 }
 
-static void ComputePitchAdd(struct Channel *c, uint8 pitch) {
+static void ComputePitchAdd(Channel *c, uint8 pitch) {
   c->pitch_target = pitch & 0x7f;
   c->pitch_add_per_tick = SpcDivHelper(c->pitch_target - (c->pitch >> 8), c->pitch_slide_length);
 }
 
-static void PitchSlideToNote_Check(struct SpcPlayer *p, struct Channel *c) {
+static void PitchSlideToNote_Check(SpcPlayer *p, Channel *c) {
   if (c->pitch_slide_length || p->ram[c->pattern_order_ptr_for_chan] != 0xf9)
     return;
 
@@ -307,7 +307,7 @@ static void PitchSlideToNote_Check(struct SpcPlayer *p, struct Channel *c) {
 
 static const uint8 kEffectByteLength[27] = {1, 1, 2, 3, 0, 1, 2, 1, 2, 1, 1, 3, 0, 1, 2, 3, 1, 3, 3, 0, 1, 3, 0, 3, 3, 3, 1};
 
-static void HandleEffect(struct SpcPlayer *p, struct Channel *c, uint8 effect) {
+static void HandleEffect(SpcPlayer *p, Channel *c, uint8 effect) {
   uint8 arg = kEffectByteLength[effect - 0xe0] ? p->ram[c->pattern_order_ptr_for_chan++] : 0;
 
   switch (effect) {
@@ -430,7 +430,7 @@ static void HandleEffect(struct SpcPlayer *p, struct Channel *c, uint8 effect) {
   }
 }
 
-static bool WantWriteKof(struct SpcPlayer *p, struct Channel *c) {
+static bool WantWriteKof(SpcPlayer *p, Channel *c) {
   int loops = c->subroutine_num_loops;
   int ptr = c->pattern_order_ptr_for_chan;
 
@@ -456,11 +456,11 @@ static bool WantWriteKof(struct SpcPlayer *p, struct Channel *c) {
   }
 }
 
-static void HandleTremolo(struct SpcPlayer *p, struct Channel *c) {
+static void HandleTremolo(SpcPlayer *p, Channel *c) {
   Not_Implemented();
 }
 
-static void CalcVibratoAddPitch(struct SpcPlayer *p, struct Channel *c, uint16 pitch, uint8 value) {
+static void CalcVibratoAddPitch(SpcPlayer *p, Channel *c, uint16 pitch, uint8 value) {
   int t = value << 2;
   t ^= (t & 0x100) ? 0xff : 0;
   int r = (c->vib_depth >= 0xf1) ?
@@ -469,7 +469,7 @@ static void CalcVibratoAddPitch(struct SpcPlayer *p, struct Channel *c, uint16 p
   WritePitch(p, c, pitch + (value & 0x80 ? -r : r));
 }
 
-static void HandlePanAndSweep(struct SpcPlayer *p, struct Channel *c) {
+static void HandlePanAndSweep(SpcPlayer *p, Channel *c) {
   p->did_affect_volumepitch_flag = 0;
   if (c->tremolo_depth) {
     c->tremolo_hold_count = c->tremolo_delay_ticks;
@@ -502,7 +502,7 @@ static void HandlePanAndSweep(struct SpcPlayer *p, struct Channel *c) {
     WritePitch(p, c, pitch);
 }
 
-static void HandleNoteTick(struct SpcPlayer *p, struct Channel *c) {
+static void HandleNoteTick(SpcPlayer *p, Channel *c) {
   if (c->note_keyoff_ticks_left != 0 && (--c->note_keyoff_ticks_left == 0 || c->note_ticks_left == 2)) {
     if (WantWriteKof(p, c) && !(p->cur_chan_bit & p->is_chan_on))
       Dsp_Write(p, KOF, p->cur_chan_bit);
@@ -538,18 +538,18 @@ static void HandleNoteTick(struct SpcPlayer *p, struct Channel *c) {
     WritePitch(p, c, pitch);
 }
 
-void CalcFinalVolume(struct SpcPlayer *p, struct Channel *c, uint8 vol) {
+void CalcFinalVolume(SpcPlayer *p, Channel *c, uint8 vol) {
   int t = (p->master_volume >> 8) * vol >> 8;
   t = t * c->channel_volume_master >> 8;
   t = t * (c->channel_volume >> 8) >> 8;
   c->final_volume = t * t >> 8;
 }
 
-void CalcTremolo(struct SpcPlayer *p, struct Channel *c) {
+void CalcTremolo(SpcPlayer *p, Channel *c) {
   Not_Implemented();
 }
 
-static void Chan_HandleTick(struct SpcPlayer *p, struct Channel *c) {
+static void Chan_HandleTick(SpcPlayer *p, Channel *c) {
   if (c->volume_fade_ticks) {
     c->volume_fade_ticks--;
     p->vol_dirty |= p->cur_chan_bit;
@@ -582,8 +582,8 @@ static void Chan_HandleTick(struct SpcPlayer *p, struct Channel *c) {
     WriteVolumeToDsp(p, c, c->pan_value);
 }
 
-static void Port0_HandleMusic(struct SpcPlayer *p) {
-  struct Channel *c;
+static void Port0_HandleMusic(SpcPlayer *p) {
+  Channel *c;
   uint8 a = p->new_value_from_snes[0];
   int t;
 
@@ -738,7 +738,7 @@ static inline uint8 Asl(uint8 *p) {
   return old >> 7;
 }
 
-static void Sfx_TurnOffChannel(struct SpcPlayer *p, struct Channel *c) {
+static void Sfx_TurnOffChannel(SpcPlayer *p, Channel *c) {
   c->sfx_which_sound = 0;
   p->is_chan_on &= ~p->current_bit;
   p->port1_active &= ~p->current_bit;
@@ -752,12 +752,12 @@ static void Sfx_TurnOffChannel(struct SpcPlayer *p, struct Channel *c) {
   }
 }
 
-static void Write_KeyOn(struct SpcPlayer *p, uint8 bit) {
+static void Write_KeyOn(SpcPlayer *p, uint8 bit) {
   Dsp_Write(p, KOF, 0);
   Dsp_Write(p, KON, bit);
 }
 
-static void PlayNote(struct SpcPlayer *p, struct Channel *c, uint8 note) {
+static void PlayNote(SpcPlayer *p, Channel *c, uint8 note) {
   if (note >= 0xca) {
     Channel_SetInstrument(p, c, note);
     note = 0xa4;
@@ -796,7 +796,7 @@ static void PlayNote(struct SpcPlayer *p, struct Channel *c, uint8 note) {
   WritePitch(p, c, c->pitch);
 }
 
-static void Sfx_MaybeDisableEcho(struct SpcPlayer *p) {
+static void Sfx_MaybeDisableEcho(SpcPlayer *p) {
   if (!(p->port_to_snes[0] & 0x10) || p->current_bit & p->sfx_channels_echo_mask2) {
     if (p->current_bit & p->reg_EON) {
       p->reg_EON ^= p->current_bit;
@@ -805,7 +805,7 @@ static void Sfx_MaybeDisableEcho(struct SpcPlayer *p) {
   }
 }
 
-static void Sfx_ChannelTick(struct SpcPlayer *p, struct Channel *c, bool is_continue) {
+static void Sfx_ChannelTick(SpcPlayer *p, Channel *c, bool is_continue) {
   uint8 cmd;
 
   if (is_continue) {
@@ -898,9 +898,9 @@ note_continue:
   c->sfx_sound_ptr = p->sfx_sound_ptr_cur;
 }
 
-static void Port1_Play_Inner(struct SpcPlayer *p) {
+static void Port1_Play_Inner(SpcPlayer *p) {
   p->port1_counter = 0;
-  struct Channel *c = &p->channel[7];
+  Channel *c = &p->channel[7];
   c->sfx_which_sound = p->new_value_from_snes[1];
   c->sfx_arr_countdown = 3;
   c->pitch_envelope_num_ticks = 0;
@@ -923,7 +923,7 @@ static void Port1_Play_Inner(struct SpcPlayer *p) {
   p->port3_active &= 0x3f;
 }
 
-static void Port1_StartNewSound(struct SpcPlayer *p) {
+static void Port1_StartNewSound(SpcPlayer *p) {
   if (p->port1_counter != 0) {
     if (--p->port1_counter == 0) {
       p->new_value_from_snes[1] = 5;
@@ -940,7 +940,7 @@ static void Port1_StartNewSound(struct SpcPlayer *p) {
   p->port1_current_bit = p->port1_active;
   if (!p->port1_current_bit)
     return;
-  struct Channel *c = &p->channel[7];
+  Channel *c = &p->channel[7];
   p->current_bit = 0x80;
   do {
     if (Asl(&p->port1_current_bit)) {
@@ -961,7 +961,7 @@ static void Port1_StartNewSound(struct SpcPlayer *p) {
   } while (c--, (p->current_bit >>= 1) != 0x10);
 }
 
-static void Port1_HandleCmd(struct SpcPlayer *p) {
+static void Port1_HandleCmd(SpcPlayer *p) {
   uint8 a = p->new_value_from_snes[1];
   if (!(a & 0x80)) {
     if (a != 0) {
@@ -976,11 +976,11 @@ static void Port1_HandleCmd(struct SpcPlayer *p) {
   }
 }
 
-static void Port2_StartNewSound(struct SpcPlayer *p) {
+static void Port2_StartNewSound(SpcPlayer *p) {
   p->port2_current_bit = p->port2_active;
   if (!p->port2_current_bit)
     return;
-  struct Channel *c = &p->channel[7];
+  Channel *c = &p->channel[7];
   p->current_bit = 0x80;
   do {
     if (Asl(&p->port2_current_bit)) {
@@ -1001,9 +1001,9 @@ static void Port2_StartNewSound(struct SpcPlayer *p) {
   } while (c--, p->current_bit >>= 1);
 }
 
-static struct Channel *Port2_AllocateChan(struct SpcPlayer *p) {
+static Channel *Port2_AllocateChan(SpcPlayer *p) {
   p->sfx_play_echo_flag = p->ram[0x18dd + (p->new_value_from_snes[2] & 0x3f) - 1];
-  struct Channel *c = &p->channel[7];
+  Channel *c = &p->channel[7];
   p->current_bit = 0x80;
   do {
     if (p->port2_active & p->current_bit && c->sfx_which_sound + c->sfx_pan == p->new_value_from_snes[2])
@@ -1026,9 +1026,9 @@ found_channel:
   return c;
 }
 
-static void Port2_HandleCmd(struct SpcPlayer *p) {
+static void Port2_HandleCmd(SpcPlayer *p) {
   while (p->new_value_from_snes[2] != 0 && p->is_chan_on != 0xff) {
-    struct Channel *c = Port2_AllocateChan(p);
+    Channel *c = Port2_AllocateChan(p);
     c->sfx_pan = p->new_value_from_snes[2] & 0xc0;
     c->sfx_which_sound = p->new_value_from_snes[2] & 0x3f;
     c->sfx_arr_countdown = 3;
@@ -1040,11 +1040,11 @@ static void Port2_HandleCmd(struct SpcPlayer *p) {
 }
 
 
-static void Port3_StartNewSound(struct SpcPlayer *p) {
+static void Port3_StartNewSound(SpcPlayer *p) {
   p->port3_current_bit = p->port3_active;
   if (!p->port3_current_bit)
     return;
-  struct Channel *c = &p->channel[7];
+  Channel *c = &p->channel[7];
   p->current_bit = 0x80;
   do {
     if (Asl(&p->port3_current_bit)) {
@@ -1065,9 +1065,9 @@ static void Port3_StartNewSound(struct SpcPlayer *p) {
   } while (c--, p->current_bit >>= 1);
 }
 
-static struct Channel *Port3_AllocateChan(struct SpcPlayer *p) {
+static Channel *Port3_AllocateChan(SpcPlayer *p) {
   p->sfx_play_echo_flag = p->ram[0x19d8 + (p->new_value_from_snes[3] & 0x3f)];
-  struct Channel *c = &p->channel[7];
+  Channel *c = &p->channel[7];
   p->current_bit = 0x80;
   do {
     if (p->port3_active & p->current_bit && c->sfx_which_sound + c->sfx_pan == p->new_value_from_snes[3])
@@ -1090,9 +1090,9 @@ found_channel:
   return c;
 }
 
-static void Port3_HandleCmd(struct SpcPlayer *p) {
+static void Port3_HandleCmd(SpcPlayer *p) {
   while (p->new_value_from_snes[3] != 0 && p->is_chan_on != 0xff) {
-    struct Channel *c = Port3_AllocateChan(p);
+    Channel *c = Port3_AllocateChan(p);
     c->sfx_pan = p->new_value_from_snes[3] & 0xc0;
     c->sfx_which_sound = p->new_value_from_snes[3] & 0x3f;
     c->sfx_arr_countdown = 3;
@@ -1103,7 +1103,7 @@ static void Port3_HandleCmd(struct SpcPlayer *p) {
   }
 }
 
-static void ReadPortFromSnes(struct SpcPlayer *p, int port) {
+static void ReadPortFromSnes(SpcPlayer *p, int port) {
   uint8 old = p->last_value_from_snes[port];
   p->last_value_from_snes[port] = p->input_ports[port];
   if (p->input_ports[port] != old)
@@ -1112,7 +1112,7 @@ static void ReadPortFromSnes(struct SpcPlayer *p, int port) {
     p->new_value_from_snes[port] = 0;
 }
 
-static void Spc_Loop_Part1(struct SpcPlayer *p) {
+static void Spc_Loop_Part1(SpcPlayer *p) {
   static const uint8 kRegAddrs0[10] = {EVOLL, EVOLR, EFB, EON, FLG, KON, KOF, NON, PMON, KOF};
 
   Dsp_Write(p, KOF, p->key_OFF);
@@ -1132,7 +1132,7 @@ static void Spc_Loop_Part1(struct SpcPlayer *p) {
   p->key_OFF = p->key_ON = 0;
 }
 
-static void Spc_Loop_Part2(struct SpcPlayer *p, uint8 ticks) {
+static void Spc_Loop_Part2(SpcPlayer *p, uint8 ticks) {
   int t = p->sfx_timer_accum + (uint8)(ticks * 0x38);
   p->sfx_timer_accum = t;
   if (t >= 256) {
@@ -1158,7 +1158,7 @@ static void Spc_Loop_Part2(struct SpcPlayer *p, uint8 ticks) {
     Port0_HandleMusic(p);
     ReadPortFromSnes(p, 0);
   } else if (p->port_to_snes[0]) {
-    struct Channel *c = p->channel;
+    Channel *c = p->channel;
     for (p->cur_chan_bit = 1; p->cur_chan_bit != 0; p->cur_chan_bit <<= 1, c++) {
       if (HIBYTE(c->pattern_order_ptr_for_chan))
         HandlePanAndSweep(p, c);
@@ -1166,10 +1166,10 @@ static void Spc_Loop_Part2(struct SpcPlayer *p, uint8 ticks) {
   }
 }
 
-static void Interrupt_Reset(struct SpcPlayer *p) {
+static void Interrupt_Reset(SpcPlayer *p) {
   dsp_reset(p->dsp);
 
-  memset(&p->new_value_from_snes, 0, sizeof(struct SpcPlayer) - offsetof(struct SpcPlayer, new_value_from_snes));
+  memset(&p->new_value_from_snes, 0, sizeof(SpcPlayer) - offsetof(SpcPlayer, new_value_from_snes));
   for (int i = 0; i < 8; i++)
     p->channel[i].index = i;
   SetupEchoParameter_EDL(p, 1);
@@ -1181,40 +1181,40 @@ static void Interrupt_Reset(struct SpcPlayer *p) {
   p->timer_cycles = 0;
 }
 
-struct SpcPlayer *SpcPlayer_Create() {
-  struct SpcPlayer *p = (struct SpcPlayer *)malloc(sizeof(struct SpcPlayer));
+SpcPlayer *SpcPlayer_Create() {
+  SpcPlayer *p = (SpcPlayer *)malloc(sizeof(SpcPlayer));
   p->dsp = dsp_init(p->ram);
   p->reg_write_history = 0;
   return p;
 }
 
-void SpcPlayer_Initialize(struct SpcPlayer *p) {
+void SpcPlayer_Initialize(SpcPlayer *p) {
   Interrupt_Reset(p);
   Spc_Loop_Part1(p);
 }
 
-void SpcPlayer_CopyVariablesToRam(struct SpcPlayer *p) {
-  struct Channel *c = p->channel;
+void SpcPlayer_CopyVariablesToRam(SpcPlayer *p) {
+  Channel *c = p->channel;
   for (int i = 0; i < 8; i++, c++) {
-    for (const struct MemMap *m = &kChannel_Maps[0]; m != &kChannel_Maps[countof(kChannel_Maps)]; m++)
+    for (const MemMap *m = &kChannel_Maps[0]; m != &kChannel_Maps[countof(kChannel_Maps)]; m++)
       memcpy(&p->ram[(m->org_off & 0x7fff) + i * 2], (uint8 *)c + m->off, m->org_off & 0x8000 ? 2 : 1);
   }
-  for (const struct MemMapSized *m = &kSpcPlayer_Maps[0]; m != &kSpcPlayer_Maps[countof(kSpcPlayer_Maps)]; m++)
+  for (const MemMapSized *m = &kSpcPlayer_Maps[0]; m != &kSpcPlayer_Maps[countof(kSpcPlayer_Maps)]; m++)
     memcpy(&p->ram[m->org_off], (uint8 *)p + m->off, m->size);
 }
 
-void SpcPlayer_CopyVariablesFromRam(struct SpcPlayer *p) {
-  struct Channel *c = p->channel;
+void SpcPlayer_CopyVariablesFromRam(SpcPlayer *p) {
+  Channel *c = p->channel;
   for (int i = 0; i < 8; i++, c++) {
-    for (const struct MemMap *m = &kChannel_Maps[0]; m != &kChannel_Maps[countof(kChannel_Maps)]; m++)
+    for (const MemMap *m = &kChannel_Maps[0]; m != &kChannel_Maps[countof(kChannel_Maps)]; m++)
       memcpy((uint8 *)c + m->off, &p->ram[(m->org_off & 0x7fff) + i * 2], m->org_off & 0x8000 ? 2 : 1);
   }
-  for (const struct MemMapSized *m = &kSpcPlayer_Maps[0]; m != &kSpcPlayer_Maps[countof(kSpcPlayer_Maps)]; m++)
+  for (const MemMapSized *m = &kSpcPlayer_Maps[0]; m != &kSpcPlayer_Maps[countof(kSpcPlayer_Maps)]; m++)
     memcpy((uint8 *)p + m->off, &p->ram[m->org_off], m->size);
 }
 
 
-void SpcPlayer_GenerateSamples(struct SpcPlayer *p) {
+void SpcPlayer_GenerateSamples(SpcPlayer *p) {
   assert(p->timer_cycles <= 64);
 
   assert(p->dsp->sampleOffset <= 534);
@@ -1241,7 +1241,7 @@ void SpcPlayer_GenerateSamples(struct SpcPlayer *p) {
   }
 }
 
-void SpcPlayer_Upload(struct SpcPlayer *p, const uint8_t *data) {
+void SpcPlayer_Upload(SpcPlayer *p, const uint8_t *data) {
   Dsp_Write(p, EVOLL, 0);
   Dsp_Write(p, EVOLR, 0);
   Dsp_Write(p, KOF, 0xff);
@@ -1271,7 +1271,7 @@ struct DspRegWriteHistory my_write_hist;
 struct SpcPlayer my_spc, my_spc_snapshot;
 static int loop_ctr;
 
-bool CompareSpcImpls(struct SpcPlayer *p, struct SpcPlayer *p_org, Apu *apu) {
+bool CompareSpcImpls(SpcPlayer *p, SpcPlayer *p_org, Apu *apu) {
   SpcPlayer_CopyVariablesToRam(p);
   memcpy(p->ram + 0x18, apu->ram + 0x18, 2); //lfsr_value
   memcpy(p->ram + 0x110, apu->ram + 0x110, 256-16);  // stack
@@ -1347,7 +1347,7 @@ void RunAudioPlayer() {
   bool run_both = 0;// false;// false;
 
   if (!run_both) {
-    struct SpcPlayer *p = &my_spc;
+    SpcPlayer *p = &my_spc;
     Dsp *dsp = dsp_init(p->ram);
     dsp_reset(dsp);
     p->dsp = dsp;
@@ -1367,7 +1367,7 @@ void RunAudioPlayer() {
     }
 
   } else {
-    struct SpcPlayer *p = &my_spc;
+    SpcPlayer *p = &my_spc;
     Dsp *dsp = dsp_init(p->ram);
     dsp_reset(dsp);
     p->dsp = dsp;

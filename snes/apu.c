@@ -31,8 +31,6 @@ void apu_free(Apu* apu) {
 }
 
 void apu_saveload(Apu *apu, SaveLoadFunc *func, void *ctx) {
-  size_t size = sizeof(struct Apu2);
-  size_t size2 = offsetof(Apu, hist);
   func(ctx, apu->ram, offsetof(Apu, hist) - offsetof(Apu, ram));
   dsp_saveload(apu->dsp, func, ctx);
   spc_saveload(apu->spc, func, ctx);

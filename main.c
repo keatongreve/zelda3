@@ -16,8 +16,8 @@
 #include "zelda_rtl.h"
 #include "zelda_cpu_infra.h"
 
-extern struct Ppu *GetPpuForRendering();
-extern struct Dsp *GetDspForRendering();
+extern Ppu *GetPpuForRendering();
+extern Dsp *GetDspForRendering();
 extern uint8 g_emulated_ram[0x20000];
 bool g_run_without_emu = false;
 

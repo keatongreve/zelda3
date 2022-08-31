@@ -4,22 +4,21 @@
 #include "nmi.h"
 #include "poly.h"
 #include "attract.h"
-#include "spc_player.h"
 #include "snes/ppu.h"
 
-struct ZeldaEnv g_zenv;
+ZeldaEnv g_zenv;
 // These point to the rewritten instance of the emu.
 uint8 g_ram[131072];
-struct SimpleHdma {
+typedef struct SimpleHdma {
   const uint8 *table;
   const uint8 *indir_ptr;
   uint8 rep_count;
   uint8 mode;
   uint8 ppu_addr;
   uint8 indir_bank;
-};
-void SimpleHdma_Init(struct SimpleHdma *c, DmaChannel *dc);
-void SimpleHdma_DoLine(struct SimpleHdma *c);
+} SimpleHdma;
+void SimpleHdma_Init(SimpleHdma *c, DmaChannel *dc);
+void SimpleHdma_DoLine(SimpleHdma *c);
 
 static const uint8 bAdrOffsets[8][4] = {
   {0, 0, 0, 0},
@@ -123,7 +122,7 @@ const uint8 *SimpleHdma_GetPtr(uint32 p) {
   }
 }
 
-void SimpleHdma_Init(struct SimpleHdma *c, DmaChannel *dc) {
+void SimpleHdma_Init(SimpleHdma *c, DmaChannel *dc) {
   if (!dc->hdmaActive) {
     c->table = 0;
     return;
@@ -135,7 +134,7 @@ void SimpleHdma_Init(struct SimpleHdma *c, DmaChannel *dc) {
   c->indir_bank = dc->indBank;
 }
 
-void SimpleHdma_DoLine(struct SimpleHdma *c) {
+void SimpleHdma_DoLine(SimpleHdma *c) {
   if (c->table == NULL)
     return;
   bool do_transfer = false;
@@ -161,7 +160,7 @@ void SimpleHdma_DoLine(struct SimpleHdma *c) {
 }
 
 void ZeldaDrawPpuFrame() {
-  struct SimpleHdma hdma_chans[2];
+  SimpleHdma hdma_chans[2];
 
   dma_startDma(g_zenv.dma, HDMAEN_copy, true);
 
@@ -186,7 +185,7 @@ void ZeldaDrawPpuFrame() {
 }
 
 void HdmaSetup(uint32 addr6, uint32 addr7, uint8 transfer_unit, uint8 reg6, uint8 reg7, uint8 indirect_bank) {
-  struct Dma *dma = g_zenv.dma;
+  Dma *dma = g_zenv.dma;
   if (addr6) {
     dma_write(dma, DMAP6, transfer_unit);
     dma_write(dma, BBAD6, reg6);

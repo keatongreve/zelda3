@@ -564,7 +564,7 @@ void DesertPrayer_BuildIrisHDMATable() {  // 87ea27
         break;
       k = (r4 - 1);
     } else {
-      struct Pair16U pair = DesertHDMA_CalculateIrisShapeLine();
+      Pair16U pair = DesertHDMA_CalculateIrisShapeLine();
       if (pair.a == 0) {
         spotlight_y_lower = 0;
       } else {
@@ -622,7 +622,7 @@ void DesertPrayer_BuildIrisHDMATable() {  // 87ea27
   }
 }
 
-struct Pair16U DesertHDMA_CalculateIrisShapeLine() {  // 87ecdc
+Pair16U DesertHDMA_CalculateIrisShapeLine() {  // 87ecdc
   static const uint8 kPrayingScene_Tab1[129] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0xfe, 0xfe, 0xfe,
     0xfd, 0xfd, 0xfd, 0xfd, 0xfc, 0xfc, 0xfc, 0xfb, 0xfb, 0xfb, 0xfa, 0xfa, 0xf9, 0xf9, 0xf8, 0xf8,
@@ -650,7 +650,7 @@ struct Pair16U DesertHDMA_CalculateIrisShapeLine() {  // 87ecdc
   uint16 r8 = r6 * BYTE(spotlight_var1) >> 8;
   if (BYTE(spotlight_var2))
     r8 <<= 1;
-  struct Pair16U ret = { r6, r8 };
+  Pair16U ret = { r6, r8 };
   return ret;
 }
 
@@ -1092,7 +1092,7 @@ void Module0E_0A_FluteMenu() {  // 8ab730
 }
 
 void FluteMenu_HandleSelection() {  // 8ab78b
-  struct PointU8 pt;
+  PointU8 pt;
 
   if (g_ram[0xc8] == 0) {
     if ((joypad1L_last | joypad1H_last) & 0xc0) {
@@ -1414,7 +1414,7 @@ void WorldMap_FillTilemapWithEF() {  // 8abda5
 }
 
 void WorldMap_HandleSprites() {  // 8abf66
-  struct PointU8 pt;
+  PointU8 pt;
 
   if (frame_counter & 0x10 && WorldMap_CalculateOamCoordinates(&pt))
     WorldMap_HandleSpriteBlink(0, 2, 0x3e, 0, pt.x - 4, pt.y - 4);
@@ -1576,7 +1576,7 @@ out:
   link_y_coord_spexit = ybak;
 }
 
-bool WorldMap_CalculateOamCoordinates(struct PointU8 *pt) {  // 8ac39f
+bool WorldMap_CalculateOamCoordinates(PointU8 *pt) {  // 8ac39f
   uint8 r14, r15;
 
   if (overworld_map_flags == 0) {

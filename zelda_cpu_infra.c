@@ -7,7 +7,6 @@
 #include "nmi.h"
 #include "poly.h"
 #include "attract.h"
-#include "spc_player.h"
 
 #include "snes/snes.h"
 #include "snes/cpu.h"
@@ -33,17 +32,17 @@ uint8 *GetCartRamPtr(uint32 addr) {
   return &cart->ram[addr];
 }
 
-struct Snapshot {
+typedef struct Snapshot {
   uint16 a, x, y, sp, dp, pc;
   uint8 k, db, flags;
   uint8 ram[0x20000];
   uint16 vram[0x8000];
   uint16 sram[0x2000];
-};
+} Snapshot;
 
-static struct Snapshot g_snapshot_mine, g_snapshot_theirs, g_snapshot_before;
+static Snapshot g_snapshot_mine, g_snapshot_theirs, g_snapshot_before;
 
-static void MakeSnapshot(struct Snapshot *s) {
+static void MakeSnapshot(Snapshot *s) {
   Cpu *c = g_cpu;
   s->a = c->a, s->x = c->x, s->y = c->y;
   s->sp = c->sp, s->dp = c->dp, s->db = c->db;
@@ -54,19 +53,19 @@ static void MakeSnapshot(struct Snapshot *s) {
   memcpy(s->vram, g_snes->ppu->vram, sizeof(uint16) * 0x8000);
 }
 
-static void MakeMySnapshot(struct Snapshot *s) {
+static void MakeMySnapshot(Snapshot *s) {
   memcpy(s->ram, g_zenv.ram, 0x20000);
   memcpy(s->sram, g_zenv.sram, 0x2000);
   memcpy(s->vram, g_zenv.ppu->vram, sizeof(uint16) * 0x8000);
 }
 
-static void RestoreMySnapshot(struct Snapshot *s) {
+static void RestoreMySnapshot(Snapshot *s) {
   memcpy(g_zenv.ram, s->ram, 0x20000);
   memcpy(g_zenv.sram, s->sram, 0x2000);
   memcpy(g_zenv.ppu->vram, s->vram, sizeof(uint16) * 0x8000);
 }
 
-static void RestoreSnapshot(struct Snapshot *s) {
+static void RestoreSnapshot(Snapshot *s) {
   Cpu *c = g_cpu;
 
   c->a = s->a, c->x = s->x, c->y = s->y;
@@ -80,7 +79,7 @@ static void RestoreSnapshot(struct Snapshot *s) {
 
 static bool g_fail;
 
-static void VerifySnapshotsEq(struct Snapshot *b, struct Snapshot *a, struct Snapshot *prev) {
+static void VerifySnapshotsEq(Snapshot *b, Snapshot *a, Snapshot *prev) {
   memcpy(b->ram, a->ram, 16);
   b->ram[0xfa1] = a->ram[0xfa1];
   b->ram[0x72] = a->ram[0x72];
@@ -299,24 +298,24 @@ Dsp *GetDspForRendering() {
   return g_zenv.player->dsp;
 }
 
-struct alloc {
+typedef struct AllocContext {
   uint8* data;
   uint32 size;
-};
+} AllocContext;
 
 void saveFunc(void *_ctx, void *data, size_t data_size) {
-  struct alloc *ctx = (struct alloc*)_ctx;
+  AllocContext *ctx = (AllocContext*)_ctx;
   ctx->data = realloc(ctx->data, ctx->size + data_size);
   memcpy(ctx->data + ctx->size, data, data_size);
   ctx->size += data_size;
 }
 
-struct LoadFuncState {
+typedef struct LoadFuncState {
   uint8 *p, *pend;
-};
+} LoadFuncState;
 
 void loadFunc(void *ctx, void *data, size_t data_size) {
-  struct LoadFuncState *st = (struct LoadFuncState *)ctx;
+  LoadFuncState *st = (LoadFuncState *)ctx;
   assert(st->pend - st->p >= data_size);
   memcpy(data, st->p, data_size);
   st->p += data_size;
@@ -359,7 +358,7 @@ void CopyStateAfterSnapshotRestore(bool is_reset) {
     }
   }
 }
-void SaveSnesState(struct alloc*ctx) {
+void SaveSnesState(AllocContext *ctx) {
   MakeSnapshot(&g_snapshot_before);
 
   // Copy from my state into the emulator
@@ -486,7 +485,7 @@ void StateRecorderLoad(FILE *f, bool replay_mode) {
     // Load snapshot from |base_snapshot_|, or reset if empty.
 
     if (base_snapshot_size) {
-      struct LoadFuncState state = { base_snapshot_, base_snapshot_ + base_snapshot_size };
+      LoadFuncState state = { base_snapshot_, base_snapshot_ + base_snapshot_size };
       snes_saveload(g_snes, &loadFunc, &state);
       assert(state.p == state.pend);
     } else {
@@ -495,10 +494,10 @@ void StateRecorderLoad(FILE *f, bool replay_mode) {
       is_reset = true;
     }
   } else {
-    struct alloc data = {malloc(hdr[6]), hdr[6]};
-    fread(data.data, 1, data.size, f);
+    AllocContext context = {malloc(hdr[6]), hdr[6]};
+    fread(context.data, 1, context.size, f);
 
-    struct LoadFuncState state = { data.data, data.data + data.size };
+    LoadFuncState state = { context.data, context.data + context.size };
     snes_saveload(g_snes, &loadFunc, &state);
     assert(state.p == state.pend);
   }
@@ -507,9 +506,9 @@ void StateRecorderLoad(FILE *f, bool replay_mode) {
 
 void StateRecorderSave(FILE *f) {
   uint32 hdr[8] = { 0 };
-  struct alloc data = {};
-  SaveSnesState(&data);
-  assert(base_snapshot_size == 0 || base_snapshot_size == data.size);
+  AllocContext context = {};
+  SaveSnesState(&context);
+  assert(base_snapshot_size == 0 || base_snapshot_size == context.size);
 
   hdr[0] = 1;
   hdr[1] = total_frames_;
@@ -517,20 +516,20 @@ void StateRecorderSave(FILE *f) {
   hdr[3] = last_inputs_;
   hdr[4] = frames_since_last_;
   hdr[5] = base_snapshot_size ? 1 : 0;
-  hdr[6] = data.size;
+  hdr[6] = context.size;
 
   fwrite(hdr, 8, 4, f);
   fwrite(log_, 1, log_size, f);
   fwrite(base_snapshot_, 1, base_snapshot_size, f);
-  fwrite(data.data, 1, data.size, f);
+  fwrite(context.data, 1, context.size, f);
 }
 
 void StateRecorderMigrateToBaseSnapshot() {
   printf("Migrating to base snapshot!\n");
-  struct alloc data;
-  SaveSnesState(&data);
-  base_snapshot_ = data.data;
-  base_snapshot_size = data.size;
+  AllocContext context;
+  SaveSnesState(&context);
+  base_snapshot_ = context.data;
+  base_snapshot_size = context.size;
 
   replay_mode_ = false;
   frames_since_last_ = 0;

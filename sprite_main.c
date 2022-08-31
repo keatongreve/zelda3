@@ -73,7 +73,7 @@ static const uint8 kWishPondItemData[50] = {
   0x09, 0x13, 0x14, 0x4a, 0x21, 0x1d, 0x15, 0x18, 0x19, 0x31, 0x1a, 0x1a, 0x1b, 0x1c, 0x4b, 0x1e,
   0x1f, 0x49, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x22, 0x23, 0x29, 0x16, 0x2b, 0x2c, 0x2d, 0x3d, 0x3c, 0x48
 };
-static const struct DrawMultipleData kUncleDraw_Table[48] = {
+static const DrawMultipleData kUncleDraw_Table[48] = {
   {  0, -10, 0x0e00, 2},
   {  0,   0, 0x0c06, 2},
   {  0, -10, 0x0e00, 2},
@@ -129,7 +129,7 @@ static const uint8 kUncle_LeaveHouse_Delay[2] = {64, 224};
 static const uint8 kUncle_LeaveHouse_Dir[2] = {2, 1};
 static const int8 kUncle_LeaveHouse_Xvel[4] = {0, 0, -12, 12};
 static const int8 kUncle_LeaveHouse_Yvel[4] = {-12, 12, 0, 0};
-static const struct DrawMultipleData kPriest_Dmd[20] = {
+static const DrawMultipleData kPriest_Dmd[20] = {
   { 0, -8, 0x0e20, 2},
   { 0,  0, 0x0e26, 2},
   { 0, -8, 0x0e20, 2},
@@ -151,14 +151,14 @@ static const struct DrawMultipleData kPriest_Dmd[20] = {
   {-7,  1, 0x0e0a, 2},
   { 3,  3, 0x0e0c, 2},
 };
-static const struct DrawMultipleData kSageMantle_Dmd[4] = {
+static const DrawMultipleData kSageMantle_Dmd[4] = {
   {0, 0, 0x162c, 2},
   {16, 0, 0x562c, 2},
   {0, 16, 0x062e, 2},
   {16, 16, 0x462e, 2},
 };
 static const uint8 kCrystalMaiden_Dma[16] = {0x20, 0xc0, 0x20, 0xc0, 0, 0xa0, 0, 0xa0, 0x40, 0x80, 0x40, 0x60, 0x40, 0x80, 0x40, 0x60};
-static const struct DrawMultipleData kCrystalMaiden_SpriteData[16] = {
+static const DrawMultipleData kCrystalMaiden_SpriteData[16] = {
   {1, -7, 0x0120, 2},
   {1,  3, 0x0122, 2},
   {1, -7, 0x0120, 2},
@@ -180,7 +180,7 @@ static const int8 kZelda_Xvel[4] = {0, 0, -9, 9};
 static const int8 kZelda_Yvel[4] = {-9, 9, 0, 0};
 static const int8 kHeartRefill_AccelX[2] = {1, -1};
 static const int8 kHeartRefill_VelTarget[2] = {10, -10};
-static const struct DrawMultipleData kFakeSword_Dmd[2] = {
+static const DrawMultipleData kFakeSword_Dmd[2] = {
   {4, 0, 0x00f4, 0},
   {4, 8, 0x00f5, 0},
 };
@@ -422,7 +422,7 @@ static const int8 kSpriteRope_Yvel[8] = {0, 0, 8, -8, 0, 0, 0x10, -0x10};
 static const int8 kSpriteRope_Tab0[4] = {2, 3, 1, 0};
 static const uint8 kSpawnBee_InitDelay[4] = {64, 64, 255, 255};
 static const int8 kSpawnBee_InitVel[8] = {15, 5, -5, -15, 20, 10, -10, -20};
-static const struct DrawMultipleData kLargeShadow_Dmd[15] = {
+static const DrawMultipleData kLargeShadow_Dmd[15] = {
   {-6, 19, 0x086c, 2},
   { 0, 19, 0x086c, 2},
   { 6, 19, 0x086c, 2},
@@ -1027,7 +1027,7 @@ void Sprite_PullSwitch_bounce(int k) {
 }
 
 void GiantMoldorm_DrawSegment_AB(int k, int lookback) {
-  static const struct DrawMultipleData kGiantMoldorm_SegA_Dmd[8] = {
+  static const DrawMultipleData kGiantMoldorm_SegA_Dmd[8] = {
     {-8, -8, 0x0084, 2},
     { 8, -8, 0x0086, 2},
     {-8,  8, 0x00a4, 2},
@@ -1234,7 +1234,7 @@ void Sprite_WishPond3(int k) {
   }
   case 3:
     if (sprite_delay_main[k] == 0) {
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0x72, &info);
       assert(j >= 0);
       Sprite_SetX(j, info.r0_x);
@@ -1356,7 +1356,7 @@ void Sprite_WishPond3(int k) {
 }
 
 int Sprite_SpawnSmallSplash(int k) {
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0xec, &info, 14);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -1465,7 +1465,7 @@ static inline uint8 ChainBallMult(uint16 a, uint8 b) {
 }
 
 void ChainBallTrooper_Draw(int k) {
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   SpriteDraw_GuardHead(k, &info, 0x18 / 4);
@@ -1554,7 +1554,7 @@ void Sprite_Wizzbeam(int k) {
 }
 
 void Kiki_LyingInwait(int k) {
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -1600,7 +1600,7 @@ void Sprite_CC(int k) {
     Sprite_Sidenexx(k);
     return;
   }
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -1614,7 +1614,7 @@ void Sprite_CD(int k) {
     Sprite_Sidenexx(k);
     return;
   }
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -1663,7 +1663,7 @@ void SpritePrep_MedallionTable(int k) {
 }
 
 void Hobo_Draw(int k) {  // 84ea60
-  static const struct DrawMultipleData kHobo_Dmd[12] = {
+  static const DrawMultipleData kHobo_Dmd[12] = {
     {-5,   3, 0x00a6, 2},
     { 3,   3, 0x00a7, 2},
     {-5,   3, 0x00a6, 2},
@@ -1683,14 +1683,14 @@ void Hobo_Draw(int k) {  // 84ea60
 bool Landmine_CheckDetonationFromHammer(int k) {  // 84ea81
   if (!(link_item_in_hand & 10) || player_oam_y_offset == 0x80)
     return false;
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   Player_SetupActionHitBox(&hb);
   Sprite_SetupHitBox(k, &hb);
   return CheckIfHitBoxesOverlap(&hb);
 }
 
 void Sprite_DrawLargeWaterTurbulence(int k) {  // 84ebe5
-  static const struct DrawMultipleData kWaterTurbulence_Dmd[6] = {
+  static const DrawMultipleData kWaterTurbulence_Dmd[6] = {
     {-10, 14, 0x00c0, 2},
     { -5, 16, 0x40c0, 2},
     { -2, 18, 0x00c0, 2},
@@ -1727,7 +1727,7 @@ void Sprite_70_KingHelmasaurFireball_bounce(int k) {  // 85807f
   static const uint8 kHelmasaurFireball_Char[3] = {0xcc, 0xcc, 0xca};
   static const uint8 kHelmasaurFireball_Flags[2] = {0x33, 0x73};
   static const uint8 kHelmasaurFireball_Gfx[4] = {2, 2, 1, 0};
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 flags = kHelmasaurFireball_Flags[++sprite_subtype2[k] >> 2 & 1];
 
   if ((uint8)((oam->x = sprite_x_lo[k] - BG2HOFS_copy2) + 32) < 64 ||
@@ -1811,7 +1811,7 @@ void Sprite_66_WallCannonVerticalLeft(int k) {  // 858090
     sprite_delay_aux2[k] = 16;
   if (sprite_delay_aux2[k] != 1 || sprite_pause[k])
     return;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   j = Sprite_SpawnDynamicallyEx(k, 0x6B, &info, 13);
   if (j >= 0) {
     SpriteSfx_QueueSfx3WithPan(k, 0x7);
@@ -1905,10 +1905,10 @@ void ArcheryGame_Host_ProctorGame(int k) {  // 8582d4
     sprite_head_dir[k]++;
   }
   Oam_AllocateFromRegionA(0x34);
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int i = sprite_delay_aux1[k] ? kArcheryGame_NumSpr[sprite_delay_aux1[k] >> 3] : archery_game_arrows_left;
   i = i * 2 + 7;
   do {
@@ -1936,10 +1936,10 @@ void ArcheryGame_DrawPrize(int k) {  // 8584cf
   static const int8 kGoodArcheryTarget_Draw_Flags[5] = {0x38, 0x38, 0x34, 0x35, 0x35};
   static const uint8 kGoodArcheryTarget_Draw_Char3[6] = {0x12, 0x32, 0x31, 3, 0x22, 0x33};
   static const uint8 kGoodArcheryTarget_Draw_Char4[6] = {0x7c, 0x7c, 0x22, 2, 0x12, 0x33};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr() + 1;
+  OamEnt *oam = GetOamCurPtr() + 1;
   int b = sprite_B[k];
   for (int i = 4; i >= 0; i--, oam++) {
     oam->x = info.x + kGoodArcheryTarget_X[i];
@@ -1956,7 +1956,7 @@ void Sprite_63_DebirandoPit(int k) {  // 858531
   static const uint8 kDebirandoPit_OpeningGfx[4] = {5, 4, 3, 3};
   static const uint8 kDebirandoPit_ClosingGfx[4] = {3, 3, 4, 5};
 
-  struct PointU8 pt;
+  PointU8 pt;
   Sprite_DirectionToFaceLink(k, &pt);
   if ((uint8)(pt.y + 0x20) < 0x40 && (uint8)(pt.x + 0x20) < 0x40)
     Oam_AllocateFromRegionB(16);
@@ -2040,13 +2040,13 @@ void DebirandoPit_Draw(int k) {  // 8586e4
     0, 0x40, 0x80, 0xc0, 0, 0x40, 0x80, 0xc0,
   };
   static const uint8 kDebirandoPit_Draw_Ext[6] = {2, 2, 2, 0, 0, 2};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   int g = sprite_graphics[k];
   if (g == 6)
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 ext = kDebirandoPit_Draw_Ext[g];
   for (int i = 3; i >= 0; i--, oam++) {
     int j = g * 4 + i;
@@ -2114,10 +2114,10 @@ void Debirando_Draw(int k) {  // 858857
   static const uint8 kDebirando_Draw_Char[16] = {0, 0, 0xd8, 0xd8, 0, 0, 0xd9, 0xd9, 0, 0, 0, 0, 0x20, 0x20, 0x20, 0x20};
   static const uint8 kDebirando_Draw_Flags[16] = {1, 0x41, 0, 0x40, 1, 1, 0, 0x40, 1, 1, 1, 1, 1, 1, 1, 1};
   static const uint8 kDebirando_Draw_Ext[16] = {0, 0, 0, 0, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int d = sprite_graphics[k] * 4;
   for (int i = 3; i >= 0; i--, oam++) {
     int j = d + i;
@@ -2235,7 +2235,7 @@ void Sprite_MasterSword_LightWell(int k) {  // 858a16
 }
 
 void SpriteDraw_LightFountain(int k) {  // 858a94
-  static const struct DrawMultipleData kMasterSword_LightBall_Dmd[12] = {
+  static const DrawMultipleData kMasterSword_LightBall_Dmd[12] = {
     {-6, 4, 0x0082, 2},
     {-6, 4, 0x4082, 2},
     {-6, 4, 0xc082, 2},
@@ -2254,7 +2254,7 @@ void SpriteDraw_LightFountain(int k) {  // 858a94
 }
 
 void MasterSword_SpawnLightWell(int k) {  // 858ab6
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x62, &info);
   Sprite_SetSpawnedCoordinates(j, &info);
   sprite_subtype2[j] = 4;
@@ -2263,7 +2263,7 @@ void MasterSword_SpawnLightWell(int k) {  // 858ab6
 }
 
 void MasterSword_SpawnLightFountain(int k) {  // 858ad0
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x62, &info);
   Sprite_SetSpawnedCoordinates(j, &info);
   sprite_subtype2[j] = 1;
@@ -2284,7 +2284,7 @@ void Sprite_MasterSword_LightBeam(int k) {  // 858aea
 }
 
 void MasterSword_SpawnReplacementLightBeam(int k) {  // 858b20
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j;
   if ((j = Sprite_SpawnDynamically(k, 0x62, &info)) < 0)
     return;
@@ -2311,7 +2311,7 @@ void MasterSword_SpawnLightBeam(int k, uint8 ain, uint8 yin) {  // 858b62
   static const uint8 kMasterSword_LightBeam_Flags0[2] = {5, 0x45};
   static const uint8 kMasterSword_LightBeam_Flags2[2] = {5, 5};
 
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j;
   if ((j = Sprite_SpawnDynamically(k, 0x62, &info)) < 0)
     return;
@@ -2369,7 +2369,7 @@ void MasterSword_SpawnLightBeam(int k, uint8 ain, uint8 yin) {  // 858b62
 void MasterSword_SpawnPendantProp(int k, uint8 ain) {  // 858cd3
   static const int8 kMasterSword_Pendant_Xv[4] = {-4, 4, 0, 0};
   static const int8 kMasterSword_Pendant_Yv[4] = {-2, -2, -4, -4};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j;
   if ((j = Sprite_SpawnDynamically(k, 0x62, &info)) < 0)
     return;
@@ -2422,10 +2422,10 @@ void MasterSword_Draw(int k) {  // 858da8
   static const int8 kMasterSword_Draw_X[6] = {-8, 0, -8, 0, -8, 0};
   static const int8 kMasterSword_Draw_Y[6] = {-8, -8, 0, 0, 8, 8};
   static const uint8 kMasterSword_Draw_Char[6] = {0xc3, 0xc4, 0xd3, 0xd4, 0xe0, 0xf0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 5; i >= 0; i--, oam++) {
     oam->x = kMasterSword_Draw_X[i] + info.x;
     oam->y = kMasterSword_Draw_Y[i] + info.y;
@@ -2470,10 +2470,10 @@ void SpikeRoller_Draw(int k) {  // 858ee3
     0, 0, 0, 0x80, 0, 0, 0, 0x80, 0x40, 0x40, 0x40, 0xc0, 0x40, 0x40, 0x40, 0xc0,
     0, 0, 0, 0x40, 0, 0, 0, 0x40, 0x80, 0x80, 0x80, 0xc0, 0x80, 0x80, 0x80, 0xc0,
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   uint8 chr = kSpikeRoller_Draw_Char[g * 8];
 
@@ -2533,7 +2533,7 @@ void Sprite_61_Beamos(int k) {  // 858f54
 void Beamos_FireLaser(int k) {  // 858fc2
   if (sprite_limit_instance >= 4)
     return;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j, t;
   if ((j = Sprite_SpawnDynamically(k, 0x61, &info)) < 0)
     return;
@@ -2560,7 +2560,7 @@ void Beamos_FireLaser(int k) {  // 858fc2
 void Beamos_Draw(int k) {  // 859068
   static const int8 kBeamos_Draw_Y[2] = {-16, 0};
   static const int8 kBeamos_Draw_Char[2] = {0x48, 0x68};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   int spr_offs = 0;
@@ -2570,7 +2570,7 @@ void Beamos_Draw(int k) {  // 859068
   } else {
     Oam_AllocateFromRegionC(12);
   }
-  struct OamEnt *oam = GetOamCurPtr() + spr_offs;
+  OamEnt *oam = GetOamCurPtr() + spr_offs;
   for (int i = 1; i >= 0; i--, oam++) {
     uint16 x = info.x;
     uint16 y = info.y + kBeamos_Draw_Y[i];
@@ -2583,7 +2583,7 @@ void Beamos_Draw(int k) {  // 859068
   SpriteDraw_Beamos_Eyeball(k, &info);
 }
 
-void SpriteDraw_Beamos_Eyeball(int k, struct PrepOamCoordsRet *info) {  // 859151
+void SpriteDraw_Beamos_Eyeball(int k, PrepOamCoordsRet *info) {  // 859151
   static const int8 kBeamosEyeball_Draw_X[32] = {
     -1,  0,  1,  2,  3,  4,  5, 7, 8, 10, 11, 12, 13, 14, 15, 16,
     17, 15, 14, 13, 12, 11, 10, 8, 7,  5,  4,  3,  2,  1,  0, -2,
@@ -2601,7 +2601,7 @@ void SpriteDraw_Beamos_Eyeball(int k, struct PrepOamCoordsRet *info) {  // 85915
     0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,    0,    0,    0,    0,    0,    0,    0,    0,
   };
   int n = (sprite_D[k] < 0x20) ? 0 : 2;
-  struct OamEnt *oam = GetOamCurPtr() + n;
+  OamEnt *oam = GetOamCurPtr() + n;
   int i = sprite_D[k] >> 1;
   BYTE(dungmap_var7) = kBeamosEyeball_Draw_X[i] - 3;
   oam->x = BYTE(dungmap_var7) + info->x;
@@ -2647,7 +2647,7 @@ void Sprite_Beamos_Laser(int k) {  // 8591b5
   SpriteSfx_QueueSfx3WithPan(k, 0x26);
   sprite_delay_main[k] = 16;
   Sprite_ZeroVelocity_XY(k);
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x61, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -2660,9 +2660,9 @@ void Sprite_Beamos_Laser(int k) {  // 8591b5
 }
 
 void BeamosLaser_Draw(int k) {  // 85925b
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   for (int i = 31; i >= 0; i--, oam++) {
     int j = g * 32 + i;
@@ -2682,10 +2682,10 @@ void Sprite_Beamos_LaserHit(int k) {  // 8592da
   static const uint8 kBeamosLaserHit_Draw_Flags[4] = {6, 0x46, 0x86, 0xc6};
   if (!sprite_delay_main[k])
     sprite_state[k] = 0;
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 3; i >= 0; i--, oam++) {
     uint16 x = info.x + kBeamosLaserHit_Draw_X[i];
     uint16 y = info.y + kBeamosLaserHit_Draw_Y[i];
@@ -2809,10 +2809,10 @@ void Crab_Draw(int k) {  // 859510
   static const int16 kCrab_Draw_X[4] = {-8, 8, -8, 8};
   static const uint8 kCrab_Draw_Char[4] = {0x8e, 0x8e, 0xae, 0xae};
   static const int8 kCrab_Draw_Flags[4] = {0, 0x40, 0, 0x40};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int d = sprite_graphics[k] * 2;
   for (int i = 1; i >= 0; i--, oam++) {
     int j = d + i;
@@ -2869,7 +2869,7 @@ void Sprite_57_DesertStatue(int k) {  // 85956d
 }
 
 void DesertBarrier_Draw(int k) {  // 859626
-  static const struct DrawMultipleData kDesertBarrier_Dmd[4] = {
+  static const DrawMultipleData kDesertBarrier_Dmd[4] = {
     {-8, -8, 0x008e, 2},
     { 8, -8, 0x408e, 2},
     {-8,  8, 0x00ae, 2},
@@ -2880,7 +2880,7 @@ void DesertBarrier_Draw(int k) {  // 859626
     sound_effect_ambient = 5;
   }
   BYTE(cur_sprite_x) += (sprite_delay_main[k] >> 1) & 1;
-  struct PointU8 pt;
+  PointU8 pt;
   Sprite_DirectionToFaceLink(k, &pt);
   if ((uint8)(pt.x + 0x20) < 0x40 && (uint8)(pt.y + 0x20) < 0x40)
     Oam_AllocateFromRegionB(16);
@@ -2921,7 +2921,7 @@ void Sprite_Fireball(int k) {  // 859683
   if ((link_is_bunny_mirror | link_disable_sprite_damage) || sign8(link_state_bits) || link_shield_type < 2 ||
       link_is_on_lower_level != sprite_floor[k])
     return;
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   Sprite_SetupHitBox(k, &hb);
   int j = link_direction_facing >> 1;
   if (button_b_frames)
@@ -2944,7 +2944,7 @@ void Sprite_Zora_Main(int k) {  // 859725
   static const int8 kSprite_Zora_Surface_XY[8] = {-32, -24, -16, -8, 8, 16, 24, 32};
   static const uint8 kSprite_Zora_AttackGfx[8] = {5, 5, 6, 10, 6, 5, 5, 5};
   static const uint8 kSprite_Zora_SubmergeGfx[12] = {12, 11, 9, 8, 7, 0, 0, 0, 0, 0, 0, 0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (!sprite_ai_state[k])
     Sprite_PrepOamCoord(k, &info);
   else
@@ -3020,10 +3020,10 @@ void Zora_Draw(int k) {  // 8598f5
     0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     2, 2, 0, 0, 2, 0, 0, 0, 0, 0,
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int d = sprite_graphics[k] * 2;
   for (int i = 1; i >= 0; i--, oam++) {
     int j = d + i;
@@ -3152,7 +3152,7 @@ void Sprite_SpawnBigSplash(int k) {  // 859b40
   SpriteSfx_QueueSfx2WithPan(k, 0x24);
 
   for (int i = 7; i >= 0; i--) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 8, &info);
     if (j >= 0) {
       sprite_state[j] = 3;
@@ -3171,7 +3171,7 @@ void Sprite_SpawnBigSplash(int k) {  // 859b40
 }
 
 void ZoraKing_Draw(int k) {  // 859cab
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
 
@@ -3200,7 +3200,7 @@ void ZoraKing_Draw(int k) {  // 859cab
       0xc5, 0xc5, 0xc5, 0xc5, 0x85, 0x85, 0x85, 0x85, 4, 0x44, 0x84, 0xc4,    4, 0x44, 0x84, 0xc4,
       4, 0x44, 0x84, 0xc4,
     };
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     int g = sprite_graphics[k];
     for (int i = 3; i >= 0; i--, oam++) {
       int j = g * 4 + i;
@@ -3223,7 +3223,7 @@ void ZoraKing_Draw(int k) {  // 859cab
   static const uint8 kZoraKing_Draw_Char1[8] = {0xae, 0xae, 0xae, 0xae, 0xac, 0xac, 0xac, 0xac};
   static const uint8 kZoraKing_Draw_Flags1[8] = {0, 0x40, 0x40, 0x40, 0, 0, 0x40, 0x40};
   Oam_AllocateFromRegionC(0x10);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = (sprite_delay_aux2[k] >> 1) & 4;
   for (int i = 3; i >= 0; i--, oam++) {
     int j = g + i;
@@ -3243,7 +3243,7 @@ void Sprite_56_WalkingZora(int k) {  // 859d4a
     sprite_x_vel[k] = (int8)sprite_x_recoil[k] >> 1;
     sprite_y_vel[k] = (int8)sprite_y_recoil[k] >> 1;
   }
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   switch(sprite_B[k]) {
   case 0:  // Waiting
     Sprite_PrepOamCoord(k, &info);
@@ -3347,11 +3347,11 @@ void WalkingZora_Draw(int k) {  // 859f08
   static const uint8 kWalkingZora_Draw_Char2[8] = {0xcc, 0xec, 0xcc, 0xec, 0xe8, 0xe8, 0xca, 0xca};
   static const uint8 kWalkingZora_Draw_Flags2[8] = {0x40, 0x40, 0, 0, 0, 0x40, 0, 0x40};
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   WalkingZora_DrawWaterRipples(k);
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   if (g == 0 || g == 2)
     info.y--;
@@ -3386,7 +3386,7 @@ void SpriteDraw_WaterRipple_WithOamAdjust(int k) {  // 859fe5
 }
 
 void SpriteDraw_WaterRipple(int k) {  // 859ffa
-  static const struct DrawMultipleData kWaterRipple_Dmd[6] = {
+  static const DrawMultipleData kWaterRipple_Dmd[6] = {
     {0, 10, 0x01d8, 0},
     {8, 10, 0x41d8, 0},
     {0, 10, 0x01d9, 0},
@@ -3396,7 +3396,7 @@ void SpriteDraw_WaterRipple(int k) {  // 859ffa
   };
   static const uint8 kWaterRipple_Idx[4] = {0, 1, 2, 1};
   Sprite_DrawMultiple(k, &kWaterRipple_Dmd[kWaterRipple_Idx[frame_counter >> 2 & 3] * 2], 2, NULL);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 t = (oam[0].flags & 0x30) | 0x4;
   oam[0].flags = t;
   oam[1].flags = t | 0x40;
@@ -3423,7 +3423,7 @@ void Sprite_53_ArmosKnight(int k) {  // 85a036
     }
     sprite_state[k] = 0;
     if (Sprite_CheckIfScreenIsClear()) {
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0xea, &info);
       assert(j >= 0);
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -3478,7 +3478,7 @@ void Sprite_53_ArmosKnight(int k) {  // 85a036
     if (!sprite_ai_state[k]) {
       uint16 x = overlord_y_hi[k] << 8 | overlord_x_hi[k];
       uint16 y = overlord_floor[k] << 8 | overlord_gen2[k];
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
       Sprite_Get16BitCoords(k);
@@ -3515,12 +3515,12 @@ void ArmosKnight_Draw(int k) {  // 85a274
     2, 2, 2, 2, 0, 0, 0, 0,
   };
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   if (!sprite_A[k] && submodule_index != 7)
     Oam_AllocateDeferToPlayer(k);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   for (int i = 3; i >= 0; i--, oam++) {
     int j = g * 4 + i;
@@ -3561,7 +3561,7 @@ void Sprite_54_Lanmolas(int k) {  // 85a3a2
   static const uint8 kLanmola_RandB[8] = {0x58, 0x50, 0x60, 0x70, 0x80, 0x90, 0xa0, 0x98};
   static const uint8 kLanmola_RandC[8] = {0x68, 0x60, 0x70, 0x80, 0x90, 0xa0, 0xa8, 0x80};
   static const int8 kLanmola_ZVel[2] = {2, -2};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   Lanmola_Draw(k);
   if (Sprite_ReturnIfPaused(k))
@@ -3606,7 +3606,7 @@ lbl_a:
     uint16 y2 = sprite_y_hi[k] << 8 | sprite_C[k];
     if ((uint16)(x - x2 + 2) < 4 && (uint16)(y - y2 + 2) < 4)
       sprite_ai_state[k] = 3;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x2, y2, 10);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x2, y2, 10);
     sprite_y_vel[k] = pt.y;
     sprite_x_vel[k] = pt.x;
     Sprite_MoveXY(k);
@@ -3635,7 +3635,7 @@ lbl_a:
     if (!sprite_delay_main[k]) {
       sprite_state[k] = 0;
       if (Sprite_CheckIfScreenIsClear()) {
-        struct SpriteSpawnInfo info;
+        SpriteSpawnInfo info;
         int j = Sprite_SpawnDynamically(k, 0xEA, &info);
         assert(j >= 0);
         Sprite_SetSpawnedCoordinates(j, &info);
@@ -3647,7 +3647,7 @@ lbl_a:
       int i = ((sprite_subtype2[k] - garnish_y_lo[k] * 8) & 0x3f) + k * 0x40;
       uint8 xlo = moldorm_x_lo[i] - BG2HOFS_copy2;
       uint8 ylo = moldorm_y_lo[i] - beamos_x_hi[i] - BG2VOFS_copy2;
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0x00, &info);
       if (j >= 0) {
         load_chr_halfslot_even_odd = 11;
@@ -3691,7 +3691,7 @@ void Lanmola_Draw(int k) {  // 85a64a
     return;
   j = sign8(sprite_y_vel[k]) ? 1 : 0;
   int oam_step = (j ? -1 : 1);
-  struct OamEnt *oam = GetOamCurPtr() + (j ? 7 : 0);
+  OamEnt *oam = GetOamCurPtr() + (j ? 7 : 0);
   uint8 i = n;
   do {
     int j = r2 + k * 64;
@@ -3726,7 +3726,7 @@ void Lanmola_Draw(int k) {  // 85a64a
     static const uint8 kLanmola_Draw_Char2[6] = {0xee, 0xee, 0xec, 0xec, 0xce, 0xce};
     static const uint8 kLanmola_Draw_Flags2[6] = {0, 0x40, 0, 0x40, 0, 0x40};
     Oam_AllocateFromRegionB(4);
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     oam->x = sprite_x_lo[k] - BG2HOFS_copy2;
     oam->y = sprite_y_lo[k] - BG2VOFS_copy2;
     j = kLanmola_Draw_Idx2[sprite_delay_main[k] >> 3];
@@ -3744,7 +3744,7 @@ void Lanmola_Draw(int k) {  // 85a64a
       Oam_AllocateFromRegionB(8);
     else
       Oam_AllocateFromRegionC(8);
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     uint8 r6 = (((sprite_delay_aux1[k] >> 2) & 3) ^ 3) * 2;
     uint8 x = sprite_D[k] - BG2HOFS_copy2;
     uint8 y = sprite_wallcoll[k] - BG2VOFS_copy2;
@@ -3813,7 +3813,7 @@ void Sprite_6E_Rope(int k) {  // 85a973
   if (Sprite_ReturnIfInactive(k))
     return;
   if (sprite_E[k]) {
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     oam[0].flags |= 0x30;
 
     uint8 old_z = sprite_z[k];
@@ -3860,7 +3860,7 @@ void Sprite_6E_Rope(int k) {  // 85a973
         sprite_ai_state[k]++;
         sprite_delay_main[k] = (a & 0x7f) + 0x40;
 
-        struct PointU8 pt;
+        PointU8 pt;
         uint8 dir = Sprite_DirectionToFaceLink(k, &pt);
         if ((uint8)(pt.y + 0x10) < 0x20 || (uint8)(pt.x + 0x18) < 0x20) {
           sprite_G[k] = 4;
@@ -3905,7 +3905,7 @@ void Sprite_6F_Keese(int k) {  // 85aa8b
     if ((k ^ frame_counter) & 3 | sprite_delay_main[k])
       return;
 
-    struct PointU8 pt;
+    PointU8 pt;
     uint8 dir = Sprite_DirectionToFaceLink(k, &pt);
     if ((uint8)(pt.y + 0x28) >= 0x50 || (uint8)(pt.x + 0x28) >= 0x50)
       return;
@@ -4004,7 +4004,7 @@ void Sprite_6A_BallNChain(int k) {  // 85b01b
   Sprite_MoveXY(k);
   Sprite_CheckDamageToLink(k);
 
-  struct PointU8 pt = { 0, 0 };
+  PointU8 pt = { 0, 0 };
 
   if (((k ^ frame_counter) & 0xf) == 0)
     sprite_head_dir[k] = Sprite_DirectionToFaceLink(k, &pt);
@@ -4058,9 +4058,9 @@ void BallNChain_Animate(int k) {  // 85b0ab
   sprite_graphics[k] = kFlailTrooperGfx[sprite_D[k] * 8 + (++sprite_subtype2[k] >> 2 & 7)];
 }
 
-void SpriteDraw_GuardHead(int k, struct PrepOamCoordsRet *info, int spr_offs) {  // 85b160
+void SpriteDraw_GuardHead(int k, PrepOamCoordsRet *info, int spr_offs) {  // 85b160
   int j = sprite_head_dir[k];
-  struct OamEnt *oam = GetOamCurPtr() + spr_offs;
+  OamEnt *oam = GetOamCurPtr() + spr_offs;
   uint16 x = info->x, y = info->y - 9;
   oam->x = x;
   oam->y = ClampYForOam(y);
@@ -4069,10 +4069,10 @@ void SpriteDraw_GuardHead(int k, struct PrepOamCoordsRet *info, int spr_offs) { 
   bytewise_extended_oam[oam - oam_buf] = 2 | (x >> 8 & 1);
 }
 
-void SpriteDraw_BNCBody(int k, struct PrepOamCoordsRet *info, int spr_offs) {  // 85b3cb
+void SpriteDraw_BNCBody(int k, PrepOamCoordsRet *info, int spr_offs) {  // 85b3cb
   int g = sprite_graphics[k];
   spr_offs += kFlailTrooperBody_SprOffs[g] >> 2;
-  struct OamEnt *oam = GetOamCurPtr() + spr_offs;
+  OamEnt *oam = GetOamCurPtr() + spr_offs;
   int n = kFlailTrooperBody_Num[g];
   do {
     int j = g * 3 + n;
@@ -4088,8 +4088,8 @@ void SpriteDraw_BNCBody(int k, struct PrepOamCoordsRet *info, int spr_offs) {  /
   } while (oam++, --n >= 0);
 }
 
-void SpriteDraw_BNCFlail(int k, struct PrepOamCoordsRet *info) {  // 85b468
-  struct OamEnt *oam = GetOamCurPtr();
+void SpriteDraw_BNCFlail(int k, PrepOamCoordsRet *info) {  // 85b468
+  OamEnt *oam = GetOamCurPtr();
 
   BYTE(dungmap_var7) = info->x;
   HIBYTE(dungmap_var7) = info->y;
@@ -4159,10 +4159,10 @@ void SpriteDraw_BigCannonball(int k) {  // 85b6a4
   static const uint8 kMetalBallLarge_Char[8] = {0x84, 0x88, 0x88, 0x88, 0x86, 0x88, 0x88, 0x88};
   static const uint8 kMetalBallLarge_Flags[4] = {0, 0, 0xc0, 0x80};
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   for (int i = 3; i >= 0; i--, oam++) {
     uint16 x = info.x + kMetalBallLarge_X[i];
@@ -4226,11 +4226,11 @@ void Sprite_51_ArmosStatue(int k) {  // 85b703
 }
 
 void Armos_Draw(int k) {  // 85b7ef
-  static const struct DrawMultipleData kArmos_Dmd[2] = {
+  static const DrawMultipleData kArmos_Dmd[2] = {
     {0, -16, 0x00c0, 2},
     {0,   0, 0x00e0, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (!sprite_ai_state[k]) {
     if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
       return;
@@ -4297,7 +4297,7 @@ void Sprite_4C_Geldman(int k) {  // 85b8b3
   static const uint8 kGerudoMan_EmergeGfx[8] = {3, 2, 0, 0, 0, 0, 0, 0};
   static const uint8 kGerudoMan_PursueGfx[2] = {4, 5};
   static const uint8 kGerudoMan_SubmergeGfx[5] = {0, 1, 2, 3, 3};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (sprite_ai_state[k] < 2)
     Sprite_PrepOamCoord(k, &info);
   else
@@ -4366,10 +4366,10 @@ void GerudoMan_Draw(int k) {  // 85ba24
     0, 0, 0, 0x40, 0x40, 0x40, 0, 0x40, 0x40, 0, 0x40, 0x40, 0x40, 0x40, 0x40, 0, 0, 0,
   };
   static const uint8 kGerudoMan_Draw_Ext[18] = { 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   for (int i = 2; i >= 0; i--, oam++) {
     int j = g * 3 + i;
@@ -4461,10 +4461,10 @@ void Toppo_Draw(int k) {  // 85bbff
   static const uint8 kToppo_Draw_Flags[15] = {0, 0x40, 0x40, 0, 0x40, 0x40, 0, 0, 0x40, 0, 0, 0, 0x40, 0x40, 0x40};
   static const uint8 kToppo_Draw_Ext[15] = {0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 2};
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   uint16 ybase = Sprite_GetY(k) - BG2VOFS_copy2;
   for (int i = 2; i >= 0; i--, oam++) {
@@ -4503,7 +4503,7 @@ void Sprite_4B_GreenKnifeGuard(int k) {  // 85bca2
   sprite_delay_main[k] = (GetRandomNumber() & 0x3f) + 0x30;
   sprite_ai_state[k]++;
   sprite_D[k] = sprite_head_dir[k];
-  struct PointU8 out;
+  PointU8 out;
   int j = sprite_D[k];
   if (j == Sprite_DirectionToFaceLink(k, &out) &&
      (((uint8)(out.x + 0x10) < 0x20) || ((uint8)(out.y + 0x10) < 0x20))) {
@@ -4531,10 +4531,10 @@ out:
 }
 
 void Recruit_Draw(int k) {  // 85bd7e
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int r6 = sprite_graphics[k];
   int hd = sprite_head_dir[k];
   uint16 x = info.x;
@@ -4581,7 +4581,7 @@ void Sprite_4A_BombGuard(int k) {  // 85be0a
 
 void SpriteBomb_CheckDamageToSprite(int k, int j) {  // 85be49
   int x = Sprite_GetX(k) - 16, y = Sprite_GetY(k) - 16;
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   hb.r0_xlo = x;
   hb.r8_xhi = x >> 8;
   hb.r3 = hb.r2 = 48;
@@ -4593,7 +4593,7 @@ void SpriteBomb_CheckDamageToSprite(int k, int j) {  // 85be49
   Ancilla_CheckDamageToSprite_preset(j, 8);
   x = Sprite_GetX(j);
   y = Sprite_GetY(j) - sprite_z[j];
-  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
+  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
   sprite_y_recoil[j] = pt.y;
   sprite_x_recoil[j] = pt.x;
 }
@@ -4656,14 +4656,14 @@ void BombGuard_CreateBomb(int k) {  // 85bfc1
   static const int8 kBombTrooperBomb_X[4] = {0, 1, 9, -8};
   static const int8 kBombTrooperBomb_Y[4] = {-12, -12, -15, -13};
   static const int8 kBombTrooperBomb_Zvel[16] = {32, 40, 48, 56, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x4a, &info);
   if (j >= 0) {
     int i = sprite_D[k];
     Sprite_SetX(j, info.r0_x + kBombTrooperBomb_X[i]);
     Sprite_SetY(j, info.r2_y + kBombTrooperBomb_Y[i]);
     Sprite_ApplySpeedTowardsLink(j, 16);
-    struct PointU8 pt;
+    PointU8 pt;
     sprite_C[j] = 1;
     Sprite_DirectionToFaceLink(j, &pt);
     if (sign8(pt.x))
@@ -4680,7 +4680,7 @@ void BombGuard_CreateBomb(int k) {  // 85bfc1
 }
 
 void BombTrooper_Draw(int k) {  // 85c04b
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   SpriteDraw_GuardHead(k, &info, 2);
@@ -4690,10 +4690,10 @@ void BombTrooper_Draw(int k) {  // 85c04b
   SpriteDraw_Shadow_custom(k, &info, 10);
 }
 
-void SpriteDraw_BombGuard_Arm(int k, struct PrepOamCoordsRet *info) {  // 85c089
+void SpriteDraw_BombGuard_Arm(int k, PrepOamCoordsRet *info) {  // 85c089
   static const int8 kBombTrooper_DrawArm_X[8] = {-1, 1, 2, 0, 9, 9, -8, -8};
   static const int8 kBombTrooper_DrawArm_Y[8] = {-12, -12, -12, -12, -16, -14, -12, -14};
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = sprite_D[k] * 2 | sprite_subtype2[k];
   uint16 x = info->x + kBombTrooper_DrawArm_X[j];
   uint16 y = info->y + kBombTrooper_DrawArm_Y[j];
@@ -4709,10 +4709,10 @@ void SpriteDraw_SpriteBombExplosion(int k) {  // 85c113
   static const int8 kEnemyBombExplosion_Y[16] = {-12, -12, 12, 12, -8, -8, 8, 8, -8, -8, 8, 8, 0, 0, 0, 0};
   static const uint8 kEnemyBombExplosion_Char[16] = {0x88, 0x88, 0x88, 0x88, 0x8a, 0x8a, 0x8a, 0x8a, 0x84, 0x84, 0x84, 0x84, 0x86, 0x86, 0x86, 0x86};
   static const uint8 kEnemyBombExplosion_Flags[16] = {0, 0x40, 0x80, 0xc0, 0, 0x40, 0x80, 0xc0, 0, 0x40, 0x80, 0xc0, 0, 0, 0, 0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int base = sprite_delay_aux1[k] >> 1 & 0xc;
   for (int i = 3; i >= 0; i--, oam++) {
     int j = base + i;
@@ -4759,7 +4759,7 @@ void Probe(int k) {  // 85c15d
     }
     sprite_state[k] = 0;
   } else {
-    struct PrepOamCoordsRet oam;
+    PrepOamCoordsRet oam;
     if (Sprite_PrepOamCoordOrDoubleRet(k, &oam))
       return;
     if ((oam.x | oam.y) >= 256)
@@ -4958,7 +4958,7 @@ void Sprite_Guard_SendOutProbe(int k) {  // 85c5f2
 }
 
 void Sprite_SpawnProbeAlways(int k, uint8 r15) {  // 85c612
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x41, &info, 10);
   if (j < 0)
     return;
@@ -4980,7 +4980,7 @@ void Sprite_SpawnProbeAlways(int k, uint8 r15) {  // 85c612
 }
 
 void Guard_HandleAllAnimation(int k) {  // 85c680
-  struct PrepOamCoordsRet poc;
+  PrepOamCoordsRet poc;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &poc))
     return;
   Guard_AnimateHead(k, 0, &poc);
@@ -4990,8 +4990,8 @@ void Guard_HandleAllAnimation(int k) {  // 85c680
     SpriteDraw_Shadow_custom(k, &poc, kSoldier_DrawShadow[sprite_D[k]]);
 }
 
-void Guard_AnimateHead(int k, int oam_offs, const struct PrepOamCoordsRet *poc) {  // 85c6de
-  struct OamEnt *oam = GetOamCurPtr() + oam_offs;
+void Guard_AnimateHead(int k, int oam_offs, const PrepOamCoordsRet *poc) {  // 85c6de
+  OamEnt *oam = GetOamCurPtr() + oam_offs;
   oam->x = poc->x;
   int dir = sprite_head_dir[k];
   uint16 y = poc->y - kSoldier_Draw1_Yd[sprite_graphics[k]];
@@ -5001,10 +5001,10 @@ void Guard_AnimateHead(int k, int oam_offs, const struct PrepOamCoordsRet *poc) 
   bytewise_extended_oam[oam - oam_buf] = 2 | (poc->x & 0x100) >> 8;
 }
 
-void Guard_AnimateBody(int k, int oam_idx, const struct PrepOamCoordsRet *poc) {  // 85ca09
+void Guard_AnimateBody(int k, int oam_idx, const PrepOamCoordsRet *poc) {  // 85ca09
   int g = sprite_graphics[k] * 4;
   uint8 type = sprite_type[k];
-  struct OamEnt *oam = GetOamCurPtr() + oam_idx;
+  OamEnt *oam = GetOamCurPtr() + oam_idx;
   for (int i = 3; i >= 0; i--) {
     int j = i + g;
     if (type >= 0x46 && (!kSoldier_Draw2_Ext[j] || i == 3 && kSoldier_Draw2_Char[j] == 0x20))
@@ -5030,11 +5030,11 @@ void Guard_AnimateBody(int k, int oam_idx, const struct PrepOamCoordsRet *poc) {
   }
 }
 
-void Guard_AnimateWeapon(int k, const struct PrepOamCoordsRet *poc) {  // 85cb64
+void Guard_AnimateWeapon(int k, const PrepOamCoordsRet *poc) {  // 85cb64
   int oam_idx = kSoldier_Draw3_OamIdx[sprite_D[k]] >> 2;
   int g = sprite_graphics[k] * 2;
   uint8 type = sprite_type[k];
-  struct OamEnt *oam = GetOamCurPtr() + oam_idx;
+  OamEnt *oam = GetOamCurPtr() + oam_idx;
   for (int i = 1; i >= 0; i--, oam++) {
     int j = i + g;
     uint16 x = poc->x + kSoldier_Draw3_Xd[j];
@@ -5098,7 +5098,7 @@ void Sprite_44_BluesainBolt(int k) {  // 85cc65
 }
 
 void PsychoTrooper_Draw(int k) {  // 85ccd5
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   SpriteDraw_GuardHead(k, &info, 3);
@@ -5108,13 +5108,13 @@ void PsychoTrooper_Draw(int k) {  // 85ccd5
     SpriteDraw_Shadow_custom(k, &info, kSoldier_DrawShadow[sprite_D[k]]);
 }
 
-void SpriteDraw_GuardSpear(int k, struct PrepOamCoordsRet *info, int spr_offs) {  // 85cd54
+void SpriteDraw_GuardSpear(int k, PrepOamCoordsRet *info, int spr_offs) {  // 85cd54
   static const int8 kSolderThrowing_Draw_X[16] = {15, 7, 17, 9, -8, 0, -10, -2, 13, 13, 13, 13, -4, -4, -4, -4};
   static const int8 kSolderThrowing_Draw_Y[16] = {-2, -2, -2, -2, -2, -2, -2, -2, 8, 0, 10, 2, -14, -6, -16, -8};
   static const uint8 kSolderThrowing_Draw_Char[16] = {0x6f, 0x7f, 0x6f, 0x7f, 0x6f, 0x7f, 0x6f, 0x7f, 0x6e, 0x7e, 0x6e, 0x7e, 0x6e, 0x7e, 0x6e, 0x7e};
   static const uint8 kSolderThrowing_Draw_Flags[16] = {0x40, 0x40, 0x40, 0x40, 0, 0, 0, 0, 0x80, 0x80, 0x80, 0x80, 0, 0, 0, 0};
 
-  struct OamEnt *oam = GetOamCurPtr() + spr_offs;
+  OamEnt *oam = GetOamCurPtr() + spr_offs;
   uint8 r6 = sprite_D[k] * 4 + (((sprite_A[k] ^ 1) << 1) & 2);
   for (int i = 1; i >= 0; i--, oam++) {
     int j = r6 + i;
@@ -5247,7 +5247,7 @@ agitated_jump_to:
         j += 4;
       uint16 x = link_x_coord + kSolderThrowing_Xd[j];
       uint16 y = link_y_coord + kSolderThrowing_Yd[j];
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 24);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 24);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
       if ((uint8)(pt.xdiff + 6) < 12 && (uint8)(pt.ydiff + 6) < 12) {
@@ -5281,7 +5281,7 @@ void Guard_LaunchProjectile(int k) {  // 85d0c5
   static const int8 kJavelinProjectile_Yvel[8] = {0, 0, 48, -48, 0, 0, 32, -32};
   static const uint8 kJavelinProjectile_Flags4[4] = {5, 5, 6, 6};
 
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x1b, &info);
   if (j < 0)
     return;
@@ -5313,7 +5313,7 @@ void BushJavelinSoldier_Draw(int k) {  // 85d141
   sprite_oam_flags[k] = bak1;
   sprite_graphics[k] = bak0;
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Guard_AnimateHead(k, 0x10 / 4, &info);
@@ -5326,7 +5326,7 @@ void BushJavelinSoldier_Draw(int k) {  // 85d141
 }
 
 void JavelinTrooper_Draw(int k) {  // 85d192
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   SpriteDraw_GuardHead(k, &info, 3);
@@ -5414,7 +5414,7 @@ void Sprite_BushGuard_Main(int k) {  // 85d1d3
 }
 
 void BushGuard_SpawnFoliage(int k) {  // 85d252
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xec, &info);
   if (j < 0)
     return;
@@ -5429,10 +5429,10 @@ void BushSoldierCommon_Draw(int k) {  // 85d321
   static const int8 kBushSoldierCommon_Y[14] = {8, 8, 8, 8, 2, 8, 0, 8, -3, 8, -3, 8, -3, 8};
   static const uint8 kBushSoldierCommon_Char[14] = {0x20, 0x20, 0x20, 0x20, 0x40, 0x20, 0x40, 0x20, 0x40, 0x20, 0x42, 0x20, 0x42, 0x20};
   static const uint8 kBushSoldierCommon_Flags[14] = {9, 3, 0x49, 0x43, 9, 3, 0x49, 0x43, 9, 3, 0x49, 0x43, 9, 3};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k] * 2;
   for (int i = 1; i >= 0; i--, oam++) {
     int j = g + i;
@@ -5453,7 +5453,7 @@ void ArcherSoldier_Draw(int k) {  // 85d38c
   static const uint8 kArcherSoldier_WeaponOamOffs[4] = {0, 0, 0, 16};
   static const uint8 kArcherSoldier_HeadOamOffs[4] = {16, 16, 16, 0};
   static const uint8 kArcherSoldier_BodyOamOffs[4] = {20, 20, 20, 4};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Guard_AnimateHead(k, kArcherSoldier_HeadOamOffs[sprite_D[k]] >> 2, &info);
@@ -5463,7 +5463,7 @@ void ArcherSoldier_Draw(int k) {  // 85d38c
     SpriteDraw_Shadow_custom(k, &info, kSoldier_DrawShadow[sprite_D[k]]);
 }
 
-void SpriteDraw_Archer_Weapon(int k, int spr_offs, struct PrepOamCoordsRet *info) {  // 85d4d4
+void SpriteDraw_Archer_Weapon(int k, int spr_offs, PrepOamCoordsRet *info) {  // 85d4d4
   static const uint8 kArcherSoldier_Tab1[4] = {9, 3, 0, 6};
   static const int8 kArcherSoldier_Draw_X[48] = {
     -1,  7,  3,  3, -1,  7,  3,  3, -1,  7,  7,  7, -5, -5, -10, -2,
@@ -5485,7 +5485,7 @@ void SpriteDraw_Archer_Weapon(int k, int spr_offs, struct PrepOamCoordsRet *info
     0xd, 0x8d, 0x48, 0x48,  0xd, 0x8d, 0x8d, 0x8d, 0x8d, 0xcd, 0x88, 0x88, 0x8d, 0xcd, 0x88, 0x88,
     0x8d, 0xcd, 0xcd, 0xcd, 0x4d, 0xcd,    8,    8, 0x4d, 0xcd,    8,    8, 0x4d, 0xcd, 0xcd, 0xcd,
   };
-  struct OamEnt *oam = GetOamCurPtr() + spr_offs;
+  OamEnt *oam = GetOamCurPtr() + spr_offs;
   int base = sprite_graphics[k] - 14;
   if (base < 0)
     base = kArcherSoldier_Tab1[sprite_D[k]];
@@ -5502,10 +5502,10 @@ void SpriteDraw_Archer_Weapon(int k, int spr_offs, struct PrepOamCoordsRet *info
 }
 
 void TutorialSoldier_Draw(int k) {  // 85d64b
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int d = sprite_graphics[k] * 5;
   for (int i = 4; i >= 0; i--, oam++) {
     int j = d + i;
@@ -5574,11 +5574,11 @@ void PullSwitch_HandleUpPulling(int k) {  // 85d743
 }
 
 void BadPullDownSwitch_Draw(int k) {  // 85d7f9
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Oam_AllocateDeferToPlayer(k);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 yoff = kBadPullSwitch_Tab5[kBadPullSwitch_Tab4[sprite_graphics[k]]];
   for (int i = 4; i >= 0; i--, oam++) {
     oam->x = info.x + kBadPullDownSwitch_X[i];
@@ -5592,11 +5592,11 @@ void BadPullDownSwitch_Draw(int k) {  // 85d7f9
 
 void BadPullUpSwitch_Draw(int k) {  // 85d858
   static const uint8 kBadPullUpSwitch_Tab2[2] = {0xa2, 0xa4};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Oam_AllocateDeferToPlayer(k);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 yoff = kBadPullSwitch_Tab5[kBadPullSwitch_Tab4[sprite_graphics[k]]];
   for (int i = 1; i >= 0; i--, oam++) {
     uint16 x = info.x;
@@ -5640,11 +5640,11 @@ void PullSwitch_FacingDown(int k) {  // 85d8b5
 
 void GoodPullSwitch_Draw(int k) {  // 85d953
   static const uint8 kGoodPullSwitch_Tab2[14] = {1, 1, 2, 3, 2, 3, 4, 5, 6, 7, 6, 7, 7, 7};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Oam_AllocateDeferToPlayer(k);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 t = kGoodPullSwitch_Tab2[sprite_graphics[k]];
   oam[0].x = oam[1].x = info.x;
   oam[0].y = info.y - 1;
@@ -5686,7 +5686,7 @@ void PullSwitch_HandleDownPulling(int k) {  // 85d999
 
 void Priest_SpawnMantle(int k) {  // 85db27
   sprite_state[15]++;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x73, &info);
   sprite_state[15] = 0;
   sprite_flags2[j] = sprite_flags2[j] & 0xf0 | 0x3;
@@ -5971,7 +5971,7 @@ void Sprite_QuarrelBros(int k) {  // 85e013
 }
 
 void QuarrelBros_Draw(int k) {  // 85e17f
-  static const struct DrawMultipleData kQuarrelBros_Dmd[16] = {
+  static const DrawMultipleData kQuarrelBros_Dmd[16] = {
     {0, -12, 0x0004, 2},
     {0,   0, 0x000a, 2},
     {0, -11, 0x0004, 2},
@@ -5989,7 +5989,7 @@ void QuarrelBros_Draw(int k) {  // 85e17f
     {0, -11, 0x4008, 2},
     {0,   1, 0x400a, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kQuarrelBros_Dmd[sprite_graphics[k] * 2 + sprite_D[k] * 4], 2, &info);
   SpriteDraw_Shadow(k, &info);
 
@@ -6000,7 +6000,7 @@ void Sprite_YoungSnitchLady(int k) {  // 85e2f2
 }
 
 void YoungSnitchLady_Draw(int k) {  // 85e37f
-  static const struct DrawMultipleData kYoungSnitchLady_Dmd[16] = {
+  static const DrawMultipleData kYoungSnitchLady_Dmd[16] = {
     {0, -8, 0x0026, 2},
     {0,  0, 0x00e8, 2},
     {0, -7, 0x0026, 2},
@@ -6018,7 +6018,7 @@ void YoungSnitchLady_Draw(int k) {  // 85e37f
     {0, -7, 0x4028, 2},
     {0,  1, 0x40e6, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kYoungSnitchLady_Dmd[sprite_graphics[k] * 2 + sprite_D[k] * 4], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -6032,11 +6032,11 @@ void Sprite_InnKeeper(int k) {  // 85e3af
 }
 
 void InnKeeper_Draw(int k) {  // 85e3dc
-  static const struct DrawMultipleData kInnKeeper_Dmd[2] = {
+  static const DrawMultipleData kInnKeeper_Dmd[2] = {
     {0, -8, 0x00c4, 2},
     {0,  0, 0x00ca, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, kInnKeeper_Dmd, 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -6095,7 +6095,7 @@ void Witch_AcceptShroom(int k) {  // 85e4cf
 }
 
 void Witch_Draw(int k) {  // 85e55d
-  static const struct OamEntSigned kWitch_DrawDataA[16] = {
+  static const OamEntSigned kWitch_DrawDataA[16] = {
     {-3,  8, 0xae, 0x00},
     {-3, 16, 0xbe, 0x00},
     {-2,  8, 0xae, 0x00},
@@ -6113,21 +6113,21 @@ void Witch_Draw(int k) {  // 85e55d
     {-3,  9, 0xae, 0x00},
     {-3, 17, 0xbe, 0x00},
   };
-  static const struct OamEntSigned kWitch_DrawDataB[3] = {
+  static const OamEntSigned kWitch_DrawDataB[3] = {
       {  0, -4, 0x80, 0x00},
       {-11, 15, 0x86, 0x04},
       { -3, 15, 0x86, 0x44},
   };
-  static const struct OamEntSigned kWitch_DrawDataC[2] = {
+  static const OamEntSigned kWitch_DrawDataC[2] = {
       {0, 4, 0x84, 0x00},
       {0, 4, 0x82, 0x00},
   };
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Oam_AllocateDeferToPlayer(k);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
 
   oam[0].x = BYTE(dungmap_var7) + kWitch_DrawDataA[g * 2].x;
@@ -6239,7 +6239,7 @@ void Sprite_OldSnitchLady(int k) {  // 85e6aa
       sprite_delay_main[k] = 16;
     } else {
       flag_is_link_immobilized = 1;
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, ovx, ovy, 64);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, ovx, ovy, 64);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
       sprite_D[k] = 0;
@@ -6354,7 +6354,7 @@ void Sprite_RunningMan(int k) {  // 85e8b2
 }
 
 void RunningMan_Draw(int k) {  // 85ea4d
-  static const struct DrawMultipleData kRunningMan_Dmd[16] = {
+  static const DrawMultipleData kRunningMan_Dmd[16] = {
     {0, -8, 0x002c, 2},
     {0,  0, 0x08ee, 2},
     {0, -7, 0x002c, 2},
@@ -6372,7 +6372,7 @@ void RunningMan_Draw(int k) {  // 85ea4d
     {0, -7, 0x402e, 2},
     {0,  1, 0x48ce, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kRunningMan_Dmd[(sprite_D[k] * 4 + sprite_graphics[k] * 2) & 0xf], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -6442,8 +6442,8 @@ void Sprite_BottleVendor(int k) {  // 85ea79
 }
 
 uint8 BottleVendor_Draw(int k) {  // 85eba7
-  struct PrepOamCoordsRet info;
-  static const struct DrawMultipleData kBottleVendor_Dmd[4] = {
+  PrepOamCoordsRet info;
+  static const DrawMultipleData kBottleVendor_Dmd[4] = {
     {0, -7, 0x00ac, 2},
     {0,  0, 0x0088, 2},
     {0, -6, 0x00ac, 2},
@@ -6455,7 +6455,7 @@ uint8 BottleVendor_Draw(int k) {  // 85eba7
 }
 
 void Priest_SpawnRescuedPrincess() {  // 85ec4c
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int k = Sprite_SpawnDynamically(0, 0x76, &info);
   if (k < 0)
     return;
@@ -6791,13 +6791,13 @@ void Sasha_Idle(int k) {  // 85f160
 }
 
 void Elder_Draw(int k) {  // 85f23a
-  static const struct DrawMultipleData kElder_Dmd[4] = {
+  static const DrawMultipleData kElder_Dmd[4] = {
     {0, -9, 0x00a0, 2},
     {0,  0, 0x00a2, 2},
     {0, -8, 0x00a0, 2},
     {0,  0, 0x40a4, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kElder_Dmd[sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -6819,7 +6819,7 @@ void Sprite_DustCloud(int k) {  // 85f2b2
 }
 
 int Sprite_SpawnDustCloud(int k) {  // 85f2d6
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xF2, &info);
   if (j >= 0) {
     info.r2_y += (GetRandomNumber() & 15);
@@ -6926,7 +6926,7 @@ void EtherTablet(int k) {  // 85f3c4
 }
 
 void ElderWife_Draw(int k) {  // 85f505
-  static const struct DrawMultipleData kElderWife_Dmd[4] = {
+  static const DrawMultipleData kElderWife_Dmd[4] = {
     {0, -5, 0x008e, 2},
     {0,  5, 0x0028, 2},
     {0, -4, 0x008e, 2},
@@ -6947,7 +6947,7 @@ void MagicShopAssistant_SpawnPowder(int k) {  // 85f539
   if (!flag_overworld_area_did_change || link_item_mushroom == 2)
     return;
   if (save_dung_info[0x109] & 0x80) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0xe9, &info);
     sprite_subtype2[j] = 1;
     Sprite_SetX(j, info.r0_x - 16);
@@ -6958,7 +6958,7 @@ void MagicShopAssistant_SpawnPowder(int k) {  // 85f539
 }
 
 void MagicShopAssistant_SpawnGreenCauldron(int k) {  // 85f58e
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xe9, &info);
   sprite_subtype2[j] = 2;
   Sprite_SetX(j, info.r0_x - 40);
@@ -6968,7 +6968,7 @@ void MagicShopAssistant_SpawnGreenCauldron(int k) {  // 85f58e
 }
 
 void MagicShopAssistant_SpawnBlueCauldron(int k) {  // 85f5bf
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xe9, &info);
   sprite_subtype2[j] = 3;
   Sprite_SetX(j, info.r0_x + 8);
@@ -6978,7 +6978,7 @@ void MagicShopAssistant_SpawnBlueCauldron(int k) {  // 85f5bf
 }
 
 void MagicShopAssistant_SpawnRedCauldron(int k) {  // 85f5f0
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xe9, &info);
   sprite_subtype2[j] = 4;
   Sprite_SetX(j, info.r0_x - 88);
@@ -7011,7 +7011,7 @@ void Sprite_BagOfPowder(int k) {  // 85f644
 }
 
 void MagicPowderItem_Draw(int k) {  // 85f67b
-  static const struct DrawMultipleData kMagicPowder_Dmd[2] = {
+  static const DrawMultipleData kMagicPowder_Dmd[2] = {
     {0, 0, 0x04e6, 2},
     {0, 0, 0x04e6, 2},
   };
@@ -7050,7 +7050,7 @@ void Sprite_GreenCauldron(int k) {  // 85f68e
 }
 
 void GreenPotionItem_Draw(int k) {  // 85f718
-  static const struct DrawMultipleData kGreenPotionItem_Dmd[3] = {
+  static const DrawMultipleData kGreenPotionItem_Dmd[3] = {
     { 0,  0, 0x08c0, 2},
     { 8, 18, 0x0a30, 0},
     {-1, 18, 0x0a22, 0},
@@ -7090,7 +7090,7 @@ void Sprite_BlueCauldron(int k) {  // 85f72b
 }
 
 void BluePotionItem_Draw(int k) {  // 85f7bd
-  static const struct DrawMultipleData kBluePotionItem_Dmd[4] = {
+  static const DrawMultipleData kBluePotionItem_Dmd[4] = {
     { 0,  0, 0x04c0, 2},
     {13, 18, 0x0a30, 0},
     { 5, 18, 0x0a22, 0},
@@ -7135,7 +7135,7 @@ void PotionCauldron_GoBeep(int k) {  // 85f846
 }
 
 void RedPotionItem_Draw(int k) {  // 85f86d
-  static const struct DrawMultipleData kRedPotionItem_Dmd[4] = {
+  static const DrawMultipleData kRedPotionItem_Dmd[4] = {
     { 0,  0, 0x02c0, 2},
     {13, 18, 0x0a30, 0},
     { 5, 18, 0x0a02, 0},
@@ -7170,13 +7170,13 @@ void Sprite_MagicShopAssistant_Main(int k) {  // 85f893
 }
 
 void Shopkeeper_Draw(int k) {  // 85f91b
-  static const struct DrawMultipleData kShopkeeper_Dmd[4] = {
+  static const DrawMultipleData kShopkeeper_Dmd[4] = {
     {0, -8, 0x0c00, 2},
     {0,  0, 0x0c10, 2},
     {0, -8, 0x0c00, 2},
     {0,  0, 0x4c10, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kShopkeeper_Dmd[sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -7333,10 +7333,10 @@ void DashTreeTop_Draw(int k) {  // 85fe6f
   static const int8 kDashTreeTop_Y[16] = {0, 4, 2, 7, 10, 16, 24, 23, 34, 35, 30, 31, 46, 42, 10, 11};
   static const int8 kDashTreeTop_Char[6] = {8, 8, 0x28, 0x28, 0x2a, 0x2a};
   static const int8 kDashTreeTop_Flags[6] = {0x31, 0x71, 0x31, 0x71, 0x31, 0x71};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   BYTE(dungmap_var7) -= 0x20;
   HIBYTE(dungmap_var7) -= 0x20;
@@ -7363,7 +7363,7 @@ void DashTreeTop_Draw(int k) {  // 85fe6f
 }
 
 int LumberjackTree_SpawnLeaves(int k) {  // 85ff39
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x3B, &info);
   assert(j >= 0);
   sprite_graphics[j] = 2;
@@ -7392,7 +7392,7 @@ void Sprite_TroughBoy(int k) {  // 85ff66
 }
 
 void TroughBoy_Draw(int k) {  // 85ffdf
-  static const struct DrawMultipleData kTroughBoy_Dmd[8] = {
+  static const DrawMultipleData kTroughBoy_Dmd[8] = {
     {0, -8, 0x0882, 2},
     {0,  0, 0x0aaa, 2},
     {0, -8, 0x0882, 2},
@@ -7402,7 +7402,7 @@ void TroughBoy_Draw(int k) {  // 85ffdf
     {0, -8, 0x0880, 2},
     {0,  0, 0x0aaa, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kTroughBoy_Dmd[sprite_D[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -7410,7 +7410,7 @@ void TroughBoy_Draw(int k) {  // 85ffdf
 void BottleMerchant_DetectFish(int k) {  // 868000
   for (int i = 15; i >= 0; i--) {
     if (sprite_state[i] && sprite_type[i] == 0xd2) {
-      struct SpriteHitBox hb;
+      SpriteHitBox hb;
       hb.r0_xlo = sprite_x_lo[k];
       hb.r8_xhi = sprite_x_hi[k];
       hb.r2 = 16;
@@ -7429,7 +7429,7 @@ void BottleMerchant_BuyFish(int k) {  // 868054
   static const uint8 kBottleVendor_FishRewardType[5] = {0xdb, 0xe0, 0xde, 0xe2, 0xd9};
   static const int8 kBottleVendor_FishRewardXv[5] = {-6, -3, 0, 4, 7};
   static const int8 kBottleVendor_FishRewardYv[5] = {11, 14, 16, 14, 11};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   SpriteSfx_QueueSfx3WithPan(k, 0x13);
   tmp_counter = 4;
   do {
@@ -7641,7 +7641,7 @@ void SpritePrep_Bomber(int k) {  // 8689d8
 
 void SpritePrep_BombShoppe(int k) {  // 8689df
   sprite_ignore_projectile[k]++;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xb5, &info);
   if (j >= 0) {
     Sprite_SetX(j, info.r0_x - 24);
@@ -7765,7 +7765,7 @@ void SpritePrep_DebirandoPit(int k) {  // 868b4a
   sprite_delay_main[k] = 0;
   sprite_graphics[k] = 6;
   SpritePrep_IgnoreProjectiles(k);
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x64, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -8515,7 +8515,7 @@ void Sprite_09_Moldorm_bounce(int k) {  // 869469
 
   if (!link_incapacitated_timer && Sprite_CheckDamageToLink(k)) {
     Link_CancelDash();
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 0x28);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 0x28);
     link_actual_vel_y = pt.y;
     link_actual_vel_x = pt.x;
     link_incapacitated_timer = 24;
@@ -8592,7 +8592,7 @@ void Sprite_01_Vulture_bounce(int k) {  // 869473
     }
     if ((k ^ frame_counter) & 1)
       return;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, (k & 0xf) + 24);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, (k & 0xf) + 24);
     sprite_x_vel[k] = -pt.y;
     sprite_y_vel[k] = pt.x;
     if ((uint8)(pt.xdiff + 0x28) < 0x50 && (uint8)(pt.ydiff + 0x28) < 0x50)
@@ -8720,7 +8720,7 @@ set_vel:
 }
 
 void Sluggula_DropBomb(int k) {  // 869673
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x4a, &info, 11);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -8793,10 +8793,10 @@ void Sprite_19_Poe(int k) {  // 869688
 void Poe_Draw(int k) {  // 869786
   static const int8 kPoe_Draw_X[2] = {9, -1};
   static const uint8 kPoe_Draw_Char[4] = {0x7c, 0x80, 0xb7, 0x80};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint16 x = info.x + kPoe_Draw_X[sprite_D[k]];
   uint16 y = info.y + 9;
   oam->x = x;
@@ -8941,7 +8941,7 @@ void Moblin_MaterializeSpear(int k) {  // 8699eb
   static const int8 kMoblinSpear_Y[4] = {-3, -3, 3, -11};
   static const int8 kMoblinSpear_Xvel[4] = {32, -32, 0, 0};
   static const int8 kMoblinSpear_Yvel[4] = {0, 0, 32, -32};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x1b, &info), i;
   if (j >= 0) {
     sprite_A[j] = 3;
@@ -8954,7 +8954,7 @@ void Moblin_MaterializeSpear(int k) {  // 8699eb
 }
 
 void Moblin_Draw(int k) {  // 869bc4
-  static const struct DrawMultipleData kMoblin_Dmd[48] = {
+  static const DrawMultipleData kMoblin_Dmd[48] = {
     {-2,   3, 0x8091, 0},
     {-2,  11, 0x8090, 0},
     { 0, -10, 0x0086, 2},
@@ -9007,11 +9007,11 @@ void Moblin_Draw(int k) {  // 869bc4
   static const uint8 kMoblin_ObjOffs[12] = {2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2};
   static const uint8 kMoblin_HeadChar[4] = {0x88, 0x88, 0x86, 0x84};
   static const uint8 kMoblin_HeadFlags[4] = {0x40, 0, 0, 0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kMoblin_Dmd[sprite_graphics[k] * 4], 4, &info);
   if (sprite_pause[k])
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   if (sprite_delay_aux1[k]) {
     for (int i = 0; i < 4; i++, oam++) {
       if (!(bytewise_extended_oam[oam - oam_buf] & 2))
@@ -9081,7 +9081,7 @@ void Sprite_0E_Snapdragon(int k) {  // 869c24
 }
 
 void SnapDragon_Draw(int k) {  // 869e02
-  static const struct DrawMultipleData kSnapDragon_Dmd[32] = {
+  static const DrawMultipleData kSnapDragon_Dmd[32] = {
     { 4, -8, 0x008f, 0},
     {12, -8, 0x009f, 0},
     {-4,  0, 0x008c, 2},
@@ -9115,7 +9115,7 @@ void SnapDragon_Draw(int k) {  // 869e02
     {-4,  0, 0x40ae, 2},
     { 4,  0, 0x40ad, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kSnapDragon_Dmd[sprite_graphics[k] * 4], 4, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -9153,7 +9153,7 @@ void Sprite_22_Ropa(int k) {  // 869e1f
 }
 
 void Ropa_Draw(int k) {  // 869ee5
-  static const struct DrawMultipleData kRopa_Dmd[12] = {
+  static const DrawMultipleData kRopa_Dmd[12] = {
     {0, -8, 0x0026, 0},
     {8, -8, 0x0027, 0},
     {0,  0, 0x0008, 2},
@@ -9167,7 +9167,7 @@ void Ropa_Draw(int k) {  // 869ee5
     {8, -8, 0x4036, 0},
     {0,  0, 0x4008, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kRopa_Dmd[sprite_graphics[k] * 3], 3, &info);
   SpriteDraw_Shadow(k, &info);
 
@@ -9229,7 +9229,7 @@ void Sprite_11_Hinox(int k) {  // 869f05
       static const int8 kHinox_BombY[4] = {-11, -11, -16, -16};
       static const int8 kHinox_BombXvel[4] = {24, -24, 0, 0};
       static const int8 kHinox_BombYvel[4] = {0, 0, 24, -24};
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0x4a, &info);
       if (j >= 0) {
         Sprite_TransmuteToBomb(j);
@@ -9271,7 +9271,7 @@ void Hinox_SetDirection(int k, uint8 dir) {  // 86a004
 }
 
 void Hinox_Draw(int k) {  // 86a1f9
-  static const struct DrawMultipleData kHinox_Dmd[46] = {
+  static const DrawMultipleData kHinox_Dmd[46] = {
     {  0, -13, 0x0600, 2},
     { -8,  -5, 0x0624, 2},
     {  8,  -5, 0x4624, 2},
@@ -9319,7 +9319,7 @@ void Hinox_Draw(int k) {  // 86a1f9
     {  0,   0, 0x4622, 2},
     {  0,  -8, 0x460c, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   static const uint8 kHinoxNum[12] = { 4, 4, 4, 4, 3, 3, 3, 3, 5, 5, 4, 4 };
   static const uint8 kHinoxOffs[12] = { 0, 4, 8, 12, 16, 19, 22, 25, 28, 33, 38, 42 };
   int j = sprite_graphics[k];
@@ -9418,7 +9418,7 @@ void RedBari_Split(int k) {  // 86a34e
 
   tmp_counter = 1;
   do {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x23, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -9436,7 +9436,7 @@ void RedBari_Split(int k) {  // 86a34e
 }
 
 void RedBari_Draw(int k) {  // 86a3dc
-  static const struct DrawMultipleData kRedBari_Dmd[8] = {
+  static const DrawMultipleData kRedBari_Dmd[8] = {
     {0, 0, 0x0022, 0},
     {8, 0, 0x4022, 0},
     {0, 8, 0x0032, 0},
@@ -9446,7 +9446,7 @@ void RedBari_Draw(int k) {  // 86a3dc
     {0, 8, 0x0033, 0},
     {8, 8, 0x4033, 0},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kRedBari_Dmd[sprite_graphics[k] * 4], 4, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -9490,7 +9490,7 @@ void HelmasaurHardHatBeetleCommon(int k) {  // 86a46d
   }
   Sprite_CheckTileCollision(k);
   if (!((k ^ frame_counter) & 31)) {
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, sprite_A[k]);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, sprite_A[k]);
     sprite_B[k] = pt.y;
     sprite_C[k] = pt.x;
   }
@@ -9501,13 +9501,13 @@ void HelmasaurHardHatBeetleCommon(int k) {  // 86a46d
 }
 
 void HardHatBeetle_Draw(int k) {  // 86a4f2
-  static const struct DrawMultipleData kHardHatBeetle_Dmd[4] = {
+  static const DrawMultipleData kHardHatBeetle_Dmd[4] = {
     {0, -4, 0x0140, 2},
     {0,  2, 0x0142, 2},
     {0, -5, 0x0140, 2},
     {0,  2, 0x0144, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kHardHatBeetle_Dmd[sprite_graphics[k] * 2], 2, &info);
   if (sprite_flags3[k] & 0x10)
     SpriteDraw_Shadow(k, &info);
@@ -9618,7 +9618,7 @@ void Cucco_Flee(int k) {  // 86a6fc
   Cucco_DoMovement_XY(k);
   sprite_z[k] = 0;
   if (!((k ^ frame_counter) & 0x1f)) {
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 16);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 16);
     sprite_x_vel[k] = -pt.x;
     sprite_y_vel[k] = -pt.y;
   }
@@ -9627,7 +9627,7 @@ void Cucco_Flee(int k) {  // 86a6fc
 }
 
 void Cucco_DrawPANIC(int k) {  // 86a727
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Sprite_DrawDistress_custom(info.x, info.y, frame_counter);
@@ -9647,7 +9647,7 @@ void Cucco_Carried(int k) {  // 86a78e
   if (sign8(sprite_z[k])) {
     sprite_z[k] = 0;
     sprite_ai_state[k] = 2;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 16);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 16);
     sprite_x_vel[k] = -pt.x;
     sprite_y_vel[k] = -pt.y;
     Chicken_IncrSubtype2(k, 5);
@@ -9666,7 +9666,7 @@ void Cucco_SummonAvenger(int k) {  // 86a7d3
   static const uint8 kChicken_Avenger[2] = {0, 0xff};
   if ((k ^ frame_counter) & 0xf | player_is_indoors)
     return;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0xB, &info, 10);
   if (j < 0)
     return;
@@ -9703,7 +9703,7 @@ void Sprite_Hoarder_Covered(int k) {  // 86a874
   if (Sprite_ReturnIfInactive(k))
     return;
   sprite_graphics[k] = 0;
-  struct PointU8 pt;
+  PointU8 pt;
   uint8 dir = Sprite_DirectionToFaceLink(k, &pt);
   if (sprite_delay_main[k])
     goto lbl;
@@ -9724,7 +9724,7 @@ lbl:sprite_x_vel[k] = kRupeeCoveredGrab_Xvel[dir];
     sprite_type[k] = 0xec;
     sprite_oam_flags[k] &= ~1;
     sprite_graphics[k] = 0;
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x3e, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -9763,7 +9763,7 @@ void Sprite_Hoarder_Frantic(int k) {  // 86a91d
   }
   Sprite_CheckTileCollision2(k);
   if (!sprite_delay_aux4[k] && !((k ^ frame_counter) & 31)) {
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 16);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 16);
     sprite_y_vel[k] = -pt.y;
     sprite_x_vel[k] = -pt.x;
   }
@@ -9784,7 +9784,7 @@ void Sprite_Hoarder_Frantic(int k) {  // 86a91d
     end = 0;
     type = sprite_head_dir[k] == 6 ? 0xdb : 0xd9;
   }
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   j = Sprite_SpawnDynamicallyEx(k, type, &info, end);
   if (j >= 0) {
     sprite_head_dir[k]++;
@@ -9792,7 +9792,7 @@ void Sprite_Hoarder_Frantic(int k) {  // 86a91d
     Sprite_SetX(j, info.r0_x + 8);
     sprite_z_vel[j] = 32;
     sprite_delay_aux4[j] = 16;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(j, 16);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(j, 16);
     sprite_y_vel[j] = ~pt.y;
     sprite_x_vel[j] = ~pt.x;
     SpriteSfx_QueueSfx3WithPan(k, 0x30);
@@ -9803,12 +9803,12 @@ void CoveredRupeeCrab_Draw(int k) {  // 86aa48
   static const int8 kCoveredRupeeCrab_DrawY[12] = {0, 0, 0, -3, 0, -5, 0, -6, 0, -6, 0, -6};
   static const uint8 kCoveredRupeeCrab_DrawChar[12] = {0x44, 0x44, 0xe8, 0x44, 0xe8, 0x44, 0xe6, 0x44, 0xe8, 0x44, 0xe6, 0x44};
   static const uint8 kCoveredRupeeCrab_DrawFlags[12] = {0, 0xc, 3, 0xc, 3, 0xc, 3, 0xc, 3, 0xc, 0x43, 0xc};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   if (byte_7E0FC6 >= 3)
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 r7 = (sprite_type[k] == 0x17) ? 2 : 0;
   uint8 r6 = sprite_graphics[k] * 2;
   for (int i = 1; i >= 0; i--, oam++) {
@@ -9836,7 +9836,7 @@ void Sprite_EC_ThrownItem(int k) {  // 86aae0
       SpriteDraw_ThrownItem_Gigantic(k);
     } else {
       SpriteDraw_SingleLarge(k);
-      struct OamEnt *oam = GetOamCurPtr();
+      OamEnt *oam = GetOamCurPtr();
       uint8 t = player_is_indoors + is_in_dark_world;
       int j = sprite_C[k];
       oam->charnum = kThrowableScenery_Char[j + ((t >= 2) ? 6 : 0)];
@@ -9852,13 +9852,13 @@ void Sprite_EC_ThrownItem(int k) {  // 86aae0
 }
 
 void SpriteDraw_ThrownItem_Gigantic(int k) {  // 86ab76
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   sprite_oam_flags[k] = kThrowableScenery_DrawLarge_OamFlags[sprite_C[k] - 6];
 
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 3; i >= 0; i--, oam++) {
     uint16 x = info.x + kThrowableScenery_DrawLarge_X[i];
     uint16 y = info.y + kThrowableScenery_DrawLarge_Y[i];
@@ -9885,7 +9885,7 @@ void SpriteDraw_ThrownItem_Gigantic(int k) {  // 86ab76
 void ThrowableScenery_ScatterIntoDebris(int k) {  // 86ac41
   if (!sign8(sprite_C[k]) && sprite_C[k] >= 6) {
     for (int i = 3; i >= 0; i--) {
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0xec, &info);
       if (j >= 0) {
         sprite_z[j] = sprite_z[k];
@@ -9899,7 +9899,7 @@ void ThrowableScenery_ScatterIntoDebris(int k) {  // 86ac41
     sprite_state[k] = 0;
   } else {
     sprite_state[k] = 0;
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
       return;
     int j = 29;
@@ -10034,7 +10034,7 @@ bool DarkWorldHintNPC_HandlePayment() {  // 86aeab
 }
 
 void StoryTeller_1_Draw(int k) {  // 86af1a
-  static const struct DrawMultipleData kStoryTeller_Dmd[10] = {
+  static const DrawMultipleData kStoryTeller_Dmd[10] = {
     {0, 0, 0x0a4a, 2},
     {0, 0, 0x4a6e, 2},
     {0, 0, 0x0a24, 2},
@@ -10046,7 +10046,7 @@ void StoryTeller_1_Draw(int k) {  // 86af1a
     {0, 0, 0x0a0e, 2},
     {0, 0, 0x0a2e, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kStoryTeller_Dmd[sprite_subtype2[k] * 2 + sprite_graphics[k]], 1, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -10204,7 +10204,7 @@ void Sprite_FluteKid_Quaver(int k) {  // 86b173
 }
 
 void FluteKid_SpawnQuaver(int k) {  // 86b1a5
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x2e, &info);
   if (j >= 0) {
     Sprite_SetX(j, info.r0_x + 4);
@@ -10284,7 +10284,7 @@ void Smithy_Frog(int k) {  // 86b274
 }
 
 void ReturningSmithy_Draw(int k) {  // 86b308
-  static const struct DrawMultipleData kReturningSmithy_Dmd[8] = {
+  static const DrawMultipleData kReturningSmithy_Dmd[8] = {
     {0, 0, 0x4122, 2},
     {0, 0, 0x0122, 2},
     {0, 0, 0x4122, 2},
@@ -10296,17 +10296,17 @@ void ReturningSmithy_Draw(int k) {  // 86b308
   };
   static const uint8 kReturningSmithy_Dma[8] = {0xc0, 0xc0, 0xa0, 0xa0, 0x80, 0x60, 0x80, 0x60};
   int j = sprite_D[k] * 2 + sprite_graphics[k];
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   BYTE(dma_var7) = kReturningSmithy_Dma[j];
   Sprite_DrawMultiplePlayerDeferred(k, &kReturningSmithy_Dmd[j], 1, &info);
   SpriteDraw_Shadow(k, &info);
 }
 
 void SmithyFrog_Draw(int k) {  // 86b339
-  static const struct DrawMultipleData kSmithyFrog_Dmd[1] = {
+  static const DrawMultipleData kSmithyFrog_Dmd[1] = {
     {0, 0, 0x00c8, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, kSmithyFrog_Dmd, 1, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -10427,7 +10427,7 @@ void Smithy_Main(int k) {  // 86b34e
   case 9:  //
     break;
   case 10: { // Smithy_SpawnFriend
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x1a, &info);
     if (j >= 0) {
       Sprite_SetX(j, link_x_coord);
@@ -10452,7 +10452,7 @@ bool Smithy_ListenForHammer(int k) {  // 86b43d
 }
 
 int Smithy_SpawnDwarfPal(int k) {  // 86b5a6
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x1a, &info);
   if (j < 0)
     return j;
@@ -10466,7 +10466,7 @@ int Smithy_SpawnDwarfPal(int k) {  // 86b5a6
 }
 
 void Smithy_Draw(int k) {  // 86b673
-  static const struct DrawMultipleData kSmithy_Dmd[20] = {
+  static const DrawMultipleData kSmithy_Dmd[20] = {
     {  1,   0, 0x4040, 2},
     {-11, -10, 0x4060, 2},
     { -1,   0, 0x0040, 2},
@@ -10488,7 +10488,7 @@ void Smithy_Draw(int k) {  // 86b673
     {  0,   0, 0x0064, 2},
     {  0,   0, 0x0064, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kSmithy_Dmd[sprite_graphics[k] * 4 + sprite_D[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -10512,7 +10512,7 @@ void Smithy_Spark(int k) {  // 86b6a3
 }
 
 void Smithy_SpawnSpark(int k) {  // 86b6cd
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x1a, &info);
   if (j >= 0) {
     Sprite_SetX(j, info.r0_x);
@@ -10525,7 +10525,7 @@ void Smithy_SpawnSpark(int k) {  // 86b6cd
 
 void SmithySpark_Draw(int k) {  // 86b72c
   Oam_AllocateFromRegionB(8);
-  static const struct DrawMultipleData kSmithySpark_Dmd[6] = {
+  static const DrawMultipleData kSmithySpark_Dmd[6] = {
     { 0,  3, 0x41aa, 2},
     { 0, -1, 0x41aa, 2},
     {-4,  0, 0x0190, 0},
@@ -10601,10 +10601,10 @@ void EnemyArrow_Draw(int k) {  // 86b867
     8, 0x88, 0xc8, 0x48, 8, 8, 0x88, 0x88, 0x49, 0x49, 9,    9, 0x89, 0x89, 9,    9,
   };
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 r6 = sprite_D[k] * 2, r7 = sprite_A[k] * 8;
   for (int i = 1; i >= 0; i--, oam++) {
     int j = r6 + i;
@@ -10724,7 +10724,7 @@ void Sprite_21_WaterSwitch(int k) {  // 86b9fa
 }
 
 void PushSwitch_Draw(int k) {  // 86bb22
-  static const struct OamEntSigned kPushSwitch_Oam[40] = {
+  static const OamEntSigned kPushSwitch_Oam[40] = {
     {  4, 20, 0xdc, 0x20},
     {  4, 12, 0xdd, 0x20},
     {  4, 12, 0xdd, 0x20},
@@ -10768,7 +10768,7 @@ void PushSwitch_Draw(int k) {  // 86bb22
   };
   static const uint8 kPushSwitch_WH[16] = {8, 6, 0x10, 0x10, 0x10, 8, 0x10, 8, 0x10, 8, 0x10, 8, 0x10, 3, 0x10, 8};
   Oam_AllocateDeferToPlayer(k);
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   uint8 flags;
@@ -10777,7 +10777,7 @@ void PushSwitch_Draw(int k) {  // 86bb22
 
   oam_cur_ptr += 4, oam_ext_cur_ptr += 1;
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   memcpy(oam, &kPushSwitch_Oam[sprite_D[k] * 5], 20);
 
   uint8 xv = -r1 + BYTE(dungmap_var7);
@@ -10813,7 +10813,7 @@ void PushSwitch_Draw(int k) {  // 86bb22
     int x = Sprite_GetX(k) + (int8)kPushSwitch_Oam[d * 4].x;
     int y = Sprite_GetY(k) + (int8)kPushSwitch_Oam[d * 4].y;
 
-    struct SpriteHitBox hb;
+    SpriteHitBox hb;
     hb.r4_spr_xlo = x;
     hb.r10_spr_xhi = x >> 8;
     hb.r5_spr_ylo = y;
@@ -10908,11 +10908,11 @@ void Sprite_39_Locksmith(int k) {  // 86bcac
 }
 
 void MiddleAgedMan_Draw(int k) {  // 86bdac
-  static const struct DrawMultipleData kMiddleAgedMan_Dmd[2] = {
+  static const DrawMultipleData kMiddleAgedMan_Dmd[2] = {
     {0, -8, 0x00ea, 2},
     {0,  0, 0x00ec, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kMiddleAgedMan_Dmd[0], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -10993,7 +10993,7 @@ void Sprite_Hobo_Bum(int k) {  // 86bdd0
 }
 
 void SpritePrep_Hobo_SpawnSmoke(int k) {  // 86be9d
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x2b, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -11019,7 +11019,7 @@ void Sprite_Hobo_Bubble(int k) {  // 86beb4
 }
 
 int Hobo_SpawnBubble(int k) {  // 86beed
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x2b, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -11046,7 +11046,7 @@ void Sprite_Hobo_Fire(int k) {  // 86bf15
 }
 
 void SpritePrep_Hobo_SpawnFire(int k) {  // 86bf4b
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x2b, &info);
   if (j >= 0) {
     Sprite_SetX(j, 0x194);
@@ -11072,7 +11072,7 @@ void Sprite_Hobo_Smoke(int k) {  // 86bf81
 }
 
 void Hobo_SpawnSmoke(int k) {  // 86bfaf
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x2b, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -11211,7 +11211,7 @@ void Sprite_F2_MedallionTablet_bounce(int k) {  // 86c00d
 }
 
 void Sprite_33_RupeePull_bounce(int k) {  // 86c017
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -11233,7 +11233,7 @@ void Sprite_33_RupeePull_bounce(int k) {  // 86c017
 }
 
 void Sprite_14_ThievesTownGrate_bounce(int k) {  // 86c01c
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -11274,7 +11274,7 @@ void Sprite_37_Waterfall_bounce(int k) {  // 86c03a
 
 void Sprite_38_EyeStatue_bounce(int k) {  // 86c03f
   if (!sprite_B[k]) {
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     Sprite_PrepOamCoord(k, &info);
     if (Sprite_ReturnIfInactive(k))
       return;
@@ -11540,7 +11540,7 @@ bool Statue_CheckForSwitch(int k) {  // 86c203
 }
 
 void MovableStatue_Draw(int k) {  // 86c264
-  static const struct DrawMultipleData kMovableStatue_Dmd[3] = {
+  static const DrawMultipleData kMovableStatue_Dmd[3] = {
     {0, -8, 0x00c2, 0},
     {8, -8, 0x40c2, 0},
     {0,  0, 0x00c0, 2},
@@ -11556,7 +11556,7 @@ void Statue_BlockSprites(int k) {  // 86c277
     if ((uint16)(cur_sprite_x - x + 12) < 24 &&
         (uint16)(cur_sprite_y - y + 12) < 36) {
       sprite_F[j] = 4;
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
       sprite_y_recoil[j] = pt.y;
       sprite_x_recoil[j] = pt.x;
     }
@@ -11564,7 +11564,7 @@ void Statue_BlockSprites(int k) {  // 86c277
 }
 
 void Sprite_1D_FluteQuest(int k) {  // 86c2e5
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -11591,7 +11591,7 @@ void Sprite_72_FairyPond(int k) {  // 86c319
     sprite_graphics[k] = frame_counter >> 4 & 1;
     if (frame_counter & 15)
       return;
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x72, &info);
     if (j >= 0) {
       Sprite_SetX(j, info.r0_x + kWishPond_X[GetRandomNumber() & 7]);
@@ -11605,7 +11605,7 @@ void Sprite_72_FairyPond(int k) {  // 86c319
     }
     return;
   }
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   Sprite_WishPond2(k);
 }
@@ -11685,7 +11685,7 @@ show_later_msg:
     break;
   case 5:
     if (sprite_delay_main[k] == 0) {
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0x72, &info);
       assert(j >= 0);
       Sprite_SetX(j, info.r0_x);
@@ -11789,7 +11789,7 @@ show_later_msg:
 }
 
 void WishPond2_Draw(int k) {  // 86c4b5
-  static const struct DrawMultipleData kWishPond2_Dmd[8] = {
+  static const DrawMultipleData kWishPond2_Dmd[8] = {
     {32, -64, 0x0024, 0},
     {32, -56, 0x0034, 0},
     {32, -64, 0x0024, 0},
@@ -11829,7 +11829,7 @@ void FaerieQueen_Draw(int k) {  // 86cb26
   static const uint8 kFaerieQueen_Draw_Ext[24] = {
     2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2,
   };
-  static const struct DrawMultipleData kFaerieQueen_Dmd[20] = {
+  static const DrawMultipleData kFaerieQueen_Dmd[20] = {
     { 0,  0, 0x00e9, 2},
     {16,  0, 0x40e9, 2},
     { 0,  0, 0x00e9, 2},
@@ -11852,10 +11852,10 @@ void FaerieQueen_Draw(int k) {  // 86cb26
     {16, 32, 0x40ed, 2},
   };
   if (!savegame_is_darkworld) {
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
       return;
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     int g = sprite_graphics[k];
     for (int i = 11; i >= 0; i--, oam++) {
       int j = g * 12 + i;
@@ -11880,7 +11880,7 @@ void Sprite_71_Leever(int k) {  // 86cba2
   if (sprite_ai_state[k])
     Leever_Draw(k);
   else {
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     Sprite_PrepOamCoord(k, &info);
   }
   if (sprite_pause[k])
@@ -11971,10 +11971,10 @@ void Leever_Draw(int k) {  // 86ce45
     2, 2, 0, 0, 2, 2, 2, 0, 2, 2, 2, 0, 2, 2, 2, 0,
     2, 2, 2, 0, 2, 2, 2, 0,
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int d = sprite_graphics[k];
   for (int i = kLeever_Draw_Num[d]; i >= 0; i--, oam++) {
     int j = d * 4 + i;
@@ -12218,7 +12218,7 @@ void Octorok_FireLoogie(int k) {  // 86d4cd
   static const int8 kOctorock_Spit_Y[4] = {4, 4, 12, -12};
   static const int8 kOctorock_Spit_Xvel[4] = {44, -44, 0, 0};
   static const int8 kOctorock_Spit_Yvel[4] = {0, 0, 44, -44};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   SpriteSfx_QueueSfx2WithPan(k, 0x7);
   int j = Sprite_SpawnDynamically(k, 0xc, &info);
   if (j >= 0) {
@@ -12235,11 +12235,11 @@ void Octorock_Draw(int k) {  // 86d54a
   static const int8 kOctorock_Draw_Y[9] = {6, 6, 9, 6, 6, 9, 6, 6, 9};
   static const uint8 kOctorock_Draw_Char[9] = {0xbb, 0xbb, 0xba, 0xab, 0xab, 0xaa, 0xa9, 0xa9, 0xb9};
   static const uint8 kOctorock_Draw_Flags[9] = {0x65, 0x25, 0x25, 0x65, 0x25, 0x25, 0x65, 0x25, 0x25};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   if (sprite_D[k] != 3) {
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     int j = sprite_C[k] * 3 + sprite_D[k];
     uint16 x = info.x + kOctorock_Draw_X[j];
     uint16 y = info.y + kOctorock_Draw_Y[j];
@@ -12279,10 +12279,10 @@ void SpriteDraw_OctorokStoneCrumbling(int k) {  // 86d643
   static const int8 kOctostone_Draw_Y[16] = {0, 0, 8, 8, -8, -8, 16, 16, -12, -12, 20, 20, -14, -14, 22, 22};
   static const uint8 kOctostone_Draw_Flags[16] = {0, 0x40, 0x80, 0xc0, 0, 0x40, 0x80, 0xc0, 0, 0x40, 0x80, 0xc0, 0, 0x40, 0x80, 0xc0};
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = ((sprite_delay_main[k] >> 1 & 0xc) ^ 0xc);
   for (int i = 3; i >= 0; i--, oam++) {
     int j = g + i;
@@ -12316,7 +12316,7 @@ void Sprite_0F_Octoballoon(int k) {  // 86d6aa
     return;
   sprite_subtype2[k]++;
   if (!((k ^ frame_counter) & 15)) {
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 4);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 4);
     if (sprite_x_vel[k] - pt.x)
       sprite_x_vel[k] += sign8(sprite_x_vel[k] - pt.x) ? 1 : -1;
     if (sprite_y_vel[k] - pt.y)
@@ -12349,10 +12349,10 @@ void Octoballoon_Draw(int k) {  // 86d784
       Octoballoon_FormBabby(k);
     d = (sprite_delay_main[k] >> 1 & 4) + 4;
   }
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 3; i >= 0; i--, oam++) {
     int j = d + i;
     uint16 x = info.x + kOctoballoon_Draw_X[j];
@@ -12372,7 +12372,7 @@ void Octoballoon_FormBabby(int k) {  // 86d80e
 
   SpriteSfx_QueueSfx2WithPan(k, 0xc);
   for (int i = 5; i >= 0; i--) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x10, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -12445,10 +12445,10 @@ void BuzzBlob_Draw(int k) {  // 86d953
   static const uint8 kBuzzBlob_DrawFlags[18] = { 0, 0x40, 0, 0, 0, 0, 0, 0, 0x40, 0, 0x40, 0, 0, 0, 0, 0x40, 0x40, 0x40 };
   static const uint8 kBuzzBlob_DrawExt[3] = {0, 0, 2};
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   for (int i = 2; i >= 0; i--, oam++) {
     uint16 x = info.x + kBuzzBlob_DrawX[i];
@@ -12485,7 +12485,7 @@ void Sprite_02_StalfosHead(int k) {  // 86ddb7
     Sprite_ZeroVelocity_XY(k);
   Sprite_MoveXY(k);
   sprite_subtype2[k]++;
-  struct ProjectSpeedRet pt;
+  ProjectSpeedRet pt;
   if (sprite_delay_main[k]) {
     if (sprite_delay_main[k] & 1)
       return;
@@ -12524,7 +12524,7 @@ void Ancilla_TerminateSparkleObjects() {  // 89adc7
 }
 
 int Sprite_SpawnSuperficialBombBlast(int k) {  // 89ae40
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x4a, &info);
   if (j >= 0) {
     sprite_state[j] = 6;
@@ -12539,7 +12539,7 @@ int Sprite_SpawnSuperficialBombBlast(int k) {  // 89ae40
 }
 
 void Sprite_SpawnDummyDeathAnimation(int k) {  // 89ae7e
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xb, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -12554,7 +12554,7 @@ void Sprite_MagicBat_SpawnLightning(int k) {  // 89aea8
   static const int8 kSpawnMadderBolts_Xvel[4] = {-8, -4, 4, 8};
   static const int8 kSpawnMadderBolts_St2[4] = {0, 0x11, 0x22, 0x33};
   for (int i = 0; i < 4; i++) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x3a, &info);
     if (j >= 0) {
       SpriteSfx_QueueSfx3WithPan(k, 0x1);
@@ -12611,7 +12611,7 @@ void GarnishSpawn_PyramidDebris(int8 x, int8 y, int8 xvel, int8 yvel) {  // 89b1
 void Snitch_SpawnGuard(int k) {  // 89c02f
   static const uint16 kCrazyVillageSoldier_X[3] = {0x120, 0x340, 0x2e0};
   static const uint16 kCrazyVillageSoldier_Y[3] = {0x100, 0x3b0, 0x160};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x45, &info, 0);
   if (j < 0)
     return;
@@ -12627,7 +12627,7 @@ void Snitch_SpawnGuard(int k) {  // 89c02f
 }
 
 void Babusu_Draw(int k) {  // 8dbd20
-  static const struct DrawMultipleData kBabusu_Dmd[40] = {
+  static const DrawMultipleData kBabusu_Dmd[40] = {
     { 0,  4, 0x4380, 0},
     { 0,  4, 0x4380, 0},
     { 0,  4, 0x43b6, 0},
@@ -12672,13 +12672,13 @@ void Babusu_Draw(int k) {  // 8dbd20
   if (sprite_graphics[k] != 0xff) {
     Sprite_DrawMultiple(k, &kBabusu_Dmd[sprite_graphics[k] * 2], 2, NULL);
   } else {
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     Sprite_PrepOamCoord(k, &info);
   }
 }
 
 void Wizzrobe_Draw(int k) {  // 8dbe06
-  static const struct DrawMultipleData kWizzrobe_Dmd[24] = {
+  static const DrawMultipleData kWizzrobe_Dmd[24] = {
     {0, -8, 0x00b2, 0},
     {8, -8, 0x00b3, 0},
     {0,  0, 0x0088, 2},
@@ -12708,7 +12708,7 @@ void Wizzrobe_Draw(int k) {  // 8dbe06
 }
 
 void Wizzbeam_Draw(int k) {  // 8dbe68
-  static const struct DrawMultipleData kWizzbeam_Dmd[8] = {
+  static const DrawMultipleData kWizzbeam_Dmd[8] = {
     { 0, -4, 0x00c5, 0},
     { 0,  4, 0x80c5, 0},
     { 0, -4, 0x40c5, 0},
@@ -12723,7 +12723,7 @@ void Wizzbeam_Draw(int k) {  // 8dbe68
 
 void Freezor_Draw(int k) {  // 8dbfa6
 
-  static const struct DrawMultipleData kFreezor_Dmd0[28] = {
+  static const DrawMultipleData kFreezor_Dmd0[28] = {
     {-8,  0, 0x00a6, 2},
     { 8,  0, 0x40a6, 2},
     {-8,  0, 0x00a6, 2},
@@ -12753,7 +12753,7 @@ void Freezor_Draw(int k) {  // 8dbfa6
     { 0,  8, 0x00aa, 0},
     { 8,  8, 0x40aa, 0},
   };
-  static const struct DrawMultipleData kFreezor_Dmd1[8] = {
+  static const DrawMultipleData kFreezor_Dmd1[8] = {
     { 0, 0, 0x00ae, 0},
     { 8, 0, 0x40ae, 0},
     { 0, 8, 0x00be, 0},
@@ -12773,7 +12773,7 @@ void Freezor_Draw(int k) {  // 8dbfa6
 void Zazak_Draw(int k) {  // 8dc0a6
   static const uint8 kZazak_Char[8] = {0x82, 0x82, 0x80, 0x84, 0x88, 0x88, 0x86, 0x84};
   static const uint8 kZazak_Flags[8] = {0x40, 0, 0, 0, 0x40, 0, 0, 0};
-  static const struct DrawMultipleData kZazak_Dmd[24] = {
+  static const DrawMultipleData kZazak_Dmd[24] = {
     { 0, -8, 0x0008, 2},
     {-4,  0, 0x00a0, 2},
     { 4,  0, 0x00a1, 2},
@@ -12799,12 +12799,12 @@ void Zazak_Draw(int k) {  // 8dc0a6
     { 0,  0, 0x40a8, 2},
     { 0,  0, 0x40a8, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kZazak_Dmd[sprite_graphics[k] * 3], 3, &info);
   if (sprite_pause[k])
     return;
   int i = sprite_head_dir[k] + (sprite_delay_aux1[k] == 0 ? 0 : 4);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   oam->charnum = kZazak_Char[i];
   oam->flags = (oam->flags & ~0x40) | kZazak_Flags[i];
   SpriteDraw_Shadow(k, &info);
@@ -12813,7 +12813,7 @@ void Zazak_Draw(int k) {  // 8dc0a6
 void Stalfos_Draw(int k) {  // 8dc21c
   static const uint8 kStalfos_Char[4] = {2, 2, 0, 4};
   static const uint8 kStalfos_Flags[4] = {0x70, 0x30, 0x30, 0x30};
-  static const struct DrawMultipleData kStalfos_Dmd[36] = {
+  static const DrawMultipleData kStalfos_Dmd[36] = {
     { 0, -10, 0x0000, 2},
     { 0,   0, 0x0006, 2},
     { 0,   0, 0x0006, 2},
@@ -12851,14 +12851,14 @@ void Stalfos_Draw(int k) {  // 8dc21c
     { 0,  -6, 0x0004, 2},
     { 0,  -6, 0x0004, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (sprite_delay_aux2[k]) {
     Sprite_PrepOamCoord(k, &info);
     return;
   }
   Sprite_DrawMultiple(k, &kStalfos_Dmd[sprite_graphics[k] * 3], 3, &info);
   if (sprite_graphics[k] < 8 && !sprite_pause[k]) {
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     int i = sprite_head_dir[k];
     oam->charnum = kStalfos_Char[i];
     oam->flags = (oam->flags & ~0x70) | kStalfos_Flags[i];
@@ -12938,7 +12938,7 @@ void Sprite_FluteDad(int k) {  // 8dc343
 }
 
 void FluteBoyFather_Draw(int k) {  // 8dc3e1
-  static const struct DrawMultipleData kFluteBoyFather_Dmd[6] = {
+  static const DrawMultipleData kFluteBoyFather_Dmd[6] = {
     {0, -7, 0x0086, 2},
     {0,  0, 0x0088, 2},
     {0, -6, 0x0086, 2},
@@ -12946,13 +12946,13 @@ void FluteBoyFather_Draw(int k) {  // 8dc3e1
     {0, -8, 0x0084, 2},
     {0,  0, 0x0088, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kFluteBoyFather_Dmd[sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
 
 void BlindHideoutGuy_Draw(int k) {  // 8dc481
-  static const struct DrawMultipleData kBlindHideoutGuy_Dmd[16] = {
+  static const DrawMultipleData kBlindHideoutGuy_Dmd[16] = {
     {0, -8, 0x000c, 2},
     {0,  0, 0x00ca, 2},
     {0, -8, 0x000c, 2},
@@ -12970,7 +12970,7 @@ void BlindHideoutGuy_Draw(int k) {  // 8dc481
     {0, -8, 0x400e, 2},
     {0,  0, 0x40ca, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kBlindHideoutGuy_Dmd[sprite_graphics[k] * 2 + sprite_D[k] * 4], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -12985,13 +12985,13 @@ void Sprite_SweepingLady(int k) {  // 8dc4ad
 }
 
 void SweepingLady_Draw(int k) {  // 8dc4eb
-  static const struct DrawMultipleData kSweepingLadyDmd[4] = {
+  static const DrawMultipleData kSweepingLadyDmd[4] = {
     {0, -7, 0x008e, 2},
     {0,  5, 0x008a, 2},
     {0, -8, 0x008e, 2},
     {0,  4, 0x008c, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kSweepingLadyDmd[sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -13023,7 +13023,7 @@ bool Lumberjack_CheckProximity(int k, int j) {  // 8dc58f
 }
 
 void Lumberjacks_Draw(int k) {  // 8dc6ba
-  static const struct DrawMultipleData kLumberJacks_Dmd[33] = {
+  static const DrawMultipleData kLumberJacks_Dmd[33] = {
     {-23,  5, 0x02be, 0},
     {-15,  5, 0x02bf, 0},
     { -7,  5, 0x02bf, 0},
@@ -13115,7 +13115,7 @@ done:
 }
 
 void FortuneTeller_Draw(int k) {  // 8dcb01
-  static const struct DrawMultipleData kFortuneTeller_Dmd[12] = {
+  static const DrawMultipleData kFortuneTeller_Dmd[12] = {
     { 0, -48, 0x000c, 2},
     { 0, -32, 0x002c, 0},
     { 8, -32, 0x402c, 0},
@@ -13134,7 +13134,7 @@ void FortuneTeller_Draw(int k) {  // 8dcb01
 }
 
 void Smithy_SpawnDumbBarrierSprite(int k) {  // 8dcb2a
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x31, &info);
   if (j < 0)
     return;
@@ -13248,7 +13248,7 @@ void Sprite_MazeGameGuy(int k) {  // 8dcbf2
 }
 
 void MazeGameGuy_Draw(int k) {  // 8dcda7
-  static const struct DrawMultipleData kMazeGameGuy_Dmd[16] = {
+  static const DrawMultipleData kMazeGameGuy_Dmd[16] = {
     {0, -10, 0x0000, 2},
     {0,   0, 0x0020, 2},
     {0, -10, 0x0000, 2},
@@ -13266,7 +13266,7 @@ void MazeGameGuy_Draw(int k) {  // 8dcda7
     {0, -10, 0x0002, 2},
     {0,   0, 0x0020, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kMazeGameGuy_Dmd[sprite_graphics[k] * 2 + sprite_D[k] * 4], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -13280,13 +13280,13 @@ void CrystalMaiden_Draw(int k) {  // 8dce5f
 
 void Priest_Draw(int k) {  // 8dcf31
   int j = sprite_D[k] * 2 + sprite_graphics[k];
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, kPriest_Dmd + j * 2, 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
 
 uint8 FluteBoy_Draw(int k) {  // 8dcfd9
-  static const struct DrawMultipleData kFluteBoy_Dmd[16] = {
+  static const DrawMultipleData kFluteBoy_Dmd[16] = {
     {-1,  -1, 0x0abe, 0},
     { 0,   0, 0x0aaa, 2},
     { 0, -10, 0x0aa8, 2},
@@ -13305,13 +13305,13 @@ uint8 FluteBoy_Draw(int k) {  // 8dcfd9
     { 0,   0, 0x0aaa, 2},
   };
   Oam_AllocateFromRegionB(0x10);
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kFluteBoy_Dmd[sprite_D[k] * 8 + sprite_graphics[k] * 4], 4, &info);
   return (info.x | info.y) >> 8;
 }
 
 void FluteAardvark_Draw(int k) {  // 8dd040
-  static const struct DrawMultipleData kFluteAardvark_Dmd[8] = {
+  static const DrawMultipleData kFluteAardvark_Dmd[8] = {
     {0, -16, 0x06e6, 2},
     {0,  -8, 0x06c8, 2},
     {0, -16, 0x06e6, 2},
@@ -13325,7 +13325,7 @@ void FluteAardvark_Draw(int k) {  // 8dd040
 }
 
 void DustCloud_Draw(int k) {  // 8dd120
-  static const struct DrawMultipleData kDustCloud_Dmd[24] = {
+  static const DrawMultipleData kDustCloud_Dmd[24] = {
     { 0, -3, 0x008b, 0},
     { 3,  0, 0x009b, 0},
     {-3,  0, 0xc08b, 0},
@@ -13356,7 +13356,7 @@ void DustCloud_Draw(int k) {  // 8dd120
 }
 
 void MedallionTablet_Draw(int k) {  // 8dd1e2
-  static const struct DrawMultipleData kMedallionTablet_Dmd[20] = {
+  static const DrawMultipleData kMedallionTablet_Dmd[20] = {
     {-8, -16, 0x008c, 2},
     { 8, -16, 0x408c, 2},
     {-8,   0, 0x00ac, 2},
@@ -13383,12 +13383,12 @@ void MedallionTablet_Draw(int k) {  // 8dd1e2
 
 void Uncle_Draw(int k) {  // 8dd391
   Oam_AllocateFromRegionB(0x18);
-  const struct DrawMultipleData *src = &kUncleDraw_Table[sprite_D[k] * 12 + sprite_graphics[k] * 6];
+  const DrawMultipleData *src = &kUncleDraw_Table[sprite_D[k] * 12 + sprite_graphics[k] * 6];
 
   int j = sprite_D[k] * 2 + sprite_graphics[k];
   link_dma_var3 = kUncleDraw_Dma3[j];
   link_dma_var4 = kUncleDraw_Dma4[j];
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, src, 6, &info);
 
   if (sprite_D[k] != 0 && sprite_D[k] != 3)
@@ -13396,7 +13396,7 @@ void Uncle_Draw(int k) {  // 8dd391
 }
 
 void BugNetKid_Draw(int k) {  // 8dd47b
-  static const struct DrawMultipleData kBugNetKid_Dmd[18] = {
+  static const DrawMultipleData kBugNetKid_Dmd[18] = {
     { 4,  0, 0x0027, 0},
     { 0, -5, 0x000e, 2},
     {-8,  6, 0x040a, 2},
@@ -13420,7 +13420,7 @@ void BugNetKid_Draw(int k) {  // 8dd47b
 }
 
 void Bomber_Draw(int k) {  // 8dd56c
-  static const struct DrawMultipleData kBomber_Dmd[22] = {
+  static const DrawMultipleData kBomber_Dmd[22] = {
     { 0, 0, 0x40c6, 2},
     { 0, 0, 0x40c6, 2},
     { 0, 0, 0x40c4, 2},
@@ -13444,13 +13444,13 @@ void Bomber_Draw(int k) {  // 8dd56c
     { 0, 0, 0x00e6, 2},
     { 0, 0, 0x00e6, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kBomber_Dmd[sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
 
 void SpriteDraw_ZirroBomb(int k) {  // 8dd606
-  static const struct DrawMultipleData kBomberPellet_Dmd[15] = {
+  static const DrawMultipleData kBomberPellet_Dmd[15] = {
     {-11,   0, 0x019b, 0},
     {  0,  -8, 0xc19b, 0},
     {  6,   6, 0x419b, 0},
@@ -13492,7 +13492,7 @@ void PlayerBee_HoneInOnTarget(int j, int k) {  // 8dd631
 }
 
 void Pikit_Draw(int k) {  // 8dd6e6
-  static const struct DrawMultipleData kPikit_Dmd[8] = {
+  static const DrawMultipleData kPikit_Dmd[8] = {
     { 0, 0, 0x00c8, 2},
     { 0, 0, 0x00c8, 2},
     { 0, 0, 0x00ca, 2},
@@ -13502,11 +13502,11 @@ void Pikit_Draw(int k) {  // 8dd6e6
     {-8, 0, 0x00ce, 2},
     { 8, 0, 0x40ce, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   SpriteDraw_Pikit_Tongue(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   tmp_counter = oam->x;
   byte_7E0FB6 = oam->y;
   oam_cur_ptr += 24;
@@ -13519,13 +13519,13 @@ void Pikit_Draw(int k) {  // 8dd6e6
   SpriteDraw_Pikit_Loot(k, &info);
 }
 
-void SpriteDraw_Pikit_Tongue(int k, struct PrepOamCoordsRet *info) {  // 8dd74a
+void SpriteDraw_Pikit_Tongue(int k, PrepOamCoordsRet *info) {  // 8dd74a
   static const uint8 kPikit_TongueMult[4] = {0x33, 0x66, 0x99, 0xcc};
   static const uint8 kPikit_Draw_Char[8] = {0xee, 0xfd, 0xed, 0xfd, 0xee, 0xfd, 0xed, 0xfd};
   static const uint8 kPikit_Draw_Flags[8] = {0, 0, 0, 0x40, 0x40, 0xc0, 0x80, 0x80};
   if (sprite_ai_state[k] != 2 || sprite_pause[k])
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int x = info->x + 4, y = info->y + 3;
   oam[5].x = x;
   oam[5].y = y;
@@ -13544,7 +13544,7 @@ void SpriteDraw_Pikit_Tongue(int k, struct PrepOamCoordsRet *info) {  // 8dd74a
   Sprite_CorrectOamEntries(k, 5, 0);
 }
 
-void SpriteDraw_Pikit_Loot(int k, struct PrepOamCoordsRet *info) {  // 8dd858
+void SpriteDraw_Pikit_Loot(int k, PrepOamCoordsRet *info) {  // 8dd858
   static const int8 kPikit_DrawGrabbedItem_X[20] = {
     -4, 4, -4, 4, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, -4, 4, -4, 4,
   };
@@ -13562,7 +13562,7 @@ void SpriteDraw_Pikit_Loot(int k, struct PrepOamCoordsRet *info) {  // 8dd858
   if (g == 3)
     g = sprite_subtype[k] + 2;
   Oam_AllocateFromRegionC(0x10);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 3; i >= 0; i--, oam++) {
     int j = g * 4 + i;
     oam->x = tmp_counter + kPikit_DrawGrabbedItem_X[j];
@@ -13574,7 +13574,7 @@ void SpriteDraw_Pikit_Loot(int k, struct PrepOamCoordsRet *info) {  // 8dd858
 }
 
 void Kholdstare_Draw(int k) {  // 8dd98f
-  static const struct DrawMultipleData kKholdstare_Dmd[16] = {
+  static const DrawMultipleData kKholdstare_Dmd[16] = {
     {-8, -8, 0x0080, 2},
     { 8, -8, 0x0082, 2},
     {-8,  8, 0x00a0, 2},
@@ -13596,10 +13596,10 @@ void Kholdstare_Draw(int k) {  // 8dd98f
   static const int8 kKholdstare_Draw_Y[16] = {0, 2, 4, 7, 8, 7, 4, 2, 0, -2, -4, -7, -8, -7, -4, -2};
   static const uint8 kKholdstare_Draw_Char[16] = {0xac, 0xac, 0xaa, 0x8c, 0x8c, 0x8c, 0xaa, 0xac, 0xac, 0xaa, 0xaa, 0x8c, 0x8c, 0x8c, 0xaa, 0xac};
   static const uint8 kKholdstare_Draw_Flags[16] = {0x40, 0x40, 0x40, 0, 0, 0, 0, 0, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xc0, 0xc0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = sprite_A[k];
   uint16 x = info.x + kKholdstare_Draw_X[j];
   uint16 y = info.y + kKholdstare_Draw_Y[j];
@@ -13613,7 +13613,7 @@ void Kholdstare_Draw(int k) {  // 8dd98f
 }
 
 int Sprite_SpawnFireball(int k) {  // 8dda06
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   SpriteSfx_QueueSfx3WithPan(k, 0x19);
   int j = Sprite_SpawnDynamicallyEx(k, 0x55, &info, 13);
   if (j < 0)
@@ -13642,9 +13642,9 @@ void ArcheryGameGuy_Draw(int k) {  // 8ddac4
   static const uint8 kArcheryGameGuy_Draw_Ext[15] = {2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 
   Oam_AllocateDeferToPlayer(k);
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   for (int i = 2; i >= 0; i--, oam++) {
     int j = g * 3 + i;
@@ -13768,7 +13768,7 @@ update_pos:
 }
 
 void Sprite_SpawnBatCrashCutscene() {  // 9af6f5
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(0, 0x37, &info);
   if (j >= 0) {
     sprite_y_vel[j] = 0;
@@ -13788,7 +13788,7 @@ void Sprite_SpawnBatCrashCutscene() {  // 9af6f5
 }
 
 void BatCrash_DrawHardcodedGarbage(int k) {  // 9af750
-  static const struct OamEntSigned kRetreatBat_Oams[8] = {
+  static const OamEntSigned kRetreatBat_Oams[8] = {
     { 104, -105, 0x57, 0x01},
     { 120, -105, 0x57, 0x01},
     {-120, -105, 0x57, 0x01},
@@ -13827,7 +13827,7 @@ void BatCrash_SpawnDebris(int k) {  // 9af7e5
 }
 
 void RetreatBat_Draw(int k) {  // 9af833
-  static const struct DrawMultipleData kRetreatBat_Dmds[18] = {
+  static const DrawMultipleData kRetreatBat_Dmds[18] = {
     { 0,  0, 0x044b, 0},
     { 5, -4, 0x045b, 0},
     {-2, -4, 0x0464, 2},
@@ -13856,7 +13856,7 @@ void RetreatBat_Draw(int k) {  // 9af833
 }
 
 void DrinkingGuy_Draw(int k) {  // 9af88c
-  static const struct DrawMultipleData kDrinkingGuy_Dmd[6] = {
+  static const DrawMultipleData kDrinkingGuy_Dmd[6] = {
     {8,  2, 0x00ae, 0},
     {0, -9, 0x0822, 2},
     {0,  0, 0x0006, 2},
@@ -13864,13 +13864,13 @@ void DrinkingGuy_Draw(int k) {  // 9af88c
     {0, -9, 0x0822, 2},
     {0,  0, 0x0006, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kDrinkingGuy_Dmd[sprite_graphics[k] * 3], 3, &info);
   SpriteDraw_Shadow(k, &info);
 }
 
 void Lady_Draw(int k) {  // 9af92c
-  static const struct DrawMultipleData kLadyDmd[16] = {
+  static const DrawMultipleData kLadyDmd[16] = {
     {0, -8, 0x00e0, 2},
     {0,  0, 0x00e8, 2},
     {0, -7, 0x00e0, 2},
@@ -13888,7 +13888,7 @@ void Lady_Draw(int k) {  // 9af92c
     {0, -7, 0x40e2, 2},
     {0,  1, 0x40e6, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kLadyDmd[sprite_graphics[k] * 2 + sprite_D[k] * 4], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -13899,7 +13899,7 @@ void Lanmola_SpawnShrapnel(int k) {  // 9af981
 
   tmp_counter = (sprite_state[0] + sprite_state[1] + sprite_state[2]) < 10 ? 7 : 3;
   do {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0xC2, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -13937,7 +13937,7 @@ void Sprite_Cukeman(int k) {  // 9afa0c
 }
 
 void Cukeman_Draw(int k) {  // 9afb0e
-  static const struct DrawMultipleData kCukeman_Dmd[18] = {
+  static const DrawMultipleData kCukeman_Dmd[18] = {
     { 0, 0, 0x01f3, 0},
     { 7, 0, 0x41f3, 0},
     { 4, 7, 0x07e0, 0},
@@ -13973,10 +13973,10 @@ void RunningBoy_SpawnDustGarnish(int k) {  // 9afb2c
 
 void MovableMantle_Draw(int k) {  // 9afcb3
   Oam_AllocateFromRegionB(0x20);
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 5; i >= 0; i--, oam++) {
     oam->x = kMovableMantle_X[i] + info.x;
     oam->y = kMovableMantle_Y[i] + info.y;
@@ -13987,7 +13987,7 @@ void MovableMantle_Draw(int k) {  // 9afcb3
 }
 
 void Mothula_Draw(int k) {  // 9afdb5
-  static const struct DrawMultipleData kMothula_Dmd[24] = {
+  static const DrawMultipleData kMothula_Dmd[24] = {
     {-24, -8, 0x0080, 2},
     { -8, -8, 0x0082, 2},
     {  8, -8, 0x4082, 2},
@@ -14015,7 +14015,7 @@ void Mothula_Draw(int k) {  // 9afdb5
   };
   oam_cur_ptr = 0x920;
   oam_ext_cur_ptr = 0xa68;
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kMothula_Dmd[sprite_graphics[k] * 8], 8, &info);
   if (sprite_pause[k])
     return;
@@ -14024,7 +14024,7 @@ void Mothula_Draw(int k) {  // 9afdb5
     0,  3, 6, 9, 12, -3, -6, -9, -12,  0,  2, 4, 6, 8, -2, -4,
     -6, -8, 0, 1,  2,  3,  4, -1,  -2, -3, -4,
   };
-  struct OamEnt *oam = GetOamCurPtr() + 10;
+  OamEnt *oam = GetOamCurPtr() + 10;
   int g = sprite_graphics[k];
   for (int i = 8; i >= 0; i--, oam++) {
     uint16 x = info.x + kMothula_Draw_X[g * 9 + i];
@@ -14040,7 +14040,7 @@ void Mothula_Draw(int k) {  // 9afdb5
 void BottleMerchant_BuyBee(int k) {  // 9afe88
   static const int8 kBottleVendor_GoodBeeX[5] = {-6, -3, 0, 4, 7};
   static const int8 kBottleVendor_GoodBeeY[5] = {11, 14, 16, 14, 11};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   SpriteSfx_QueueSfx3WithPan(k, 0x13);
   tmp_counter = 4;
   do {
@@ -14107,7 +14107,7 @@ void Sprite_D4_Landmine(int k) {  // 9d8099
 }
 
 void Landmine_Draw(int k) {  // 9d810c
-  static const struct DrawMultipleData kLandmine_Dmd[2] = {
+  static const DrawMultipleData kLandmine_Dmd[2] = {
     {0, 4, 0x0070, 0},
     {8, 4, 0x4070, 0},
   };
@@ -14169,7 +14169,7 @@ void Sprite_D3_Stal(int k) {  // 9d8129
 }
 
 void Stal_Draw(int k) {  // 9d820c
-  static const struct DrawMultipleData kStal_Dmd[6] = {
+  static const DrawMultipleData kStal_Dmd[6] = {
     {0,  0, 0x0044, 2},
     {4, 11, 0x0070, 0},
     {0,  0, 0x0044, 2},
@@ -14177,7 +14177,7 @@ void Stal_Draw(int k) {  // 9d820c
     {0,  0, 0x0044, 2},
     {4, 13, 0x0070, 0},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   int n = sprite_ai_state[k] ? 2 : 1;
   Sprite_DrawMultiple(k, &kStal_Dmd[sprite_graphics[k] * 2], n, &info);
   if (sprite_ai_state[k])
@@ -14253,7 +14253,7 @@ void Sprite_D2_FloppingFish(int k) {  // 9d8235
       sprite_z[k] = 0;
       Sprite_SpawnSmallSplash(k);
       if (sprite_A[k]) {
-        struct SpriteSpawnInfo info;
+        SpriteSpawnInfo info;
         int j = Sprite_SpawnDynamically(k, 0xdb, &info);
         if (j >= 0) {
           Sprite_SetSpawnedCoordinates(j, &info);
@@ -14278,7 +14278,7 @@ void Sprite_D2_FloppingFish(int k) {  // 9d8235
 }
 
 void Fish_Draw(int k) {  // 9d8483
-  static const struct DrawMultipleData kFish_Dmd[16] = {
+  static const DrawMultipleData kFish_Dmd[16] = {
     {-4, 8, 0x045e, 0},
     { 4, 8, 0x045f, 0},
     {-4, 8, 0x845e, 0},
@@ -14296,7 +14296,7 @@ void Fish_Draw(int k) {  // 9d8483
     { 0, 0, 0xc471, 0},
     { 0, 8, 0xc461, 0},
   };
-  static const struct DrawMultipleData kFish_Dmd2[9] = {
+  static const DrawMultipleData kFish_Dmd2[9] = {
     {-2, 11, 0x0438, 0},
     { 0, 11, 0x0438, 0},
     { 2, 11, 0x0438, 0},
@@ -14307,7 +14307,7 @@ void Fish_Draw(int k) {  // 9d8483
     { 0, 11, 0x0438, 0},
     { 0, 11, 0x0438, 0},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (sprite_graphics[k] == 0) {
     Sprite_PrepOamCoord(k, &info);
     return;
@@ -14322,7 +14322,7 @@ void Fish_Draw(int k) {  // 9d8483
 }
 
 void ChimneySmoke_Draw(int k) {  // 9d8531
-  static const struct DrawMultipleData kChimneySmoke_Dmd[8] = {
+  static const DrawMultipleData kChimneySmoke_Dmd[8] = {
     {0, 0, 0x0086, 0},
     {8, 0, 0x0087, 0},
     {0, 8, 0x0096, 0},
@@ -14352,7 +14352,7 @@ void Sprite_Chimney(int k) {  // 9d858f
     if (sprite_delay_main[k])
       return;
     sprite_delay_main[k] = 67;
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0xd1, &info);
     if (j < 0)
       return;
@@ -14385,7 +14385,7 @@ void Sprite_Chimney(int k) {  // 9d858f
 
 void Sprite_BunnyBeam(int k) {  // 9d85e0
   static const uint8 kRabbitBeam_Gfx[6] = {0xd7, 0xd7, 0xd7, 0x91, 0x91, 0x91};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (!sprite_ai_state[k]) {
     Sprite_PrepOamCoord(k, &info);
     if (Sprite_ReturnIfInactive(k))
@@ -14399,7 +14399,7 @@ void Sprite_BunnyBeam(int k) {  // 9d85e0
 
   SpriteDraw_Antfairy(k);
   if (!sprite_pause[k]) {
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     uint8 charnum = kRabbitBeam_Gfx[sprite_graphics[k]];
     for (int i = 0; i < 5; i++) {
       oam[i].charnum = charnum;
@@ -14457,7 +14457,7 @@ void Sprite_D0_Lynel(int k) {  // 9d866a
         uint16 y = sprite_C[k] | sprite_E[k] << 8;
         if ((uint16)(x - cur_sprite_x + 5) < 10 && (uint16)(y - cur_sprite_y + 5) < 10)
           goto incr_state;
-        struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 24);
+        ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 24);
         sprite_x_vel[k] = pt.x;
         sprite_y_vel[k] = pt.y;
       }
@@ -14489,7 +14489,7 @@ incr_state:
 }
 
 void Lynel_Draw(int k) {  // 9d8880
-  static const struct DrawMultipleData kLynel_Dmd[33] = {
+  static const DrawMultipleData kLynel_Dmd[33] = {
     {-5, -11, 0x00cc, 2},
     {-4,   0, 0x00e4, 2},
     { 4,   0, 0x00e5, 2},
@@ -14524,13 +14524,13 @@ void Lynel_Draw(int k) {  // 9d8880
     {-4,   0, 0x40ee, 2},
     { 4,   0, 0x40ed, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kLynel_Dmd[sprite_graphics[k] * 3], 3, &info);
   SpriteDraw_Shadow(k, &info);
 }
 
 void Sprite_SpawnPhantomGanon(int k) {  // 9d88a1
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xc9, &info);
   Sprite_SetSpawnedCoordinates(j, &info);
   sprite_flags2[j] = 2;
@@ -14581,7 +14581,7 @@ void Sprite_PhantomGanon(int k) {  // 9d88bc
         if (sprite_x_vel[k] == 0)
           SpriteSfx_QueueSfx3WithPan(k, 0x1e);
       }
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, link_x_coord & 0xff00 | 0x78, link_y_coord & 0xff00 | 0x50, 5);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, link_x_coord & 0xff00 | 0x78, link_y_coord & 0xff00 | 0x50, 5);
       uint8 xvel = sprite_x_vel[k], yvel = sprite_y_vel[k];
       sprite_x_vel[k] = xvel + pt.x, sprite_y_vel[k] = yvel + pt.y;
       Sprite_MoveXY(k);
@@ -14597,7 +14597,7 @@ void Sprite_PhantomGanon(int k) {  // 9d88bc
 }
 
 void GanonBat_Draw(int k) {  // 9d89eb
-  static const struct DrawMultipleData kGanonBat_Dmd[6] = {
+  static const DrawMultipleData kGanonBat_Dmd[6] = {
     {-8, 0, 0x0560, 2},
     { 8, 0, 0x4560, 2},
     {-8, 0, 0x0562, 2},
@@ -14609,7 +14609,7 @@ void GanonBat_Draw(int k) {  // 9d89eb
 }
 
 void PhantomGanon_Draw(int k) {  // 9d8a84
-  static const struct DrawMultipleData kPhantomGanon_Dmd[16] = {
+  static const DrawMultipleData kPhantomGanon_Dmd[16] = {
     {-16, -8, 0x0d46, 2},
     { -8, -8, 0x0d47, 2},
     {  8, -8, 0x4d47, 2},
@@ -14648,7 +14648,7 @@ void Sprite_GanonTrident(int k) {  // 9d8ab6
   if (sprite_delay_main[k]) {
     if (sprite_delay_main[k] & 1)
       return;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
     Sprite_ApproachTargetSpeed(k, pt.x, pt.y);
   } else {
     int x = Sprite_GetX(0) + (sprite_D[0] ? -16 : 24);
@@ -14658,7 +14658,7 @@ void Sprite_GanonTrident(int k) {  // 9d8ab6
       sprite_ai_state[0] = 3;
       sprite_delay_main[0] = 16;
     }
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
     Sprite_ApproachTargetSpeed(k, pt.x, pt.y);
   }
 }
@@ -14677,8 +14677,8 @@ void Sprite_SpiralFireBat(int k) {  // 9d8b52
   {
     uint16 x = sprite_A[k] | sprite_B[k] << 8;
     uint16 y = sprite_C[k] | sprite_E[k] << 8;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 2);
-    struct ProjectSpeedRet pt2 = Sprite_ProjectSpeedTowardsLocation(k, x, y, 80);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 2);
+    ProjectSpeedRet pt2 = Sprite_ProjectSpeedTowardsLocation(k, x, y, 80);
     sprite_x_vel[k] = pt2.y - pt.x;
     sprite_y_vel[k] = -pt2.x - pt.y;
   }
@@ -14759,10 +14759,10 @@ void FireBat_Draw(int k) {  // 9d8ca9
   static const uint8 kFirebat_Draw_Char[7] = { 0x88, 0x88, 0x8a, 0x8c, 0x68, 0xaa, 0xa8 };
   static const uint8 kFirebat_Draw_Flags[14] = { 0, 0xc0, 0x80, 0x40, 0, 0x40, 0, 0x40, 0, 0x40, 0, 0x40, 0, 0x40 };
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
 
   for (int i = 1; i >= 0; i--, oam++) {
@@ -14805,7 +14805,7 @@ void Ganon_HandleFireBatCircle(int k) {  // 9d8d70
 }
 
 void Ganon_SpawnSpiralBat(int k) {  // 9d8e7c
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0xc9, &info, 8);
   if (j < 0)
     return;
@@ -14860,7 +14860,7 @@ void Sprite_D6_Ganon(int k) {  // 9d8eb4
   else if (sprite_delay_aux2[k] == 16)
     Ganon_ExtinguishTorch_adjust_translucency();
 
-  struct PairU8 pair = Sprite_IsRightOfLink(k);
+  PairU8 pair = Sprite_IsRightOfLink(k);
   static const uint8 kGanon_HeadDir0[2] = { 2, 0 };
   sprite_head_dir[k] = (uint8)(pair.b + 32) < 64 ? 1 : kGanon_HeadDir0[pair.a];
 
@@ -14905,7 +14905,7 @@ void Sprite_D6_Ganon(int k) {  // 9d8eb4
       static const int8 kGanon_Xvel1[16] = { 32, 28, 24, 16, 0, -16, -24, -28, -32, -28, -24, -16, 0, 16, 24, 28 };
       static const int8 kGanon_Yvel1[16] = { 0, 16, 24, 28, 32, 28, 24, 16, 0, -16, -24, -28, -32, -28, -24, -16 };
       sprite_G[k] = 0;
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0xc9, &info);
       int i = sprite_D[k];
       Sprite_SetX(j, info.r0_x + kGanon_X1[i]);
@@ -14980,7 +14980,7 @@ void Sprite_D6_Ganon(int k) {  // 9d8eb4
         sprite_delay_main[k] = 104;
       }
     } else {
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 32);
       Sprite_ApproachTargetSpeed(k, pt.x, pt.y);
       Sprite_MoveXY(k);
       if (sprite_delay_main[k] == 0 || frame_counter & 1) {
@@ -14990,7 +14990,7 @@ void Sprite_D6_Ganon(int k) {  // 9d8eb4
       static const uint8 kGanon_Gfx5[2] = { 2, 10 };
       sprite_graphics[k] = kGanon_Gfx5[sprite_D[k]];
       if (!(frame_counter & 7)) {
-        struct SpriteSpawnInfo info;
+        SpriteSpawnInfo info;
         int j = Sprite_SpawnDynamically(k, 0xd6, &info);
         if (j >= 0) {
           Sprite_SetSpawnedCoordinates(j, &info);
@@ -15234,7 +15234,7 @@ void Ganon_SpawnFallingTilesOverlord(int k) {  // 9d90d0
 
 void Ganon_Func1(int k, int t) {  // 9d9162
   tmp_counter = t;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0xC9, &info, 8);
   if (j < 0)
     return;
@@ -15300,7 +15300,7 @@ void Ganon_ShakeHead(int k) {  // 9d94ba
 }
 
 void Ganon_Draw(int k) {  // 9d9adf
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (sign8(sprite_graphics[k]) ||
       sprite_ai_state[k] != 19 && sprite_delay_aux4[k] == 0 && byte_7E04C5 == 0) {
     Sprite_PrepOamCoordOrDoubleRet(k, &info);
@@ -15309,7 +15309,7 @@ void Ganon_Draw(int k) {  // 9d9adf
   Trident_Draw(k);
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr() + 5;
+  OamEnt *oam = GetOamCurPtr() + 5;
   int g = sprite_graphics[k];
   for (int i = 0; i < 12; i++, oam++) {
     int j = g * 12 + i;
@@ -15336,7 +15336,7 @@ void Ganon_Draw(int k) {  // 9d9adf
     Sprite_CorrectOamEntries(k, 9, 0xff);
 
   if (sprite_G[k] == 9) {
-    static const struct DrawMultipleData kGanon_Dmd[2] = {
+    static const DrawMultipleData kGanon_Dmd[2] = {
       {16, -3, 0x4c0a, 2},
       {16,  5, 0x4c1a, 2},
     };
@@ -15358,7 +15358,7 @@ void Ganon_Draw(int k) {  // 9d9adf
 }
 
 void Trident_Draw(int k) {  // 9d9c1c
-  static const struct DrawMultipleData kTrident_Dmd[50] = {
+  static const DrawMultipleData kTrident_Dmd[50] = {
   { 10, -10, 0x0864, 0},
   {  5, -15, 0x0864, 0},
   {  0, -20, 0x0864, 0},
@@ -15479,7 +15479,7 @@ void Sprite_CF_Swamola(int k) {  // 9d9cb0
     if (!(sprite_subtype2[k] & 3)) {
       if (!++sprite_z_vel[k])
         sprite_ai_state[k] = 2;
-      struct ProjectSpeedRet pt = Swamola_ProjectVelocityTowardsTarget(k);
+      ProjectSpeedRet pt = Swamola_ProjectVelocityTowardsTarget(k);
       Sprite_ApproachTargetSpeed(k, pt.x, pt.y);
     }
     break;
@@ -15494,7 +15494,7 @@ void Sprite_CF_Swamola(int k) {  // 9d9cb0
     uint16 y = swamola_target_y_hi[k] << 8 | swamola_target_y_lo[k];
     if ((uint16)(cur_sprite_x - x + 8) < 16 && (uint16)(cur_sprite_y - y + 8) < 16)
       sprite_ai_state[k] = 3;
-    struct ProjectSpeedRet pt = Swamola_ProjectVelocityTowardsTarget(k);
+    ProjectSpeedRet pt = Swamola_ProjectVelocityTowardsTarget(k);
     sprite_x_vel[k] = pt.x;
     sprite_y_vel[k] = pt.y;
     break;
@@ -15523,14 +15523,14 @@ void Sprite_CF_Swamola(int k) {  // 9d9cb0
   }
 }
 
-struct ProjectSpeedRet Swamola_ProjectVelocityTowardsTarget(int k) {  // 9d9e13
+ProjectSpeedRet Swamola_ProjectVelocityTowardsTarget(int k) {  // 9d9e13
   uint16 x = swamola_target_x_hi[k] << 8 | swamola_target_x_lo[k];
   uint16 y = swamola_target_y_hi[k] << 8 | swamola_target_y_lo[k];
   return Sprite_ProjectSpeedTowardsLocation(k, x, y, 15);
 }
 
 void Swamola_SpawnRipples(int k) {  // 9d9eaa
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xcf, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -15551,7 +15551,7 @@ void Sprite_Swamola_Ripples(int k) {  // 9d9ece
 }
 
 void SwamolaRipples_Draw(int k) {  // 9d9f1d
-  static const struct DrawMultipleData kSwamolaRipples_Dmd[8] = {
+  static const DrawMultipleData kSwamolaRipples_Dmd[8] = {
     {0, 4, 0x00d8, 0},
     {8, 4, 0x40d8, 0},
     {0, 4, 0x00d9, 0},
@@ -15628,7 +15628,7 @@ void Sprite_Blind_Head(int k) {  // 9da118
 
   sprite_obj_prio[k] |= 48;
   SpriteDraw_SingleLarge(k);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = sprite_head_dir[k];
   oam->charnum = kBlindHead_Draw_Char[j];
   oam->flags = oam->flags & 0x3f | kBlindHead_Draw_Flags[j];
@@ -15650,7 +15650,7 @@ void Sprite_Blind_Head(int k) {  // 9da118
   j = Blind_SpitFireball(k, 0x1f);
   if (j >= 0 && sign8(--sprite_z_subpos[k])) {
     sprite_z_subpos[k] = 4;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
     sprite_x_vel[j] = pt.x;
     sprite_y_vel[j] = pt.y;
   }
@@ -15669,7 +15669,7 @@ void Sprite_Blind_Head(int k) {  // 9da118
 }
 
 void Blind_SpawnHead(int k) {  // 9da1ed
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xce, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -15703,7 +15703,7 @@ void Sprite_BlindLaser(int k) {  // 9da268
   int j = sprite_head_dir[k];
   sprite_graphics[k] = kBlindLaser_Gfx[j];
   sprite_oam_flags[k] = kBlindLaser_OamFlags[j] | 3;
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -15954,7 +15954,7 @@ int Blind_SpitFireball(int k, uint8 a) {  // 9da49d
 }
 
 int SpawnBossPoof(int k) {  // 9da4f9
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xce, &info);
   Sprite_SetX(j, info.r0_x + 16);
   Sprite_SetY(j, info.r2_y + 40);
@@ -16019,7 +16019,7 @@ void Blind_AnimateRobes(int k) {  // 9da729
 void Blind_SpawnLaser(int k) {  // 9da765
   static const int8 kBlind_Laser_Xvel[16] = {-8, -8, -8, -4, 0, 4, 8, 8, 8, 8, 8, 4, 0, -4, -8, -8};
   static const int8 kBlind_Laser_Yvel[16] = {0, 0, 4, 8, 8, 8, 4, 0, 0, 0, -4, -8, -8, -8, -4, 0};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xce, &info), i;
   if (j >= 0) {
     sound_effect_2 = Sprite_CalculateSfxPan(k) | 0x26;
@@ -16038,7 +16038,7 @@ void Blind_SpawnLaser(int k) {  // 9da765
 void Blind_Draw(int k) {  // 9dac6c
 
   if (sprite_graphics[k] >= 15) {
-    static const struct DrawMultipleData kBlindPoof_Dmd[37] = {
+    static const DrawMultipleData kBlindPoof_Dmd[37] = {
       {-16, -20, 0x0586, 2},
       {-11, -28, 0x0586, 2},
       {-23, -26, 0x0586, 2},
@@ -16082,7 +16082,7 @@ void Blind_Draw(int k) {  // 9dac6c
     Sprite_DrawMultiple(k, &kBlindPoof_Dmd[kOffs[j]], kOffs[j + 1] - kOffs[j], NULL);
     return;
   }
-  static const struct DrawMultipleData kBlind_Dmd[105] = {
+  static const DrawMultipleData kBlind_Dmd[105] = {
     { -8,  7, 0x0c8e, 2},
     {  8,  7, 0x4c8e, 2},
     { -8, 23, 0x0ca0, 2},
@@ -16190,7 +16190,7 @@ void Blind_Draw(int k) {  // 9dac6c
     {  0, 23, 0x0a8c, 2},
   };
   Sprite_DrawMultiple(k, &kBlind_Dmd[sprite_graphics[k] * 7], 7, NULL);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   if (sprite_wallcoll[k] == 0) {
     if (sprite_C[k] == 6) {
       oam[6].y = 0xf0;
@@ -16314,7 +16314,7 @@ void Sprite_Trinexx_FinalPhase(int k) {  // 9dadb5
     break;
   case 1:
     if (!(frame_counter & 1)) {
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 31);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 31);
       Sprite_ApproachTargetSpeed(k, pt.x, pt.y);
     }
     break;
@@ -16336,7 +16336,7 @@ void Sprite_TrinexxD_Draw(int k) {  // 9daf84
   };
 
   sprite_obj_prio[k] |= 0x30;
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   SpriteDraw_TrinexxRockHead(k, &info);
   for (int i = 0; i != sprite_anim_clock[k]; i++) {
     int j = sprite_subtype2[k] - kTrinexxD_HistPos[i] & 0x7f;
@@ -16447,7 +16447,7 @@ void Sprite_CB_TrinexxRockHead(int k) {  // 9db0ca
   Trinexx_HandleShellCollision(k);
   Sprite_CheckDamageToAndFromLink(k);
   if (!(frame_counter & 63)) {
-    struct PairU8 pair = Sprite_IsRightOfLink(k);
+    PairU8 pair = Sprite_IsRightOfLink(k);
     sprite_graphics[k] = (uint8)(pair.b + 24) < 48 ? 0 : pair.a ? 1 : 7;
   }
   if (overlord_x_lo[6]) {
@@ -16488,7 +16488,7 @@ void Sprite_CB_TrinexxRockHead(int k) {  // 9db0ca
     } else {
       uint16 x = sprite_x_hi[k] << 8 | overlord_x_lo[0];
       uint16 y = sprite_y_hi[k] << 8 | overlord_x_lo[1];
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, sign8(sprite_subtype[k]) ? 16 : 8);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, sign8(sprite_subtype[k]) ? 16 : 8);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
 
@@ -16561,14 +16561,14 @@ void Trinexx_HandleShellCollision(int k) {  // 9db3e6
     link_auxiliary_state = 1;
     link_give_damage = 8;
     link_incapacitated_timer = 16;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
     link_actual_vel_x = pt.x;
     link_actual_vel_y = pt.y;
   }
 }
 
-void SpriteDraw_TrinexxRockHead(int k, struct PrepOamCoordsRet *info) {  // 9db560
-  static const struct DrawMultipleData kTrinexx_Draw1_Dmd[36] = {
+void SpriteDraw_TrinexxRockHead(int k, PrepOamCoordsRet *info) {  // 9db560
+  static const DrawMultipleData kTrinexx_Draw1_Dmd[36] = {
     {-8, -8, 0x40c0, 2},
     { 8, -8, 0x00c0, 2},
     {-8,  8, 0x40e0, 2},
@@ -16632,13 +16632,13 @@ void SpriteDraw_TrinexxRockHeadAndBody(int k) {  // 9db587
   if (sign8(sprite_head_dir[k]))
     return;
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   SpriteDraw_TrinexxRockHead(k, &info);
 
   info.flags &= ~0x10;
 
   if (sprite_ai_state[k] == 3) {
-    struct OamEnt *oam = GetOamCurPtr() + 4;
+    OamEnt *oam = GetOamCurPtr() + 4;
     uint8 xb = sprite_A[k] - sprite_x_lo[k];
     uint8 yb = sprite_C[k] - sprite_y_lo[k];
     for (int i = 7; i >= 0; i--, oam++) {
@@ -16652,7 +16652,7 @@ void SpriteDraw_TrinexxRockHeadAndBody(int k) {  // 9db587
   }
   oam_cur_ptr = 0x9f0;
   oam_ext_cur_ptr = 0xa9c;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 xb = sprite_A[k] - BG2HOFS_copy2;
   uint16 yb = (sprite_C[k] | sprite_y_hi[k] << 8) - BG2VOFS_copy2;
 
@@ -16669,7 +16669,7 @@ void SpriteDraw_TrinexxRockHeadAndBody(int k) {  // 9db587
     WORD(bytewise_extended_oam[oam - oam_buf]) = 0x202;
   }
 
-  oam = (struct OamEnt *)&g_ram[0x800] + 91;
+  oam = (OamEnt *)&g_ram[0x800] + 91;
   int g = overlord_x_lo[2];
   for (int i = 0; i < 5; i++, oam++) {
     int j = g * 5 + i;
@@ -16819,7 +16819,7 @@ void Sprite_Sidenexx(int k) {  // 9db8a7
 }
 
 void Sidenexx_ExhaleDanger(int k) {  // 9dbae8
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   if (sprite_type[k] == 0xcd) {
     for (int i = 0; i < 2; i++) {
       int j = Sprite_SpawnDynamically(k, 0xcd, &info);
@@ -16865,10 +16865,10 @@ void TrinexxHead_Draw(int k) {  // 9dbb70
   sprite_y_lo[k] = sprite_C[k];
   sprite_y_hi[k] = sprite_G[k];
   Sprite_Get16BitCoords(k);
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int i = 0;
   do {
     int j = i + k * 9;
@@ -17010,7 +17010,7 @@ void Sprite_CA_ChainChomp(int k) {  // 9dbe7d
     if (!sprite_anim_clock[k]) {
       uint16 x = sprite_A[k] | sprite_B[k] << 8;
       uint16 y = sprite_C[k] | sprite_G[k] << 8;
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
       Sprite_MoveXY(k);
@@ -17087,7 +17087,7 @@ void ChainChomp_Draw(int k) {  // 9dc192
   sprite_graphics[k] = kChainChomp_Gfx[j];
   sprite_oam_flags[k] = sprite_oam_flags[k] & 0x3f | kChainChomp_OamFlags[j];
   SpriteDraw_SingleLarge(k);
-  struct OamEnt *oam = GetOamCurPtr() + 1;
+  OamEnt *oam = GetOamCurPtr() + 1;
   uint8 flags = sprite_oam_flags[k] ^ sprite_obj_prio[k];
   int r8 = (sprite_delay_aux1[k] & 1) + 4;
   int pos = k * 8;
@@ -17141,11 +17141,11 @@ void Sprite_Tektite(int k) {  // 9dc293
     static const uint8 kTektite_Dir[4] = {3, 2, 1, 0};
     static const int8 kTektite_Xvel[4] = {16, -16, 16, -16};
     static const int8 kTektite_Yvel[4] = {16, 16, -16, -16};
-    struct PointU8 pt;
+    PointU8 pt;
     j = Sprite_DirectionToFaceLink(k, &pt);
     if ((uint8)(pt.x + 40) < 80 && (uint8)(pt.y + 40) < 80 && player_oam_y_offset != 0x80 &&
         !(sprite_z[k] | sprite_pause[k]) && link_is_on_lower_level == sprite_floor[k] && j != kTektite_Dir[link_direction_facing >> 1]) {
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
       sprite_x_vel[k] = -pt.x;
       sprite_y_vel[k] = -pt.y;
       sprite_z_vel[k] = 16;
@@ -17197,7 +17197,7 @@ reset_state:
 }
 
 void Tektite_Draw(int k) {  // 9dc3f5
-  static const struct DrawMultipleData kTektite_Dmd[6] = {
+  static const DrawMultipleData kTektite_Dmd[6] = {
     {-8, 0, 0x00c8, 2},
     { 8, 0, 0x40c8, 2},
     {-8, 0, 0x00ca, 2},
@@ -17205,7 +17205,7 @@ void Tektite_Draw(int k) {  // 9dc3f5
     {-8, 0, 0x00ea, 2},
     { 8, 0, 0x40ea, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kTektite_Dmd[sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -17218,7 +17218,7 @@ void Sprite_C8_BigFairy(int k) {  // 9dc414
 }
 
 void Sprite_FairyCloud(int k) {  // 9dc41c
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -17258,7 +17258,7 @@ void Sprite_FairyCloud(int k) {  // 9dc41c
 }
 
 void Sprite_BigFairy(int k) {  // 9dc4bf
-  struct PointU8 pt;
+  PointU8 pt;
   int i = sprite_delay_aux2[k];
   if (i != 0 && i < 0x40) {
     if (--i == 0)
@@ -17285,7 +17285,7 @@ void Sprite_BigFairy(int k) {  // 9dc4bf
       dialogue_message_index = 0x15a;
       Sprite_ShowMessageMinimal();
       flag_is_link_immobilized = 1;
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, 0xC8, &info);
       Sprite_SetSpawnedCoordinates(j, &info);
       sprite_head_dir[j] = 1;
@@ -17299,7 +17299,7 @@ void Sprite_BigFairy(int k) {  // 9dc4bf
 }
 
 void BigFaerie_Draw(int k) {  // 9dc5d0
-  static const struct DrawMultipleData kBigFaerie_Dmd[16] = {
+  static const DrawMultipleData kBigFaerie_Dmd[16] = {
     {-4, -8, 0x008e, 2},
     { 4, -8, 0x408e, 2},
     {-4,  8, 0x00ae, 2},
@@ -17317,7 +17317,7 @@ void BigFaerie_Draw(int k) {  // 9dc5d0
     {-4,  8, 0x00ac, 2},
     { 4,  8, 0x40ac, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kBigFaerie_Dmd[sprite_graphics[k] * 4], 4, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -17365,7 +17365,7 @@ void Sprite_C7_Pokey(int k) {  // 9dc64f
     sprite_x_vel[k] += sign8(sprite_x_vel[k]) ? -4 : 4;
     sprite_y_vel[k] += sign8(sprite_y_vel[k]) ? -4 : 4;
 
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0xc7, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -17403,10 +17403,10 @@ void Sprite_C7_Pokey(int k) {  // 9dc64f
 }
 
 void Hokbok_Draw(int k) {  // 9dc77d
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr() + 3;
+  OamEnt *oam = GetOamCurPtr() + 3;
   int d = sprite_B[k];
   uint16 x = info.x, y = info.y;
   for (int i = sprite_A[k]; i >= 0; i--, oam--) {
@@ -17421,7 +17421,7 @@ void Hokbok_Draw(int k) {  // 9dc77d
 }
 
 void Sprite_C5_Medusa(int k) {  // 9dc7eb
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (!player_is_indoors) {
     sprite_x_vel[k] = 255;
@@ -17455,7 +17455,7 @@ void Sprite_C6_4WayShooter(int k) {  // 9dc869
   static const int8 kFireballJunction_X[4] = {12, -12, 0, 0};
   static const int8 kFireballJunction_Y[4] = {0, 0, 12, -12};
   static const int8 kFireballJunction_XYvel[6] = {0, 0, 40, -40, 0, 0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -17567,7 +17567,7 @@ uint8 Thief_ScanForBooty(int k) {  // 9dca24
 
 void Thief_TargetBooty(int k, int j) {  // 9dca4c
   if (!((k ^ frame_counter) & 3)) {
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, Sprite_GetX(j), Sprite_GetY(j), 19);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, Sprite_GetX(j), Sprite_GetY(j), 19);
     sprite_x_vel[k] = pt.x;
     sprite_y_vel[k] = pt.y;
   }
@@ -17592,7 +17592,7 @@ void Thief_GrabBooty(int k, int j) {  // 9dca9e
 
 void Thief_CheckCollisionWithLink(int k) {  // 9dcaf2
   if (Sprite_CheckDamageToLink_same_layer(k)) {
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
     link_actual_vel_y = pt.y;
     sprite_y_recoil[k] = pt.y ^ 0xff;
     link_actual_vel_x = pt.x;
@@ -17621,7 +17621,7 @@ void Thief_SpillItems(int k) {  // 9dcb30
     }
     if (!j)
       return;
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     j = Sprite_SpawnDynamicallyEx(k, kThiefSpawn_Items[byte_7E0FB6], &info, 7);
     if (j < 0)
       return;
@@ -17643,7 +17643,7 @@ void Thief_SpillItems(int k) {  // 9dcb30
 }
 
 void Thief_Draw(int k) {  // 9dcc9e
-  static const struct DrawMultipleData kThief_Dmd[24] = {
+  static const DrawMultipleData kThief_Dmd[24] = {
     {0, -6, 0x0000, 2},
     {0,  0, 0x0006, 2},
     {0, -6, 0x0000, 2},
@@ -17671,10 +17671,10 @@ void Thief_Draw(int k) {  // 9dcc9e
   };
   static const uint8 kThief_DrawChar[4] = {2, 2, 0, 4};
   static const uint8 kThief_DrawFlags[4] = {0x40, 0, 0, 0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kThief_Dmd[sprite_graphics[k] * 2], 2, &info);
   if (!sprite_pause[k]) {
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     int j = sprite_head_dir[k];
     oam->charnum = kThief_DrawChar[j];
     oam->flags = (oam->flags & ~0x40) | kThief_DrawFlags[j];
@@ -17716,7 +17716,7 @@ void Sprite_C3_Gibo(int k) {  // 9dcce1
       sprite_ai_state[k]++;
       sprite_delay_main[k] = 48;
       sprite_A[k]++;
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       j = Sprite_SpawnDynamically(k, 0xc3, &info);
       if (j >= 0) {
         static const int8 kGibo_Xvel[8] = {16, 16, 0, -16, -16, -16, 0, 16};
@@ -17759,7 +17759,7 @@ void Sprite_C3_Gibo(int k) {  // 9dcce1
         sprite_delay_main[k] = (GetRandomNumber() & 31) + 32;
         return;
       }
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
     }
@@ -17769,7 +17769,7 @@ void Sprite_C3_Gibo(int k) {  // 9dcce1
 }
 
 void Gibo_Draw(int k) {  // 9dcf5e
-  static const struct DrawMultipleData kGibo_Dmd[32] = {
+  static const DrawMultipleData kGibo_Dmd[32] = {
     { 4, -4, 0x408a, 2},
     {-4, -4, 0x408f, 0},
     {12, 12, 0x408e, 0},
@@ -17863,7 +17863,7 @@ void Boulder_OutdoorsMain(int k) {  // 9dd02a
 }
 
 void Boulder_Draw(int k) {  // 9dd185
-  static const struct DrawMultipleData kBoulder_Dmd[16] = {
+  static const DrawMultipleData kBoulder_Dmd[16] = {
     {-8, -8, 0x01cc, 2},
     { 8, -8, 0x01ce, 2},
     {-8,  8, 0x01ec, 2},
@@ -17881,7 +17881,7 @@ void Boulder_Draw(int k) {  // 9dd185
     {-8,  8, 0x81cc, 2},
     { 8,  8, 0x81ce, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kBoulder_Dmd[(sprite_subtype2[k] >> 3 & 3) * 4], 4, &info);
   Sprite_DrawLargeShadow2(k);
 }
@@ -17902,7 +17902,7 @@ void Sprite_DrawLargeShadow2(int k) {  // 9dd1af
 void CutsceneAgahnim_SpawnZeldaOnAltar(int k) {  // 9dd1fd
   sprite_x_lo[k] += 8;
   sprite_y_lo[k] += 6;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xc1, &info);
   sprite_A[j] = 1;
   sprite_ignore_projectile[j] = 1;
@@ -17923,7 +17923,7 @@ void Sprite_C1_CutsceneAgahnim(int k) {  // 9dd234
 void CutsceneAgahnim_Agahnim(int k) {  // 9dd23f
   static const uint8 kChattyAgahnim_LevitateGfx[4] = {2, 0, 3, 0};
   int j;
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
 
   if (sprite_C[k]) {
     if (!sprite_delay_main[k])
@@ -18022,7 +18022,7 @@ void CutsceneAgahnim_Agahnim(int k) {  // 9dd23f
 int Sprite_Agahnim_ApplyMotionBlur(int k) {  // 9dd392
   if (frame_counter & 3)
     return -1;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xc1, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -18034,8 +18034,8 @@ int Sprite_Agahnim_ApplyMotionBlur(int k) {  // 9dd392
   return j;
 }
 
-void ChattyAgahnim_Draw(int k, struct PrepOamCoordsRet *info) {  // 9dd451
-  static const struct DrawMultipleData kChattyAgahnim_Dmd[16] = {
+void ChattyAgahnim_Draw(int k, PrepOamCoordsRet *info) {  // 9dd451
+  static const DrawMultipleData kChattyAgahnim_Dmd[16] = {
     {-8, -8, 0x0b82, 2},
     { 8, -8, 0x4b82, 2},
     {-8,  8, 0x0ba2, 2},
@@ -18064,8 +18064,8 @@ void ChattyAgahnim_Draw(int k, struct PrepOamCoordsRet *info) {  // 9dd451
   SpriteDraw_Shadow_custom(k, info, 18);
 }
 
-void SpriteDraw_CutsceneAgahnimSpell(int k, struct PrepOamCoordsRet *info) {  // 9dd516
-  static const struct OamEntSigned kChattyAgahnim_Telewarp_Data[28] = {
+void SpriteDraw_CutsceneAgahnimSpell(int k, PrepOamCoordsRet *info) {  // 9dd516
+  static const OamEntSigned kChattyAgahnim_Telewarp_Data[28] = {
     {-10, -16, 0xce, 0x06},
     { 18, -16, 0xce, 0x06},
     { 20, -13, 0x26, 0x06},
@@ -18097,13 +18097,13 @@ void SpriteDraw_CutsceneAgahnimSpell(int k, struct PrepOamCoordsRet *info) {  //
   };
   static const uint8 kChattyAgahnim_Telewarp_Data_Ext[14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2};
   Oam_AllocateFromRegionA(0x38);
-  const struct OamEntSigned *data = kChattyAgahnim_Telewarp_Data;
+  const OamEntSigned *data = kChattyAgahnim_Telewarp_Data;
   if (!(frame_counter & 2))
     data += 14;
   const uint8 *ext_data = kChattyAgahnim_Telewarp_Data_Ext;
   if (!sprite_subtype2[k])
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 kn = sprite_subtype2[k] - 1;
   uint8 end = sprite_subtype[k];
   uint8 t = end + 1;
@@ -18120,7 +18120,7 @@ void SpriteDraw_CutsceneAgahnimSpell(int k, struct PrepOamCoordsRet *info) {  //
 }
 
 void Sprite_CutsceneAgahnim_Zelda(int k) {  // 9dd57d
-  static const struct DrawMultipleData kAltarZelda_Dmd[4] = {
+  static const DrawMultipleData kAltarZelda_Dmd[4] = {
     {-4, 0, 0x0103, 2},
     { 4, 0, 0x0104, 2},
     {-4, 0, 0x0100, 2},
@@ -18135,19 +18135,19 @@ void Sprite_CutsceneAgahnim_Zelda(int k) {  // 9dd57d
       return;
   }
   Oam_AllocateFromRegionA(8);
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kAltarZelda_Dmd[sprite_graphics[k] * 2], 2, &info);
   AltarZelda_DrawBody(k, &info);
 }
 
-void AltarZelda_DrawBody(int k, struct PrepOamCoordsRet *info) {  // 9dd5e9
+void AltarZelda_DrawBody(int k, PrepOamCoordsRet *info) {  // 9dd5e9
   static const uint8 kAltarZelda_XOffs[16] = {4, 4, 3, 3, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
   Oam_AllocateFromRegionA(8);
   int z = sprite_z[k] < 31 ? sprite_z[k] : 31;
   uint8 xoffs = kAltarZelda_XOffs[z >> 1];
 
   int y = Sprite_GetY(k) - BG2VOFS_copy2;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   oam[0].x = info->x + xoffs;
   oam[1].x = info->x - xoffs;
@@ -18159,7 +18159,7 @@ void AltarZelda_DrawBody(int k, struct PrepOamCoordsRet *info) {  // 9dd5e9
 }
 
 void SpriteDraw_AltarZeldaWarp(int k) {  // 9dd6b1
-  static const struct DrawMultipleData kAltarZelda_Warp_Dmd[10] = {
+  static const DrawMultipleData kAltarZelda_Warp_Dmd[10] = {
     { 4, 4, 0x0480, 0},
     { 4, 4, 0x0480, 0},
     { 4, 4, 0x04b7, 0},
@@ -18185,7 +18185,7 @@ void Sprite_InitializedSegmented(int k) {  // 9dd6d1
 }
 
 void GiantMoldorm_Draw(int k) {  // 9dd881
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   sprite_oam_flags[k] = 11;
@@ -18223,7 +18223,7 @@ void GiantMoldorm_IncrementalSegmentExplosion(int k) {  // 9dd8f2
 }
 
 void SpriteDraw_Moldorm_Head(int k) {  // 9dd993
-  static const struct DrawMultipleData kGiantMoldorm_Head_Dmd[16] = {
+  static const DrawMultipleData kGiantMoldorm_Head_Dmd[16] = {
     {-8, -8, 0x0080, 2},
     { 8, -8, 0x0082, 2},
     {-8,  8, 0x00a0, 2},
@@ -18279,12 +18279,12 @@ void SpriteDraw_Moldorm_Tail(int k) {  // 9ddb17
   GiantMoldorm_DrawSegment_C_OrTail(k, 0x30);
 }
 
-void SpriteDraw_Moldorm_Eyeballs(int k, struct PrepOamCoordsRet *info) {  // 9ddb9e
+void SpriteDraw_Moldorm_Eyeballs(int k, PrepOamCoordsRet *info) {  // 9ddb9e
   static const int16 kGiantMoldorm_Eye_X[16] = {16, 15, 12, 6, 0, -6, -12, -13, -16, -13, -12, -6, 0, 6, 12, 15};
   static const int16 kGiantMoldorm_Eye_Y[16] = {0, 6, 12, 15, 16, 15, 12, 6, 0, -6, -12, -13, -16, -13, -12, -6};
   static const uint8 kGiantMoldorm_Eye_Char[16] = {0xaa, 0xaa, 0xa8, 0xa8, 0x8a, 0x8a, 0xa8, 0xa8, 0xaa, 0xaa, 0xa8, 0xa8, 0x8a, 0x8a, 0xa8, 0xa8};
   static const uint8 kGiantMoldorm_Eye_Flags[16] = {0, 0, 0, 0, 0x80, 0x80, 0x40, 0x40, 0x40, 0x40, 0xc0, 0xc0, 0, 0, 0x80, 0x80};
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 yoff = kBadPullSwitch_Tab5[kBadPullSwitch_Tab4[sprite_graphics[k]]];
   int r7 = sprite_F[k] ? frame_counter : 0;
   int r6 = sprite_D[k] - 1;
@@ -18311,7 +18311,7 @@ void Sprite_MakeBossExplosion(int k) {  // 9ddc2a
 }
 
 void Sprite_MakeBossDeathExplosion_NoSound(int k) {  // 9ddc30
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x00, &info);
   if (j >= 0) {
     load_chr_halfslot_even_odd = 11;
@@ -18327,7 +18327,7 @@ void Sprite_MakeBossDeathExplosion_NoSound(int k) {  // 9ddc30
 }
 
 void Vulture_Draw(int k) {  // 9ddd5e
-  static const struct DrawMultipleData kVulture_Dmd[8] = {
+  static const DrawMultipleData kVulture_Dmd[8] = {
     {-8, 0, 0x0086, 2},
     { 8, 0, 0x4086, 2},
     {-8, 0, 0x0080, 2},
@@ -18337,7 +18337,7 @@ void Vulture_Draw(int k) {  // 9ddd5e
     {-8, 0, 0x0084, 2},
     { 8, 0, 0x4084, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kVulture_Dmd[sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 
@@ -18357,7 +18357,7 @@ void Sprite_Raven(int k) {  // 9ddd85
   Sprite_MoveXY(k);
   switch (sprite_ai_state[k]) {
   case 0: { // inwait
-    struct PairU8 r = Sprite_IsRightOfLink(k);
+    PairU8 r = Sprite_IsRightOfLink(k);
     sprite_oam_flags[k] = sprite_oam_flags[k] & ~0x40 | r.a * 0x40;
     int x = link_x_coord - cur_sprite_x;
     int y = link_y_coord - cur_sprite_y;
@@ -18383,7 +18383,7 @@ void Sprite_Raven(int k) {  // 9ddd85
       sprite_ai_state[k]++;
 fly:
     if (!((k ^ frame_counter) & 1)) {
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, fleeing ? 48 : 32);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, fleeing ? 48 : 32);
       if (fleeing)
         pt.x = -pt.x, pt.y = -pt.y;
       if (sprite_x_vel[k] - pt.x)
@@ -18405,7 +18405,7 @@ void Vitreous_SpawnSmallerEyes(int k) {  // 9ddecb
   sprite_G[k] = 9;
   sprite_graphics[k] = 4;
 
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x4, &info, 13);
 
   static const int8 kVitreous_SpawnSmallerEyes_X[13] = {8, 22, -8, -22, 0, 14, 19, 33, 26, -14, -19, -33, -26};
@@ -18555,7 +18555,7 @@ void Catfish_BigFish(int k) {  // 9ddfd1
 }
 
 int Sprite_SpawnBomb(int k) {  // 9de144
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x4a, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -18568,7 +18568,7 @@ int Sprite_SpawnBomb(int k) {  // 9de144
 }
 
 void Catfish_RegurgitateMedallion(int k) {  // 9de16c
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xc0, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -18584,7 +18584,7 @@ void Catfish_RegurgitateMedallion(int k) {  // 9de16c
 }
 
 void Sprite_Zora_RegurgitateFlippers(int k) {  // 9de1aa
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xc0, &info);
   if (j < 0)
     return;
@@ -18601,7 +18601,7 @@ void Sprite_Zora_RegurgitateFlippers(int k) {  // 9de1aa
 }
 
 void Catfish_SpawnPlop(int k) {  // 9de1ed
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xec, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -18614,7 +18614,7 @@ void Catfish_SpawnPlop(int k) {  // 9de1ed
 }
 
 int Sprite_SpawnWaterSplash(int k) {  // 9de21c
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xc0, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -18628,7 +18628,7 @@ int Sprite_SpawnWaterSplash(int k) {  // 9de21c
 }
 
 void GreatCatfish_Draw(int k) {  // 9de320
-  static const struct DrawMultipleData kGreatCatfish_Dmd[28] = {
+  static const DrawMultipleData kGreatCatfish_Dmd[28] = {
     {-4,  4, 0x008c, 2},
     { 4,  4, 0x008d, 2},
     {-4,  4, 0x008c, 2},
@@ -18663,7 +18663,7 @@ void GreatCatfish_Draw(int k) {  // 9de320
 }
 
 void Sprite_Catfish_SplashOfWater(int k) {  // 9de37d
-  static const struct DrawMultipleData kWaterSplash_Dmd[8] = {
+  static const DrawMultipleData kWaterSplash_Dmd[8] = {
     {-8, -4, 0x0080, 0},
     {18, -7, 0x0080, 0},
     {-5, -2, 0x00bf, 0},
@@ -18787,7 +18787,7 @@ void Vitreous_Animate(int k, uint8 a) {  // 9de563
   if (a == 0x40 || a == 0x41 || a == 0x42)
     Sprite_SpawnLightning(k);
   sprite_graphics[k] = 0;
-  struct PairU8 pair = Sprite_IsRightOfLink(k);
+  PairU8 pair = Sprite_IsRightOfLink(k);
   if ((uint8)(pair.b + 16) >= 32)
     sprite_graphics[k] = kVitreous_Animate_Gfx[pair.a];
 }
@@ -18808,7 +18808,7 @@ void Vitreous_SetMinionsForth(int k) {  // 9de5da
 void Sprite_SpawnLightning(int k) {  // 9de612
   static const int8 kAgahnim_Lighting_X[8] = {-8, 8, 8, -8, 8, -8, -8, 8};
 
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xBF, &info), i;
   if (j >= 0) {
     sound_effect_2 = 0x26;
@@ -18823,7 +18823,7 @@ void Sprite_SpawnLightning(int k) {  // 9de612
 }
 
 void Vitreous_Draw(int k) {  // 9de716
-  static const struct DrawMultipleData kVitreous_Dmd[24] = {
+  static const DrawMultipleData kVitreous_Dmd[24] = {
     {-8, -8, 0x01c0, 2},
     { 8, -8, 0x41c0, 2},
     {-8,  8, 0x01e0, 2},
@@ -18887,7 +18887,7 @@ void Sprite_BE_VitreousEye(int k) {  // 9de773
     if (!((k ^ frame_counter) & 1)) {
       uint16 x = sprite_head_dir[k] << 8 | sprite_G[k];
       uint16 y = sprite_subtype[k] << 8 | sprite_anim_clock[k];
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
     }
@@ -18901,7 +18901,7 @@ void Sprite_BE_VitreousEye(int k) {  // 9de773
     if (!((k ^ frame_counter) & 1)) {
       uint16 x = sprite_A[k] | sprite_B[k] << 8;
       uint16 y = sprite_C[k] | sprite_D[k] << 8;
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
       sprite_x_vel[k] = pt.x;
       sprite_y_vel[k] = pt.y;
     }
@@ -18927,7 +18927,7 @@ void HelmasaurFireball_TriSplit(int k) {  // 9deed3
 
   byte_7E0FB6 = GetRandomNumber();
   for (int i = 2; i >= 0; i--) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x70, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -18949,7 +18949,7 @@ void HelmasaurFireball_QuadSplit(int k) {  // 9def3d
   SpriteSfx_QueueSfx3WithPan(k, 0x36);
   sprite_state[k] = 0;
   for (int i = 3; i >= 0; i--) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x70, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -19040,7 +19040,7 @@ void Sprite_EvilBarrier(int k) {  // 9df06b
 }
 
 void EvilBarrier_Draw(int k) {  // 9df249
-  static const struct DrawMultipleData kEvilBarrier_Dmd[45] = {
+  static const DrawMultipleData kEvilBarrier_Dmd[45] = {
     {  0,  0, 0x00e8, 2},
     {-29,  3, 0x00ca, 0},
     {-29, 11, 0x00da, 0},
@@ -19093,7 +19093,7 @@ void EvilBarrier_Draw(int k) {  // 9df249
 }
 
 void SpriteDraw_Antfairy(int k) {  // 9df395
-  static const struct DrawMultipleData kDrawFourAroundOne_Dmd[30] = {
+  static const DrawMultipleData kDrawFourAroundOne_Dmd[30] = {
     { 4,  2, 0x02e1, 0},
     { 4, -3, 0x02e3, 0},
     {-1,  2, 0x02e3, 0},
@@ -19150,7 +19150,7 @@ void Toppo_Flustered(int k) {  // 9df3d4
     sprite_delay_main[k] = 15;
     sprite_flags2[k] += 4;
     SpriteSfx_QueueSfx2WithPan(k, 0x15);
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x4d, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -19162,12 +19162,12 @@ void Toppo_Flustered(int k) {  // 9df3d4
 }
 
 void Goriya_Draw(int k) {  // 9df589
-  static const struct DrawMultipleData kGoriya_Dmd2[3] = {
+  static const DrawMultipleData kGoriya_Dmd2[3] = {
     {10, 4, 0x4077, 0},
     {-2, 4, 0x0077, 0},
     { 4, 4, 0x0076, 0},
   };
-  static const struct DrawMultipleData kGoriya_Dmd[32] = {
+  static const DrawMultipleData kGoriya_Dmd[32] = {
     {-4, -8, 0x0044, 2},
     {12, -8, 0x4044, 0},
     {-4,  8, 0x0064, 0},
@@ -19205,7 +19205,7 @@ void Goriya_Draw(int k) {  // 9df589
   if (sprite_delay_aux1[k] && sprite_D[k] != 3)
     Sprite_DrawMultiple(k, &kGoriya_Dmd2[sprite_D[k]], 1, NULL);
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   oam_cur_ptr += 4, oam_ext_cur_ptr++;
   int g = sprite_graphics[k];
   Sprite_DrawMultiple(k, &kGoriya_Dmd[kGoriyaDmdOffs[g]], kGoriyaDmdOffs[g + 1] - kGoriyaDmdOffs[g], &info);
@@ -19222,10 +19222,10 @@ void Moldorm_Draw(int k) {  // 9df822
   static const uint8 kMoldorm_Draw_Ext[3] = {0, 2, 2};
   static const uint8 kMoldorm_Draw_GetOffs[3] = {21, 26, 0};
 
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 base = sprite_D[k] - 1;
   for (int i = 1; i >= 0; i--, oam++, base += 2) {
     uint16 x = info.x + kMoldorm_Draw_X[base & 0xf];
@@ -19270,7 +19270,7 @@ void TalkingTree_Mouth(int k) {  // 9df956
     if (Sprite_CheckDamageToLink_same_layer(k)) {
       Link_CancelDash();
       link_incapacitated_timer = 16;
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 48);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 48);
       link_actual_vel_y = pt.y;
       link_actual_vel_x = pt.x;
       SpriteSfx_QueueSfx3WithPan(k, 0x32);
@@ -19319,7 +19319,7 @@ void TalkingTree_Mouth(int k) {  // 9df956
 }
 
 void TalkingTree_SpawnBomb(int k) {  // 9dfa4e
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x4a, &info);
   if (j >= 0) {
     Sprite_TransmuteToBomb(j);
@@ -19331,7 +19331,7 @@ void TalkingTree_SpawnBomb(int k) {  // 9dfa4e
 }
 
 void TalkingTree_Draw(int k) {  // 9dfadb
-  static const struct DrawMultipleData kTalkingTree_Dmd[12] = {
+  static const DrawMultipleData kTalkingTree_Dmd[12] = {
     {1, -1, 0x00e8, 0},
     {1,  7, 0x00f8, 0},
     {7, -1, 0x40e8, 0},
@@ -19359,7 +19359,7 @@ void TalkingTree_Eye(int k) {  // 9dfb0a
   int j = sprite_head_dir[k];
   Sprite_SetX(k, (sprite_A[k] | sprite_B[k] << 8) + kTalkingTree_Type1_X[j]);
   Sprite_SetY(k, (sprite_C[k] | sprite_E[k] << 8));
-  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 2);
+  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 2);
   if (!sign8(pt.y)) {
     sprite_D[k] = pt.x + 2;
   } else if (sprite_D[k] != 2) {
@@ -19374,7 +19374,7 @@ void TalkingTree_Eye(int k) {  // 9dfb0a
 
 void SpritePrep_TalkingTree_SpawnEyeball(int k, int dir) {  // 9dfb8a
   static const int8 kTalkingTree_SpawnX[2] = {-4, 14};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x25, &info);
   if (j >= 0) {
     sprite_head_dir[j] = dir;
@@ -19399,7 +19399,7 @@ void RupeePull_SpawnPrize(int k) {  // 9dfbd7
                   number_of_times_hurt_by_sprites ? 1 : 2;
     tmp_counter = 3;
     do {
-      struct SpriteSpawnInfo info;
+      SpriteSpawnInfo info;
       int j = Sprite_SpawnDynamically(k, kSpawnRupees_Type[byte_7E0FB6], &info);
       if (j < 0)
         break;
@@ -19484,7 +19484,7 @@ void Sprite_D5_DigGameGuy(int k) {  // 9dfc38
 }
 
 void DiggingGameGuy_Draw(int k) {  // 9dfe4b
-  static const struct DrawMultipleData kDiggingGameGuy_Dmd[9] = {
+  static const DrawMultipleData kDiggingGameGuy_Dmd[9] = {
     { 0, -8, 0x0a40, 2},
     { 4,  9, 0x0c56, 0},
     { 0,  0, 0x0a42, 2},
@@ -19495,17 +19495,17 @@ void DiggingGameGuy_Draw(int k) {  // 9dfe4b
     {-1,  0, 0x0a44, 2},
     {-1,  0, 0x0a44, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kDiggingGameGuy_Dmd[sprite_graphics[k] * 3], 3, &info);
   SpriteDraw_Shadow(k, &info);
 }
 
 void OldMountainMan_Draw(int k) {  // 9dff0e
-  static const struct DrawMultipleData kOldMountainMan_Dmd0[2] = {
+  static const DrawMultipleData kOldMountainMan_Dmd0[2] = {
     {0, 0, 0x00ac, 2},
     {0, 8, 0x00ae, 2},
   };
-  static const struct DrawMultipleData kOldMountainMan_Dmd1[16] = {
+  static const DrawMultipleData kOldMountainMan_Dmd1[16] = {
     { 0, 0, 0x0120, 2},
     { 0, 8, 0x0122, 2},
     { 0, 1, 0x0120, 2},
@@ -19747,7 +19747,7 @@ void HelmasaurKing_SwingTail(int k) {  // 9e82a0
 void HelmasaurKing_CheckMaskDamageFromHammer(int k) {  // 9e8385
   if (sprite_C[k] >= 3 || !(link_item_in_hand & 10) || (player_oam_y_offset == 0x80))
     return;
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   Player_SetupActionHitBox(&hb);
   uint8 bak  = sprite_y_lo[k];
   sprite_y_lo[k] += 8;
@@ -19756,7 +19756,7 @@ void HelmasaurKing_CheckMaskDamageFromHammer(int k) {  // 9e8385
   if (CheckIfHitBoxesOverlap(&hb)) {
     sprite_health[k]--;
     sound_effect_2 = 0x21;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 0x30);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 0x30);
     link_actual_vel_y = pt.y;
     link_actual_vel_x = pt.x;
     link_incapacitated_timer = 8;
@@ -19801,7 +19801,7 @@ void HelmasaurKing_SpawnMaskDebris(int k) {  // 9e84aa
   static const int8 kHelmasaurKing_Mask_Zvel[10] = {32, 40, 36, 37, 39, 34, 30, 33, 37, 34};
   static const uint8 kHelmasaurKing_Mask_OamFlags[10] = {0, 0, 0x40, 0, 0, 0x40, 0, 0x40, 0, 0x40};
   static const uint8 kHelmasaurKing_Mask_Gfx[10] = {0, 1, 0, 2, 3, 2, 4, 4, 5, 5};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x92, &info);
   if (j >= 0) {
     int i = tmp_counter;
@@ -19822,7 +19822,7 @@ void HelmasaurKing_SpawnMaskDebris(int k) {  // 9e84aa
 }
 
 void HelmasaurKing_SpitFireball(int k) {  // 9e8517
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x70, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -19835,7 +19835,7 @@ void HelmasaurKing_SpitFireball(int k) {  // 9e8517
 void HelmasaurKing_Draw(int k) {  // 9e853b
   oam_cur_ptr = 0x89c;
   oam_ext_cur_ptr = 0xa47;
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   KingHelmasaur_OperateTail(k, &info);
@@ -19846,12 +19846,12 @@ void HelmasaurKing_Draw(int k) {  // 9e853b
   SpriteDraw_KingHelmasaur_Mouth(k, &info);
 }
 
-void SpriteDraw_KingHelmasaur_Eyes(int k, struct PrepOamCoordsRet *info) {  // 9e856b
+void SpriteDraw_KingHelmasaur_Eyes(int k, PrepOamCoordsRet *info) {  // 9e856b
   static const int8 kHelmasaurKing_DrawB_X[2] = {-3, 11};
   static const uint8 kHelmasaurKing_DrawB_Char[8] = {0xce, 0xcf, 0xde, 0xde, 0xde, 0xde, 0xcf, 0xce};
   static const uint8 kHelmasaurKing_DrawB_Flags[2] = {0x3b, 0x7b};
   oam_cur_ptr += 0x40, oam_ext_cur_ptr += 0x10;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 1; i >= 0; i--, oam++) {
     oam->x = info->x + kHelmasaurKing_DrawB_X[i];
     oam->y = info->y + 0x14;
@@ -19864,8 +19864,8 @@ void SpriteDraw_KingHelmasaur_Eyes(int k, struct PrepOamCoordsRet *info) {  // 9
     Sprite_CorrectOamEntries(k, 1, 0);
 }
 
-void KingHelmasaurMask(int k, struct PrepOamCoordsRet *info) {  // 9e8686
-  static const struct DrawMultipleData kHelmasaurKing_DrawC_Dmd[24] = {
+void KingHelmasaurMask(int k, PrepOamCoordsRet *info) {  // 9e8686
+  static const DrawMultipleData kHelmasaurKing_DrawC_Dmd[24] = {
     {-16, -5, 0x0dae, 2},
     {  0, -5, 0x0dc0, 2},
     { 16, -5, 0x4dae, 2},
@@ -19906,7 +19906,7 @@ void KingHelmasaurMask(int k, struct PrepOamCoordsRet *info) {  // 9e8686
 }
 
 void KingHelmasaur_CheckBombDamage(int k, int j) {  // 9e86e5
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   Sprite_SetupHitBox(k, &hb);
   int x = (ancilla_x_lo[j] | ancilla_x_hi[j] << 8) - 6;
   int y = (ancilla_y_lo[j] | ancilla_y_hi[j] << 8) - ancilla_z[j];
@@ -19925,8 +19925,8 @@ void KingHelmasaur_CheckBombDamage(int k, int j) {  // 9e86e5
   }
 }
 
-void SpriteDraw_KingHelmasaur_Body(int k, struct PrepOamCoordsRet *info) {  // 9e87e5
-  static const struct DrawMultipleData kHelmasaurKing_DrawD_Dmd[19] = {
+void SpriteDraw_KingHelmasaur_Body(int k, PrepOamCoordsRet *info) {  // 9e87e5
+  static const DrawMultipleData kHelmasaurKing_DrawD_Dmd[19] = {
     {-24, -32, 0x0b80, 2},
     { -8, -32, 0x0b82, 2},
     {  8, -32, 0x4b82, 2},
@@ -19950,7 +19950,7 @@ void SpriteDraw_KingHelmasaur_Body(int k, struct PrepOamCoordsRet *info) {  // 9
   Sprite_DrawMultiple(k, kHelmasaurKing_DrawD_Dmd, 19, info);
 }
 
-void SpriteDraw_KingHelmasaur_Legs(int k, struct PrepOamCoordsRet *info) {  // 9e8805
+void SpriteDraw_KingHelmasaur_Legs(int k, PrepOamCoordsRet *info) {  // 9e8805
   static const int8 kHelmasaurKing_DrawE_X[4] = {-28, -28, 28, 28};
   static const int8 kHelmasaurKing_DrawE_Y[4] = {-28, 4, -28, 4};
   static const uint8 kHelmasaurKing_DrawE_Char[4] = {0xa2, 0xa6, 0xa2, 0xa6};
@@ -19958,7 +19958,7 @@ void SpriteDraw_KingHelmasaur_Legs(int k, struct PrepOamCoordsRet *info) {  // 9
 
   oam_cur_ptr += 19 * 4;
   oam_ext_cur_ptr += 19;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 3; i >= 0; i--, oam += 2) {
     oam[1].x = oam[0].x = info->x + kHelmasaurKing_DrawE_X[i];
     oam[0].y = info->y + kHelmasaurKing_DrawE_Y[i] + overlord_x_lo[i];
@@ -19976,7 +19976,7 @@ void SpriteDraw_KingHelmasaur_Legs(int k, struct PrepOamCoordsRet *info) {  // 9
   }
 }
 
-void SpriteDraw_KingHelmasaur_Mouth(int k, struct PrepOamCoordsRet *info) {  // 9e88bc
+void SpriteDraw_KingHelmasaur_Mouth(int k, PrepOamCoordsRet *info) {  // 9e88bc
   static const uint8 kHelmasaurKing_DrawF_Y[32] = {
     1,  2,  3,  4,  5,  6,  7, 8, 9, 10, 10, 10, 10, 10, 10, 10,
     10, 10, 10, 10, 10, 10, 10, 9, 8,  7,  6,  5,  4,  3,  2,  1,
@@ -19985,7 +19985,7 @@ void SpriteDraw_KingHelmasaur_Mouth(int k, struct PrepOamCoordsRet *info) {  // 
     return;
   uint8 yd = kHelmasaurKing_DrawF_Y[sprite_delay_aux2[k] >> 2];
   Oam_AllocateFromRegionB(4);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   oam->x = info->x;
   int t = (uint8)info->y + 0x13;
   oam->y = t + (t >> 8) + yd;
@@ -19994,7 +19994,7 @@ void SpriteDraw_KingHelmasaur_Mouth(int k, struct PrepOamCoordsRet *info) {  // 
   bytewise_extended_oam[oam - oam_buf] = 2;
 }
 
-void KingHelmasaur_OperateTail(int k, struct PrepOamCoordsRet *info) {  // 9e8920
+void KingHelmasaur_OperateTail(int k, PrepOamCoordsRet *info) {  // 9e8920
   static const uint8 kHelmasaurKing_DrawA_Mult[32] = {
     0xff, 0xf0, 0xe0, 0xd0, 0xc0, 0xb0, 0xa0, 0x90, 0x80, 0x70, 0x60, 0x50, 0x40, 0x30, 0x20, 0x10,
     0xff, 0xf8, 0xf0, 0xe8, 0xe0, 0xd8, 0xd0, 0xc8, 0xbc, 0xb0, 0xa0, 0x90, 0x70, 0x40, 0x20, 0x10,
@@ -20014,7 +20014,7 @@ void KingHelmasaur_OperateTail(int k, struct PrepOamCoordsRet *info) {  // 9e892
     overlord_y_lo[i+5] = HelmasaurSin(angle + 0x80, r15) - 40;
   }
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   bool is_hit = false;
   for (int i = overlord_gen2[3]; i != 16; i++, oam++) {
     uint8 x = overlord_x_lo[i + 5] + info->x;
@@ -20111,11 +20111,11 @@ void Sprite_AA_Pikit(int k) {  // 9e8bbf
     if (sign8(sprite_z[k])) {
       sprite_z[k] = 0;
       sprite_z_vel[k] = 0;
-      struct PointU8 pt;
+      PointU8 pt;
       Sprite_DirectionToFaceLink(k, &pt);
       if ((uint8)(pt.x + 48) < 96 && (uint8)(pt.y + 48) < 96) {
         sprite_ai_state[k]++;
-        struct ProjectSpeedRet pp = Sprite_ProjectSpeedTowardsLink(k, 31);
+        ProjectSpeedRet pp = Sprite_ProjectSpeedTowardsLink(k, 31);
         sprite_D[k] = Sprite_ConvertVelocityToAngle(pp.x, pp.y) >> 1;
         sprite_delay_main[k] = 95;
         return;
@@ -20227,11 +20227,11 @@ void Sprite_A8_GreenZirro(int k) {  // 9e8dd2
       sprite_G[k]++;
   }
   Sprite_MoveZ(k);
-  struct PointU8 pt;
+  PointU8 pt;
   Sprite_DirectionToFaceLink(k, &pt);
   if ((uint8)(pt.x + 40) < 80 && (uint8)(pt.y + 40) < 80 && player_oam_y_offset != 0x80 &&
       (link_is_running || sign8(button_b_frames - 9))) {
-    struct ProjectSpeedRet pp = Sprite_ProjectSpeedTowardsLink(k, 0x30);
+    ProjectSpeedRet pp = Sprite_ProjectSpeedTowardsLink(k, 0x30);
     sprite_x_vel[k] = -pt.x;
     sprite_y_vel[k] = -pt.y;
     sprite_delay_main[k] = 8;
@@ -20284,7 +20284,7 @@ set_dir:
 void Zirro_DropBomb(int k) {  // 9e8f81
   static const int8 kBomber_SpawnPellet_X[4] = {14, -6, 4, 4};
   static const int8 kBomber_SpawnPellet_Y[4] = {7, 7, 12, -4};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xa8, &info);
   if (j >= 0) {
     SpriteSfx_QueueSfx2WithPan(k, 0x20);
@@ -20316,7 +20316,7 @@ void Sprite_StalfosBone(int k) {  // 9e8fdf
 }
 
 void StalfosBone_Draw(int k) {  // 9e9040
-  static const struct DrawMultipleData kStalfosBone_Dmd[8] = {
+  static const DrawMultipleData kStalfosBone_Dmd[8] = {
     {-4, -2, 0x802f, 0},
     { 4,  2, 0x402f, 0},
     {-4,  2, 0x002f, 0},
@@ -20353,7 +20353,7 @@ void Sprite_A7_Stalfos(int k) {  // 9e906c
     sprite_y_vel[k] = 0;
     sprite_x_vel[k] = 0;
   }
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
 }
 
@@ -20376,7 +20376,7 @@ void Stalfos_Skellington(int k) {  // 9e90b5
     if (dir != kStalfos_CheckDir[link_direction_facing >> 1]) {
 if_1:
       sprite_D[k] = dir;
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 32);
       sprite_x_vel[k] = -pt.x;
       sprite_y_vel[k] = -pt.y;
       sprite_z_vel[k] = 32;
@@ -20512,7 +20512,7 @@ int Sprite_SpawnFirePhlegm(int k) {  // 9e92e4
   static const int8 kSpawnFirePhlegm_Y[4] = {-2, -2, 8, -20};
   static const int8 kSpawnFirePhlegm_Xvel[4] = {48, -48, 0, 0};
   static const int8 kSpawnFirePhlegm_Yvel[4] = {0, 0, 48, -48};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xa5, &info);
   if (j >= 0) {
     SpriteSfx_QueueSfx3WithPan(k, 0x5);
@@ -20537,7 +20537,7 @@ int Sprite_SpawnFirePhlegm(int k) {  // 9e92e4
 }
 
 void Stalfos_ThrowBone(int k) {  // 9e9379
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xa7, &info);
   if (j >= 0) {
     sprite_A[j] = 1;
@@ -20556,7 +20556,7 @@ void Stalfos_ThrowBone(int k) {  // 9e9379
 }
 
 void FirePhlegm_Draw(int k) {  // 9e9443
-  static const struct DrawMultipleData kFirePhlegm_Dmd[16] = {
+  static const DrawMultipleData kFirePhlegm_Dmd[16] = {
     { 0,  0, 0x00c3, 0},
     {-8,  0, 0x00c2, 0},
     { 0,  0, 0x80c3, 0},
@@ -20580,7 +20580,7 @@ void FirePhlegm_Draw(int k) {  // 9e9443
 void Sprite_A3_KholdstareShell(int k) {  // 9e9460
   if (Sprite_ReturnIfPaused(k))
     return;
-  struct PointU8 pt;
+  PointU8 pt;
   Sprite_DirectionToFaceLink(k, &pt);
   if ((uint8)(pt.x + 32) < 64 && (uint8)(pt.y + 32) < 64) {
     Sprite_NullifyHookshotDrag();
@@ -20610,7 +20610,7 @@ void Sprite_A3_KholdstareShell(int k) {  // 9e9460
 void GenerateIceball(int k) {  // 9e94dd
   if (++sprite_subtype2[k] & 127 | sprite_delay_aux1[k])
     return;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xa4, &info);
   if (j >= 0) {
     Sprite_SetX(j, link_x_coord);
@@ -20641,7 +20641,7 @@ void Sprite_A2_Kholdstare(int k) {  // 9e9518
   }
 
   if (!(frame_counter & 3)) {
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 31);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 31);
     sprite_A[k] = Sprite_ConvertVelocityToAngle(pt.x, pt.y);
   }
 
@@ -20676,7 +20676,7 @@ check_coll:
       sprite_delay_main[k] = (GetRandomNumber() & 63) + 96;
       j = GetRandomNumber();
       if (!(j & 0x1c)) {
-        struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 24);
+        ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 24);
         sprite_z_vel[k] = pt.x;
         sprite_z_subpos[k] = pt.y;
       } else {
@@ -20701,7 +20701,7 @@ check_coll:
       for (int i = 2; i >= 0; i--) {
         static const int8 kKholdstare_Triplicate_Tab0[3] = {32, -32, 0};
         static const int8 kKholdstare_Triplicate_Tab1[3] = {-32, -32, 48};
-        struct SpriteSpawnInfo info;
+        SpriteSpawnInfo info;
         j = Sprite_SpawnDynamicallyEx(k, 0xa2, &info, 4);
         assert(j >= 0);
         if (j >= 0) {
@@ -20787,7 +20787,7 @@ void IceBall_Split(int k) {  // 9e97cf
   SpriteSfx_QueueSfx2WithPan(k, 0x1f);
   int b = GetRandomNumber() & 4;
   for (int i = 3; i >= 0; i--) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0xa4, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -20907,7 +20907,7 @@ void Sprite_9E_HauntedGroveOstritch(int k) {  // 9e995b
 }
 
 void FluteBoyOstrich_Draw(int k) {  // 9e9a4b
-  static const struct DrawMultipleData kFluteBoyOstrich_Dmd[16] = {
+  static const DrawMultipleData kFluteBoyOstrich_Dmd[16] = {
     {-4, -8, 0x0080, 2},
     { 4, -8, 0x0081, 2},
     {-4,  8, 0x00a3, 2},
@@ -20925,7 +20925,7 @@ void FluteBoyOstrich_Draw(int k) {  // 9e9a4b
     {-4,  9, 0x00a3, 2},
     { 4,  9, 0x00a4, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kFluteBoyOstrich_Dmd[sprite_graphics[k] * 4], 4, &info);
   SpriteDraw_Shadow_custom(k, &info, 18);
 }
@@ -21001,10 +21001,10 @@ void Sprite_A0_HauntedGroveBird(int k) {  // 9e9aec
 
 void HauntedGroveBird_Blink(int k) {  // 9e9b9c
   static const int8 kFluteBoyBird_X[2] = {8, 0};
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = sprite_D[k];
   oam->x = info.x + kFluteBoyBird_X[j];
   oam->y = info.y;
@@ -21110,7 +21110,7 @@ void Sprite_9B_Wizzrobe(int k) {  // 9e9d1b
     return;
   }
   if (sprite_ai_state[k] == 0 || sprite_ai_state[k] & 1 && sprite_delay_main[k] & 1) {
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     Sprite_PrepOamCoord(k, &info);
   } else {
     Wizzrobe_Draw(k);
@@ -21170,7 +21170,7 @@ void Sprite_9B_Wizzrobe(int k) {  // 9e9d1b
 
 void Wizzrobe_FireBeam(int k) {  // 9e9e15
   static const int8 kWizzrobe_Beam_XYvel[6] = {32, -32, 0, 0, 32, -32};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x9b, &info);
   if (j >= 0) {
     SpriteSfx_QueueSfx3WithPan(k, 0x36);
@@ -21189,7 +21189,7 @@ void Wizzrobe_FireBeam(int k) {  // 9e9e15
 }
 
 void Sprite_9A_Kyameron(int k) {  // 9e9e7b
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (!sprite_ai_state[k])
     Sprite_PrepOamCoord(k, &info);
   else
@@ -21283,7 +21283,7 @@ skip_sound:
 
 void Kyameron_Draw(int k) {  // 9ea158
   static const uint8 kKyameron_OamFlags[12] = {0x40, 0, 0, 0, 0, 0, 0, 0, 0, 0x40, 0xc0, 0x80};
-  static const struct DrawMultipleData kKyameron_Dmd[28] = {
+  static const DrawMultipleData kKyameron_Dmd[28] = {
     { 1,   8, 0x00b4, 0},
     { 7,   8, 0x00b5, 0},
     { 4,  -3, 0x0086, 0},
@@ -21389,7 +21389,7 @@ void Sprite_99_Pengator(int k) {  // 9ea196
 }
 
 void Pengator_Draw(int k) {  // 9ea415
-  static const struct DrawMultipleData kPengator_Dmd0[40] = {
+  static const DrawMultipleData kPengator_Dmd0[40] = {
     {-1, -8, 0x0082, 2},
     { 0,  0, 0x0088, 2},
     {-1, -7, 0x0082, 2},
@@ -21431,13 +21431,13 @@ void Pengator_Draw(int k) {  // 9ea415
     {-8,  0, 0x00a0, 2},
     { 8,  0, 0x40a0, 2},
   };
-  static const struct DrawMultipleData kPengator_Dmd1[4] = {
+  static const DrawMultipleData kPengator_Dmd1[4] = {
     {0, 16, 0x00b5, 0},
     {8, 16, 0x40b5, 0},
     {0, -8, 0x00a5, 0},
     {8, -8, 0x40a5, 0},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kPengator_Dmd0[sprite_graphics[k] * 2], 2, &info);
   int i;
   if ((i = 0, sprite_graphics[k] == 14) || (i = 1, sprite_graphics[k] == 19)) {
@@ -21509,7 +21509,7 @@ void Sprite_95_LaserEyeLeft(int k) {  // 9ea541
 void LaserEye_FireBeam(int k) {  // 9ea5d8
   static const int8 kLaserEye_SpawnXY[6] = {12, -4, 4, 4, 12, -4};
   static const int8 kLaserEye_SpawnXYVel[6] = {112, -112, 0, 0, 112, -112};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x95, &info);
   if (j >= 0) {
     int i = sprite_D[k];
@@ -21531,7 +21531,7 @@ void LaserEye_FireBeam(int k) {  // 9ea5d8
 }
 
 void LaserEye_Draw(int k) {  // 9ea708
-  static const struct DrawMultipleData kLaserEye_Dmd[24] = {
+  static const DrawMultipleData kLaserEye_Dmd[24] = {
     { 8, -4, 0x40c8, 0},
     { 8,  4, 0x40d8, 0},
     { 8, 12, 0xc0c8, 0},
@@ -21683,7 +21683,7 @@ void Sprite_93_Bumper(int k) {  // 9ea982
   if (!link_cape_mode && Sprite_CheckDamageToLink_same_layer(k)) {
     Link_CancelDash();
     sprite_delay_main[k] = 32;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 0x30);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, 0x30);
     link_actual_vel_y = pt.y + kBumper_Vels[joypad1H_last >> 2 & 3];
     link_actual_vel_x = pt.x + kBumper_Vels[joypad1H_last & 3];
     link_incapacitated_timer = 20;
@@ -21698,7 +21698,7 @@ void Sprite_93_Bumper(int k) {  // 9ea982
     int x = Sprite_GetX(j), y = Sprite_GetY(j);
     if ((uint16)(cur_sprite_x - x + 16) < 32 && (uint16)(cur_sprite_y - y + 16) < 32) {
       sprite_F[j] = 15;
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 0x40);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 0x40);
       sprite_y_recoil[j] = pt.y;
       sprite_x_recoil[j] = pt.x;
       sprite_delay_main[k] = 32;
@@ -21708,7 +21708,7 @@ void Sprite_93_Bumper(int k) {  // 9ea982
 }
 
 void Bumper_Draw(int k) {  // 9eaa8b
-  static const struct DrawMultipleData kBumper_Dmd[8] = {
+  static const DrawMultipleData kBumper_Dmd[8] = {
     {-8, -8, 0x00ec, 2},
     { 8, -8, 0x40ec, 2},
     {-8,  8, 0x80ec, 2},
@@ -21724,7 +21724,7 @@ void Bumper_Draw(int k) {  // 9eaa8b
 void Sprite_91_StalfosKnight(int k) {  // 9eaaa7
   int j;
   if (!sprite_ai_state[k]) {
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     Sprite_PrepOamCoord(k, &info);
   } else {
     StalfosKnight_Draw(k);
@@ -21879,7 +21879,7 @@ SetToGround:
 }
 
 void StalfosKnight_Draw(int k) {  // 9eae04
-  static const struct DrawMultipleData kStalfosKnight_Dmd[35] = {
+  static const DrawMultipleData kStalfosKnight_Dmd[35] = {
     {-4, -8, 0x0064, 0},
     {-4,  0, 0x0061, 2},
     { 4,  0, 0x0062, 2},
@@ -21916,7 +21916,7 @@ void StalfosKnight_Draw(int k) {  // 9eae04
     { 4,  8, 0x404b, 2},
     { 4,  8, 0x404b, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   SpriteDraw_StalfosKnight_Head(k, &info);
@@ -21926,13 +21926,13 @@ void StalfosKnight_Draw(int k) {  // 9eae04
   SpriteDraw_Shadow_custom(k, &info, 18);
 }
 
-void SpriteDraw_StalfosKnight_Head(int k, struct PrepOamCoordsRet *info) {  // 9eae4e
+void SpriteDraw_StalfosKnight_Head(int k, PrepOamCoordsRet *info) {  // 9eae4e
   static const uint8 kStalfosKnight_DrawHead_Char[4] = {0x66, 0x66, 0x46, 0x46};
   static const uint8 kStalfosKnight_DrawHead_Flags[4] = {0x40, 0, 0, 0};
   if (sprite_graphics[k] == 2)
     return;
   int i = sprite_head_dir[k];
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   oam->x = info->x;
   oam->y = ClampYForOam(info->y + sprite_C[k] - 12);
   oam->charnum = kStalfosKnight_DrawHead_Char[i];
@@ -22006,7 +22006,7 @@ void Sprite_90_Wallmaster(int k) {  // 9eaea4
 }
 
 void WallMaster_Draw(int k) {  // 9eafe4
-  static const struct DrawMultipleData kWallMaster_Dmd[8] = {
+  static const DrawMultipleData kWallMaster_Dmd[8] = {
     {-4,  0, 0x01a6, 2},
     {12,  0, 0x01aa, 0},
     {-4, 16, 0x01ba, 0},
@@ -22129,7 +22129,7 @@ void Sprite_8F_Blob(int k) {  // 9eb002
 }
 
 void Zol_Draw(int k) {  // 9eb1c5
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (!(sprite_oam_flags[k] & 1) && byte_7E0FC6 >= 3)
     return;
 
@@ -22150,7 +22150,7 @@ void Zol_Draw(int k) {  // 9eb1c5
     sprite_graphics[k] = gfx;
     sprite_oam_flags[k] = bak1;
   } else {
-    static const struct DrawMultipleData kZol_Dmd[8] = {
+    static const DrawMultipleData kZol_Dmd[8] = {
       {0, 8, 0x036c, 0},
       {8, 8, 0x036d, 0},
       {0, 8, 0x0060, 0},
@@ -22235,7 +22235,7 @@ void Terrorpin_CheckForHammer(int k) {  // 9eb3a3
       sprite_floor[k] == link_is_on_lower_level &&
       player_oam_y_offset != 0x80 &&
       link_item_in_hand & 0xa) {
-    struct SpriteHitBox hb;
+    SpriteHitBox hb;
     Player_SetupActionHitBox(&hb);
     Terrorpin_SetUpHammerHitBox(k, &hb);
     if (CheckIfHitBoxesOverlap(&hb)) {
@@ -22251,7 +22251,7 @@ void Terrorpin_CheckForHammer(int k) {  // 9eb3a3
   sprite_head_dir[k] = 0;
 }
 
-void Terrorpin_SetUpHammerHitBox(int k, struct SpriteHitBox *hb) {  // 9eb405
+void Terrorpin_SetUpHammerHitBox(int k, SpriteHitBox *hb) {  // 9eb405
   int x = Sprite_GetX(k) - 16;
   int y = Sprite_GetY(k) - 16;
   hb->r4_spr_xlo = x;
@@ -22317,7 +22317,7 @@ void Sprite_8C_Arrghus(int k) {  // 9eb433
           sprite_delay_main[k] = 176;
         } else {
           sprite_delay_main[k] = (GetRandomNumber() & 63) + 48;
-          struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, (sprite_delay_main[k] & 3) + 8);
+          ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, (sprite_delay_main[k] & 3) + 8);
           sprite_head_dir[k] = pt.x;
           sprite_D[k] = pt.y;
         }
@@ -22402,7 +22402,7 @@ void Sprite_8C_Arrghus(int k) {  // 9eb433
 }
 
 void Arrghus_Draw(int k) {  // 9eb840
-  static const struct DrawMultipleData kArrghus_Dmd[5] = {
+  static const DrawMultipleData kArrghus_Dmd[5] = {
     {-8, -4, 0x0080, 2},
     { 8, -4, 0x4080, 2},
     {-8, 12, 0x00a0, 2},
@@ -22410,7 +22410,7 @@ void Arrghus_Draw(int k) {  // 9eb840
     { 0, 24, 0x00a8, 2},
   };
   Sprite_DrawMultiple(k, kArrghus_Dmd, 5, NULL);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 chr = sprite_graphics[k] * 2;
   for (int i = 0; i < 4; i++)
     oam[i].charnum += chr;
@@ -22504,7 +22504,7 @@ void Sprite_8D_Arrghi(int k) {  // 9eb8c4
   if (!((k ^ frame_counter) & 3)) {
     uint16 x = overlord_y_lo[k + 7] << 8 | overlord_x_lo[k + 7];
     uint16 y = overlord_gen3[k + 7] << 8 | overlord_gen1[k + 7];
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 4);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 4);
     sprite_y_vel[k] = pt.y;
     sprite_x_vel[k] = pt.x;
     if ((uint8)(sprite_x_lo[k] - overlord_x_lo[k + 7] + 8) < 16 && (uint8)(sprite_y_lo[k] - overlord_gen1[k + 7] + 8) < 16) {
@@ -22565,7 +22565,7 @@ void Sprite_8B_Gibdo(int k) {  // 9eb9a9
 }
 
 void Gibdo_Draw(int k) {  // 9ebb20
-  static const struct DrawMultipleData kGibdo_Dmd[24] = {
+  static const DrawMultipleData kGibdo_Dmd[24] = {
     {0, -9, 0x0080, 2},
     {0,  0, 0x008a, 2},
     {0, -8, 0x0080, 2},
@@ -22591,7 +22591,7 @@ void Gibdo_Draw(int k) {  // 9ebb20
     {0, -8, 0x4082, 2},
     {0,  1, 0x408e, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kGibdo_Dmd[sprite_graphics[k] * 2], 2, &info);
   if (!sprite_pause[k])
     SpriteDraw_Shadow(k, &info);
@@ -22677,7 +22677,7 @@ lbl_a:
 }
 
 void FlyingTile_Draw(int k) {  // 9ebcca
-  static const struct DrawMultipleData kFlyingTile_Dmd[8] = {
+  static const DrawMultipleData kFlyingTile_Dmd[8] = {
     {0, 0, 0x00d3, 0},
     {8, 0, 0x40d3, 0},
     {0, 8, 0x80d3, 0},
@@ -22687,7 +22687,7 @@ void FlyingTile_Draw(int k) {  // 9ebcca
     {0, 8, 0x80c3, 0},
     {8, 8, 0xc0c3, 0},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kFlyingTile_Dmd[sprite_graphics[k] * 4], 4, &info);
   SpriteDraw_Shadow(k, &info);
 }
@@ -22874,7 +22874,7 @@ void Mothula_SpawnBeams(int k) {  // 9ebfdf
   static const int8 kMothula_Beam_Yvel[3] = {24, 32, 24};
   SpriteSfx_QueueSfx3WithPan(k, 0x36);
   for (int i = 2; i >= 0; i--) {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x89, &info);
     if (j >= 0) {
       Sprite_SetSpawnedCoordinates(j, &info);
@@ -22907,7 +22907,7 @@ void Mothula_HandleSpikes(int k) {  // 9ec088
   if (--sprite_head_dir[k])
     return;
   sprite_head_dir[k] = 0x40;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x8a, &info);
   if (j < 0)
     return;
@@ -22997,7 +22997,7 @@ void Kodongo_SpawnFire(int k) {  // 9ec223
   static const int8 kKodondo_Flame_Y[4] = {0, 0, 8, -8};
   static const int8 kKodondo_Flame_Xvel[4] = {24, -24, 0, 0};
   static const int8 kKodondo_Flame_Yvel[4] = {0, 0, 24, -24};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0x87, &info, 13);
   if (j >= 0) {
     int i = sprite_D[k];
@@ -23039,7 +23039,7 @@ void Sprite_87_KodongoFire(int k) {  // 9ec274
 }
 
 void Flame_Draw(int k) {  // 9ec35c
-  static const struct DrawMultipleData kFlame_Dmd[12] = {
+  static const DrawMultipleData kFlame_Dmd[12] = {
     {0,  0, 0x018e, 2},
     {0,  0, 0x018e, 2},
     {0,  0, 0x01a0, 2},
@@ -23179,7 +23179,7 @@ void YellowStalfos_Animate(int k) {  // 9ec509
 }
 
 void YellowStalfos_EmancipateHead(int k) {  // 9ec580
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 2, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -23191,7 +23191,7 @@ void YellowStalfos_EmancipateHead(int k) {  // 9ec580
 }
 
 void YellowStalfos_Draw(int k) {  // 9ec655
-  static const struct DrawMultipleData kYellowStalfos_Dmd[22] = {
+  static const DrawMultipleData kYellowStalfos_Dmd[22] = {
     {0, 0, 0x000a, 2},
     {0, 0, 0x000a, 2},
     {0, 0, 0x000c, 2},
@@ -23216,7 +23216,7 @@ void YellowStalfos_Draw(int k) {  // 9ec655
     {0, 0, 0x002a, 2},
   };
   oam_cur_ptr += 4, oam_ext_cur_ptr++;
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kYellowStalfos_Dmd[sprite_graphics[k] * 2], 2, &info);
   oam_cur_ptr -= 4, oam_ext_cur_ptr--;
   if (!sprite_pause[k]) {
@@ -23225,10 +23225,10 @@ void YellowStalfos_Draw(int k) {  // 9ec655
   }
 }
 
-void YellowStalfos_DrawHead(int k, struct PrepOamCoordsRet *info) {  // 9ec69a
+void YellowStalfos_DrawHead(int k, PrepOamCoordsRet *info) {  // 9ec69a
   static const uint8 kYellowStalfos_Head_Char[4] = {2, 2, 0, 4};
   static const uint8 kYellowStalfos_Head_Flags[4] = {0x40, 0, 0, 0};
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   if (sprite_graphics[k] == 10 || sprite_B[k] == 0x80)
     return;
   uint16 x = info->x + (int8)sprite_B[k];
@@ -23293,7 +23293,7 @@ void Sprite_83_GreenEyegore(int k) {  // 9ec79b
   Sprite_CheckTileCollision(k);
   sprite_graphics[k] = kGoriya_Gfx[++sprite_subtype2[k] & 12 | sprite_D[k]];
   if (sprite_type[k] == 0x84) {
-    struct PointU8 pt;
+    PointU8 pt;
     uint8 dir = Sprite_DirectionToFaceLink(k, &pt);
     if (((uint8)(pt.x + 8) < 16 || (uint8)(pt.y + 8) < 16) && sprite_D[k] == dir) {
       if (!(sprite_A[k] & 0x1f))
@@ -23321,7 +23321,7 @@ void Eyegore_Main(int k) {  // 9ec839
   switch (sprite_ai_state[k]) {
   case 0:  // wait until player
     if (!sprite_delay_main[k]) {
-      struct PointU8 pt;
+      PointU8 pt;
       Sprite_DirectionToFaceLink(k, &pt);
       if ((uint8)(pt.x + 48) < 96 &&
           (uint8)(pt.y + 48) < 96) {
@@ -23371,7 +23371,7 @@ void Eyegore_Main(int k) {  // 9ec839
 }
 
 void Eyegore_Draw(int k) {  // 9ecacf
-  static const struct DrawMultipleData kEyeGore_Dmd[48] = {
+  static const DrawMultipleData kEyeGore_Dmd[48] = {
     {-4, -4, 0x00a2, 2},
     { 4, -4, 0x40a2, 2},
     {-4,  4, 0x009c, 2},
@@ -23421,7 +23421,7 @@ void Eyegore_Draw(int k) {  // 9ecacf
     {-4,  5, 0x00a0, 2},
     {12, 13, 0x40bd, 0},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiple(k, &kEyeGore_Dmd[sprite_graphics[k] * 4], 4, &info);
   if (!sprite_pause[k])
     SpriteDraw_Shadow_custom(k, &info, 14);
@@ -23441,7 +23441,7 @@ void SpritePrep_AntifairyCircle(int k) {  // 9ecb0c
   sprite_B[k] = 0;
   tmp_counter = 2;
   do {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x82, &info);
     if (j >= 0) {
       int i = tmp_counter;
@@ -23626,7 +23626,7 @@ void Sprite_7D_BigSpike(int k) {  // 9ecf47
     return;
   Sprite_CheckDamageToAndFromLink(k);
   if (sprite_ai_state[k] == 0) {
-    struct PointU8 pt;
+    PointU8 pt;
     sprite_D[k] = j = Sprite_DirectionToFaceLink(k, &pt);
     if ((uint8)(pt.x + 16) < 32 || (uint8)(pt.y + 16) < 32) {
       sprite_delay_main[k] = kSpikeTrap_Delay[j];
@@ -23653,7 +23653,7 @@ void Sprite_7D_BigSpike(int k) {  // 9ecf47
 }
 
 void SpikeTrap_Draw(int k) {  // 9ecfff
-  static const struct DrawMultipleData kSpikeTrap_Dmd[4] = {
+  static const DrawMultipleData kSpikeTrap_Dmd[4] = {
     {-8, -8, 0x00c4, 2},
     { 8, -8, 0x40c4, 2},
     {-8,  8, 0x80c4, 2},
@@ -23677,10 +23677,10 @@ void Sprite_7E_Firebar_Clockwise(int k) {  // 9ed01a
 }
 
 void Firebar_Main(int k) {  // 9ed049
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   byte_7E0FB6 = info.flags;
   BYTE(dungmap_var7) = info.x;
   HIBYTE(dungmap_var7) = info.y;
@@ -23697,7 +23697,7 @@ void Firebar_Main(int k) {  // 9ed049
   }
   Sprite_CorrectOamEntries(k, 3, 0xff);
   if (!((k ^ frame_counter) & 3 | submodule_index | flag_unk1)) {
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     for (int i = 0; i < 4; i++, oam++) {
       if (bytewise_extended_oam[oam - oam_buf] & 1)
         continue;
@@ -23894,7 +23894,7 @@ void Sprite_7A_Agahnim(int k) {  // 9ed330
     }
     int x = sprite_x_hi[k] << 8 | sprite_C[k];
     int y = sprite_y_hi[k] << 8 | sprite_E[k];
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, sprite_G[k]);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, sprite_G[k]);
     sprite_y_vel[k] = pt.y;
     sprite_x_vel[k] = pt.x;
     if (sprite_G[k] < 64)
@@ -23931,7 +23931,7 @@ void Sprite_7A_Agahnim(int k) {  // 9ed330
         sound_effect_2 = 0x28;
         tmp_counter = 1;
         do {
-          struct SpriteSpawnInfo info;
+          SpriteSpawnInfo info;
           j = Sprite_SpawnDynamicallyEx(k, 0x7A, &info, 2);
           Sprite_SetSpawnedCoordinates(j, &info);
           sprite_flags3[j] = kAgahnim_Tab6[j - 1];
@@ -23962,7 +23962,7 @@ void Sprite_7A_Agahnim(int k) {  // 9ed330
     if ((uint16)(cur_sprite_x - x + 4) < 8 &&
         (uint16)(cur_sprite_y - y + 4) < 8)
       sprite_state[k] = 0;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 0x20);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 0x20);
     sprite_y_vel[k] = pt.y;
     sprite_x_vel[k] = pt.x;
     Sprite_MoveXY(k);
@@ -24008,7 +24008,7 @@ void Agahnim_PerformAttack(int k) {  // 9ed67a
     for (int i = 0; i < 4; i++)
       Sprite_SpawnLightning(k);
   } else {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x7B, &info);
     if (j >= 0) {
       SpriteSfx_QueueSfx3WithPan(k, 0x29);
@@ -24079,10 +24079,10 @@ void Agahnim_Draw(int k) {  // 9ed978
     2, 2, 0, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 0, 2,
     2, 2, 2, 2,
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int g = sprite_graphics[k];
   for (int i = 3; i >= 0; i--, oam++) {
     int j = g * 4 + i;
@@ -24164,7 +24164,7 @@ void Sprite_7B_AgahnimBalls(int k) {  // 9eda42
   }
 
   if (sprite_A[k] && !sprite_ignore_projectile[0]) {
-    struct SpriteHitBox hb;
+    SpriteHitBox hb;
     hb.r0_xlo = sprite_x_lo[k];
     hb.r8_xhi = sprite_x_hi[k];
     hb.r2 = hb.r3 = 15;
@@ -24196,7 +24196,7 @@ void Sprite_7B_AgahnimBalls(int k) {  // 9eda42
   }
   if ((k ^ frame_counter) & 3 | sprite_B[k])
     return;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x7B, &info);
   if (j < 0)
     return;
@@ -24212,7 +24212,7 @@ void CreateSixBlueBalls(int k) {  // 9edb96
   SpriteSfx_QueueSfx3WithPan(k, 0x36);
   tmp_counter = 5;
   do {
-    struct SpriteSpawnInfo info;
+    SpriteSpawnInfo info;
     int j = Sprite_SpawnDynamically(k, 0x55, &info);
     if (j >= 0) {
       Sprite_SetX(j, info.r0_x + 4);
@@ -24231,7 +24231,7 @@ void CreateSixBlueBalls(int k) {  // 9edb96
 }
 
 void SeekerEnergyBall_Draw(int k) {  // 9edc3e
-  static const struct DrawMultipleData kEnergyBall_Dmd[8] = {
+  static const DrawMultipleData kEnergyBall_Dmd[8] = {
     { 4, -3, 0x00ce, 0},
     {11,  4, 0x00ce, 0},
     { 4, 11, 0x00ce, 0},
@@ -24267,7 +24267,7 @@ void Bee_DormantHive(int k) {  // 9edc68
 }
 
 void SpawnBeeFromHive(int k) {  // 9edc8f
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x79, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -24286,7 +24286,7 @@ void InitializeSpawnedBee(int k) {  // 9edc9b
 int ReleaseBeeFromBottle() {  // 9edccf
   static const int8 kSpawnBee_XY[8] = {8, 2, -2, -8, 10, 5, -5, -10};
 
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(0, 0xb2, &info), i;
   if (j >= 0) {
     sprite_floor[j] = link_is_on_lower_level;
@@ -24333,7 +24333,7 @@ void Bee_Main(int k) {  // 9edd45
   if (sprite_delay_main[k] == 0) {
     uint16 x = link_x_coord + (GetRandomNumber() & 3) * 5;
     uint16 y = link_y_coord + (GetRandomNumber() & 3) * 5;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 20);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 20);
     sprite_y_vel[k] = pt.y;
     sprite_x_vel[k] = pt.x;
     sprite_oam_flags[k] = sprite_oam_flags[k] & ~0x40 | (sign8(pt.x) ? 0 : 0x40);
@@ -24390,14 +24390,14 @@ void Sprite_B2_PlayerBee(int k) {  // 9ede63
     }
     if ((k ^ frame_counter) & 3)
       return;
-    struct Point16U pt2;
+    Point16U pt2;
     if (!PlayerBee_FindTarget(k, &pt2)) {
       pt2.x = link_x_coord + (GetRandomNumber() & 3) * 5;
       pt2.x = link_y_coord + (GetRandomNumber() & 3) * 5;
     }
     if ((k ^ frame_counter) & 7)
       return;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, pt2.x, pt2.y, 32);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, pt2.x, pt2.y, 32);
     sprite_y_vel[k] = pt.y;
     sprite_x_vel[k] = pt.x;
     sprite_oam_flags[k] = sprite_oam_flags[k] & ~0x40 | (sign8(pt.x) ? 0 : 0x40);
@@ -24410,7 +24410,7 @@ void Sprite_B2_PlayerBee(int k) {  // 9ede63
 }
 
 void GoldBee_SpawnSelf(int k) {  // 9ede90
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x79, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -24430,7 +24430,7 @@ void Bee_HandleZ(int k) {  // 9edf8a
     sprite_oam_flags[k] = (sprite_oam_flags[k] & 0xf1) | (((frame_counter >> 4 & 3) + 1) << 1);
 }
 
-bool PlayerBee_FindTarget(int k, struct Point16U *pt) {  // 9edfab
+bool PlayerBee_FindTarget(int k, Point16U *pt) {  // 9edfab
   int n = 16;
   int j = k * 4 & 0xf;
   do {
@@ -24457,7 +24457,7 @@ void Bee_Bzzt(int k) {  // 9ee02e
 }
 
 void Sprite_B3_PedestalPlaque(int k) {  // 9ee044
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_PrepOamCoord(k, &info);
   if (Sprite_ReturnIfInactive(k))
     return;
@@ -24605,7 +24605,7 @@ void Sprite_BombShop_Huff(int k) {  // 9ee21a
 }
 
 void BombShop_ClerkExhalation(int k) {  // 9ee256
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xb5, &info);
   if (j >= 0) {
     Sprite_SetX(j, info.r0_x + 4);
@@ -24620,7 +24620,7 @@ void BombShop_ClerkExhalation(int k) {  // 9ee256
 }
 
 void BombShopEntity_Draw(int k) {  // 9ee2c6
-  static const struct DrawMultipleData kBombShopEntity_Dmd[6] = {
+  static const DrawMultipleData kBombShopEntity_Dmd[6] = {
     {0, 0, 0x0a48, 2},
     {0, 0, 0x0a4c, 2},
     {0, 0, 0x04c2, 2},
@@ -24628,7 +24628,7 @@ void BombShopEntity_Draw(int k) {  // 9ee2c6
     {0, 0, 0x084e, 2},
     {0, 0, 0x084e, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kBombShopEntity_Dmd[sprite_subtype2[k] * 2 + sprite_graphics[k]], 1, &info);
   SpriteDraw_Shadow(k, &info);
 
@@ -24660,7 +24660,7 @@ void Kiki_Flee(int k) {  // 9ee2fe
     sprite_z[k] = 0;
     sprite_z_vel[k] = GetRandomNumber() & 15 | 16;
   }
-  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, 0xcf5, 0x6fe, 16);
+  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, 0xcf5, 0x6fe, 16);
   sprite_x_vel[k] = pt.x << 1;
   sprite_y_vel[k] = pt.y << 1;
   tagalong_event_flags &= ~3;
@@ -24702,7 +24702,7 @@ void Kiki_OfferInitialService(int k) {  // 9ee3af
     break;
   case 2: {
     sprite_ai_state[k]++;
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, 0xc45, 0x6fe, 9);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, 0xc45, 0x6fe, 9);
     sprite_y_vel[k] = pt.y;
     sprite_x_vel[k] = pt.x;
     sprite_D[k] = (pt.x >> 7) ^ 3;
@@ -24768,7 +24768,7 @@ void Kiki_OfferEntranceService(int k) {  // 9ee4c9
       SpriteSfx_QueueSfx2WithPan(k, 0x21);
       return;
     }
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, kKiki_Leave_X[j], kKiki_Leave_Y[j], 9);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, kKiki_Leave_X[j], kKiki_Leave_Y[j], 9);
     sprite_x_vel[k] = pt.x;
     sprite_y_vel[k] = pt.y;
     break;
@@ -24829,7 +24829,7 @@ void Kiki_OfferEntranceService(int k) {  // 9ee4c9
 }
 
 bool Kiki_Draw(int k) {  // 9ee859
-  static const struct DrawMultipleData kKiki_Dmd1[32] = {
+  static const DrawMultipleData kKiki_Dmd1[32] = {
     { 0, -6, 0x0020, 2},
     { 0,  0, 0x0022, 2},
     { 0, -6, 0x0020, 2},
@@ -24863,7 +24863,7 @@ bool Kiki_Draw(int k) {  // 9ee859
     { 1, -6, 0x01ce, 2},
     { 0,  0, 0x41ec, 2},
   };
-  static const struct DrawMultipleData kKiki_Dmd2[12] = {
+  static const DrawMultipleData kKiki_Dmd2[12] = {
     {0, -6, 0x01ca, 0},
     {8, -6, 0x41ca, 0},
     {0,  2, 0x01da, 0},
@@ -24881,7 +24881,7 @@ bool Kiki_Draw(int k) {  // 9ee859
     0x20, 0xc0, 0x20, 0xc0, 0, 0xa0, 0, 0xa0, 0x40, 0x80, 0x40, 0x60, 0x40, 0x80, 0x40, 0x60,
     0, 0, 0xfa, 0xff, 0x20, 0, 0, 2, 0, 0, 0, 0, 0x22, 0, 0, 2  // zelda bug: OOB read
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (sprite_D[k] < 8) {
     int j = sprite_D[k] * 2 + sprite_graphics[k];
     BYTE(dma_var6) = kKikiDma[j * 2 + 0];
@@ -24916,7 +24916,7 @@ void Sprite_B7_BlindMaiden(int k) {  // 9ee8b6
 }
 
 void OldMan_RevertToSprite(int k) {  // 9ee938
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xAD, &info);
   sprite_D[j] = sprite_head_dir[j] = tagalong_layerbits[k] & 3;
   Sprite_SetY(j, (tagalong_y_lo[k] | tagalong_y_hi[k] << 8) + 2);
@@ -24991,7 +24991,7 @@ void Sprite_AD_OldMan(int k) {  // 9ee992
         sprite_ai_state[k]++;
         sprite_y_vel[k] = sprite_x_vel[k] = 0;
       } else {
-        struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 8);
+        ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 8);
         sprite_y_vel[k] = pt.y;
         sprite_x_vel[k] = pt.x;
         sprite_graphics[k] = (k ^ frame_counter) >> 3 & 1;
@@ -25069,7 +25069,7 @@ play_sound:
       if (!((k ^ frame_counter) & 0x3f)) {
         uint16 x = (link_x_coord & 0xff00) | GetRandomNumber();
         uint16 y = (link_y_coord & 0xff00) | GetRandomNumber();
-        struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 8);
+        ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 8);
         sprite_B[k] = pt.x;
         sprite_A[k] = pt.y;
         if (pt.y) {
@@ -25107,7 +25107,7 @@ void PinkBall_HandleDeceleration(int k) {  // 9eec4d
 }
 
 void PinkBall_Distress(int k) {  // 9eec74
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   if (Sprite_PrepOamCoordOrDoubleRet(k, &info))
     return;
   Sprite_DrawDistress_custom(info.x, info.y, frame_counter);
@@ -25131,7 +25131,7 @@ void Sprite_Bully(int k) {  // 9eec7c
     sprite_graphics[k] = (k ^ frame_counter) >> 3 & 1;
     int j = sprite_head_dir[k];
     if (!((k ^ frame_counter) & 0x1f)) {
-      struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, Sprite_GetX(j), Sprite_GetY(j), 14);
+      ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, Sprite_GetX(j), Sprite_GetY(j), 14);
       sprite_y_vel[k] = pt.y;
       sprite_x_vel[k] = pt.x;
       if (pt.x)
@@ -25167,7 +25167,7 @@ void Sprite_Bully(int k) {  // 9eec7c
 }
 
 void Bully_Draw(int k) {  // 9eed9e
-  static const struct DrawMultipleData kBully_Dmd[8] = {
+  static const DrawMultipleData kBully_Dmd[8] = {
     {0, -7, 0x46e0, 2},
     {0,  0, 0x46e2, 2},
     {0, -7, 0x46e0, 2},
@@ -25177,7 +25177,7 @@ void Bully_Draw(int k) {  // 9eed9e
     {0, -7, 0x06e0, 2},
     {0,  0, 0x06c4, 2},
   };
-  struct PrepOamCoordsRet info;
+  PrepOamCoordsRet info;
   Sprite_DrawMultiplePlayerDeferred(k, &kBully_Dmd[sprite_D[k] * 4 + sprite_graphics[k] * 2], 2, &info);
   SpriteDraw_Shadow(k, &info);
 
@@ -25188,7 +25188,7 @@ void BallGuy_PlayBounceNoise(int k) {  // 9eedc2
 }
 
 void SpawnBully(int k) {  // 9eedc9
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xB9, &info);
   if (j >= 0) {
     Sprite_SetSpawnedCoordinates(j, &info);
@@ -25226,7 +25226,7 @@ void Sprite_BA_Whirlpool(int k) {  // 9eee5a
   static const uint8 kWhirlpool_OamFlags[4] = {0, 0x40, 0xc0, 0x80};
 
   if (BYTE(overworld_screen_index) == 0x1b) {
-    struct PrepOamCoordsRet info;
+    PrepOamCoordsRet info;
     Sprite_PrepOamCoord(k, &info);
     if (Sprite_ReturnIfInactive(k))
       return;
@@ -25451,7 +25451,7 @@ void ShopItem_RedPotion150(int k) {  // 9ef16e
 
 void ShopKeeper_SpawnShopItem(int k, int pos, int what) {  // 9ef1b3
   static const int8 kShopKeeper_ItemX[3] = {-44, 8, 60};
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamicallyEx(k, 0xbb, &info, 12);
   assert(j >= 0);
   sprite_ignore_projectile[j] = sprite_subtype2[j] = what;
@@ -25619,7 +25619,7 @@ bool ShopItem_HandleCost(int amt) {  // 9ef39e
 }
 
 void SpriteDraw_ShopItem(int k) {  // 9ef4ce
-  static const struct DrawMultipleData kShopKeeper_ItemWithPrice_Dmd[35] = {
+  static const DrawMultipleData kShopKeeper_ItemWithPrice_Dmd[35] = {
     {-4, 16, 0x0231, 0},
     { 4, 16, 0x0213, 0},
     {12, 16, 0x0230, 0},
@@ -25674,7 +25674,7 @@ void Sprite_AC_Apple(int k) {  // 9ef515
 }
 
 void SpawnApple(int k) {  // 9ef535
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0xac, &info);
   if (j < 0)
     return;
@@ -25685,7 +25685,7 @@ void SpawnApple(int k) {  // 9ef535
   sprite_z_vel[j] = 22;
   uint16 x = info.r0_x & ~0xff | GetRandomNumber();
   uint16 y = info.r2_y & ~0xff | GetRandomNumber();
-  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 10);
+  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 10);
   sprite_x_vel[j] = pt.x;
   sprite_y_vel[j] = pt.y;
 }
@@ -25824,7 +25824,7 @@ uint8 SomariaPlatformAndPipe_CheckTile(int k) {  // 9ef7c2
 }
 
 void SomariaPlatform_Draw(int k) {  // 9ef860
-  static const struct DrawMultipleData kSomariaPlatform_Dmd[16] = {
+  static const DrawMultipleData kSomariaPlatform_Dmd[16] = {
     {-16, -16, 0x00ac, 2},
     {  0, -16, 0x40ac, 2},
     {-16,   0, 0x80ac, 2},
@@ -26145,7 +26145,7 @@ void Faerie_HandleMovement(int k) {  // 9efd1c
   if (!(frame_counter & 63)) {
     uint16 x = (link_x_coord & ~0xff) + GetRandomNumber();
     uint16 y = (link_y_coord & ~0xff) + GetRandomNumber();
-    struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
+    ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(k, x, y, 16);
     sprite_A[k] = pt.y;
     sprite_D[k] = pt.x;
   }

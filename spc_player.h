@@ -1,8 +1,7 @@
 #include <stddef.h>
-struct DspRegWriteHistory;
-struct Dsp;
+#include "snes/dsp.h"
 
-struct Channel {
+typedef struct Channel {
   uint16 pattern_order_ptr_for_chan;
   uint8 note_ticks_left;
   uint8 note_keyoff_ticks_left;
@@ -56,11 +55,12 @@ struct Channel {
   uint8 sfx_note_length;
   uint8 sfx_pan;
   uint8 index;
-};
-struct SpcPlayer {
-  struct DspRegWriteHistory *reg_write_history;
+} Channel;
+
+typedef struct SpcPlayer {
+  DspRegWriteHistory *reg_write_history;
   uint8 timer_cycles;
-  struct Dsp *dsp;
+  Dsp *dsp;
   uint8 new_value_from_snes[4];
   uint8 port_to_snes[4];
   uint8 last_value_from_snes[4];
@@ -133,21 +133,21 @@ struct SpcPlayer {
   uint8 cutk_always_zero;
   uint8 last_written_edl;
   uint8 input_ports[4];
-  struct Channel channel[8];
+  Channel channel[8];
   uint8 ram[65536]; // rest of ram
-};
-struct MemMap {
+} SpcPlayer;
+typedef struct MemMap {
   uint16 off, org_off;
-};
-struct MemMapSized {
+} MemMap;
+typedef struct MemMapSized {
   uint16 off, org_off, size;
-};
-extern const struct MemMap kChannel_Maps[];
-extern const struct MemMapSized kSpcPlayer_Maps[];
+} MemMapSized;
+extern const MemMap kChannel_Maps[];
+extern const MemMapSized kSpcPlayer_Maps[];
 
 struct SpcPlayer *SpcPlayer_Create();
-void SpcPlayer_GenerateSamples(struct SpcPlayer *p);
-void SpcPlayer_Initialize(struct SpcPlayer *p);
-void SpcPlayer_Upload(struct SpcPlayer *p, const uint8_t *data);
-void SpcPlayer_CopyVariablesFromRam(struct SpcPlayer *p);
-void SpcPlayer_CopyVariablesToRam(struct SpcPlayer *p);
+void SpcPlayer_GenerateSamples(SpcPlayer *p);
+void SpcPlayer_Initialize(SpcPlayer *p);
+void SpcPlayer_Upload(SpcPlayer *p, const uint8_t *data);
+void SpcPlayer_CopyVariablesFromRam(SpcPlayer *p);
+void SpcPlayer_CopyVariablesToRam(SpcPlayer *p);

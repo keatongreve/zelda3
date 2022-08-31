@@ -34,12 +34,12 @@ struct Apu {
   Timer timer[3];
   uint8_t cpuCyclesLeft;
   union {
-    struct DspRegWriteHistory hist;
+    DspRegWriteHistory hist;
     void *padpad;
   };
 };
 
-struct Apu2 {
+typedef struct Apu2 {
   // Snes* snes;
   Spc* spc;
   Dsp* dsp;
@@ -51,7 +51,7 @@ struct Apu2 {
   uint8_t outPorts[4];
   Timer timer[3];
   uint8_t cpuCyclesLeft;
-};
+} Apu2;
 
 Apu* apu_init();
 void apu_free(Apu* apu);

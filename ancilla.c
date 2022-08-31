@@ -102,11 +102,11 @@ static const uint8 kBombosBlasts_Tab[72] = {
 };
 static const uint8 kQuake_Tab1[5] = {0x17, 0x16, 0x17, 0x16, 0x10};
 static const uint8 kQuakeDrawGroundBolts_Char[15] = { 0x40, 0x42, 0x44, 0x46, 0x48, 0x4a, 0x4c, 0x4e, 0x60, 0x62, 0x64, 0x66, 0x68, 0x6a, 0x63 };
-struct QuakeItem {
+typedef struct QuakeItem {
   int8 x, y;
   uint8 f;
-};
-static const struct QuakeItem kQuakeItems[] = {
+} QuakeItem;
+static const QuakeItem kQuakeItems[] = {
   {0, -16, 0x00},
   {0, -16, 0x01},
   {0, -16, 0x02},
@@ -175,7 +175,7 @@ static const uint8 kQuakeItemPos[] = {
   0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 17, 21, 25, 30,
   36, 42, 48, 53, 57, 60, 62, 64, 65, 66, 67, 68, 69, 70, 71, 72, 74, 77, 81, 85, 88, 91, 94, 97, 100, 103, 107, 111, 114, 116, 118, 119, 120, 121, 122, 123, 124, 125, 126, 128, 130, 132, 134, 137, 141, 145, 149, 151
 };
-static const struct QuakeItem kQuakeItems2[] = {
+static const QuakeItem kQuakeItems2[] = {
   {-96, 112, 0x20},
   {-96, 112, 0x21},
   {-96, 112, 0x66},
@@ -380,9 +380,9 @@ void SpinSpark_Draw(int k, int offs) {
     -8, 0, -8, 0, -4, 0,  0, 0, -4, 0,  0, 0,
     0x11a5
   };
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int t = (ancilla_item_to_link[k] + offs) * 4;
   assert(t < 32);
   for(int i = 0; i < 4; i++, t++) {
@@ -397,7 +397,7 @@ void SpinSpark_Draw(int k, int offs) {
   }
 }
 
-bool SomarianBlock_CheckEmpty(struct OamEnt *oam) {
+bool SomarianBlock_CheckEmpty(OamEnt *oam) {
   for (int i = 0; i != 4; i++) {
     if (oam[i].y == 0xf0)
       continue;
@@ -438,19 +438,19 @@ void AddBirdCommon(int k) {
   Ancilla_SetXY(k, BG2HOFS_copy2 - 16, link_y_coord - 8);
 }
 
-struct ProjectSpeedRet Bomb_ProjectSpeedTowardsPlayer(int k, uint16 x, uint16 y, uint8 vel) {  // 84eb63
+ProjectSpeedRet Bomb_ProjectSpeedTowardsPlayer(int k, uint16 x, uint16 y, uint8 vel) {  // 84eb63
   uint16 old_x = Sprite_GetX(0), old_y = Sprite_GetY(0), old_z = sprite_z[0];
   Sprite_SetX(0, x);
   Sprite_SetY(0, y);
   sprite_z[0] = 0;
-  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(0, vel);
+  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(0, vel);
   sprite_z[0] = old_z;
   Sprite_SetX(0, old_x);
   Sprite_SetY(0, old_y);
   return pt;
 }
 
-void Boomerang_CheatWhenNoOnesLooking(int k, struct ProjectSpeedRet *pt) {  // 86809f
+void Boomerang_CheatWhenNoOnesLooking(int k, ProjectSpeedRet *pt) {  // 86809f
   uint16 x = link_x_coord - Ancilla_GetX(k) + 0xf0;
   uint16 y = link_y_coord - Ancilla_GetY(k) + 0xf0;
   if (x >= 0x1e0) {
@@ -597,11 +597,11 @@ void Ancilla_Main() {  // 888242
   Ancilla_ExecuteAll();
 }
 
-struct ProjectSpeedRet Ancilla_ProjectReflexiveSpeedOntoSprite(int k, uint16 x, uint16 y, uint8 vel) {  // 88824d
+ProjectSpeedRet Ancilla_ProjectReflexiveSpeedOntoSprite(int k, uint16 x, uint16 y, uint8 vel) {  // 88824d
   uint16 old_x = link_x_coord, old_y = link_y_coord;
   link_x_coord = x;
   link_y_coord = y;
-  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, vel);
+  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLink(k, vel);
   link_x_coord = old_x;
   link_y_coord = old_y;
   return pt;
@@ -613,7 +613,7 @@ void Bomb_CheckSpriteDamage(int k) {  // 888287
       continue;
     if (sprite_floor[j] != ancilla_floor[k] || sprite_state[j] < 9)
       continue;
-    struct SpriteHitBox hb;
+    SpriteHitBox hb;
     int ax = Ancilla_GetX(k) - 24;
     int ay = Ancilla_GetY(k) - 24 - ancilla_z[k];
     hb.r0_xlo = ax;
@@ -628,7 +628,7 @@ void Bomb_CheckSpriteDamage(int k) {  // 888287
     if (sprite_type[j] == 0x92 && sprite_C[j] >= 3)
       continue;
     Ancilla_CheckDamageToSprite(j, ancilla_type[k]);
-    struct ProjectSpeedRet pt = Ancilla_ProjectReflexiveSpeedOntoSprite(j, Ancilla_GetX(k), Ancilla_GetY(k), 64);
+    ProjectSpeedRet pt = Ancilla_ProjectReflexiveSpeedOntoSprite(j, Ancilla_GetX(k), Ancilla_GetY(k), 64);
     sprite_x_recoil[j] = -pt.x;
     sprite_y_recoil[j] = -pt.y;
   }
@@ -664,7 +664,7 @@ void Ancilla13_IceRodSparkle(int k) {  // 888435
     Ancilla_MoveX(k);
     Ancilla_MoveY(k);
   }
-  struct AncillaOamInfo info;
+  AncillaOamInfo info;
   if (Ancilla_ReturnIfOutsideBounds(k, &info))
     return;
 
@@ -682,7 +682,7 @@ void Ancilla13_IceRodSparkle(int k) {  // 888435
     Oam_AllocateFromRegionA(0x10);
   }
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   j = ancilla_timer[k] & 0x1c;
   for (int i = 3; i >= 0; i--, oam++) {
     oam->x = info.x + kIceShotSparkle_X[i + j];
@@ -742,7 +742,7 @@ void Ancilla01_SomariaBullet(int k) {  // 88851b
   SomarianBlast_Draw(k);
 }
 
-bool Ancilla_ReturnIfOutsideBounds(int k, struct AncillaOamInfo *info) {  // 88862a
+bool Ancilla_ReturnIfOutsideBounds(int k, AncillaOamInfo*info) {  // 88862a
   static const uint8 kAncilla_FloorFlags[2] = {0x20, 0x10};
   info->flags = kAncilla_FloorFlags[ancilla_floor[k]];
   if ((info->x = ancilla_x_lo[k] - BG2HOFS_copy2) >= 0xf4 ||
@@ -755,7 +755,7 @@ bool Ancilla_ReturnIfOutsideBounds(int k, struct AncillaOamInfo *info) {  // 888
 
 void SomarianBlast_Draw(int k) {  // 888650
   static const uint8 kSomarianBlast_Flags[2] = {2, 6};
-  struct AncillaOamInfo info;
+  AncillaOamInfo info;
   if (Ancilla_ReturnIfOutsideBounds(k, &info))
     return;
   info.flags |= kSomarianBlast_Flags[ancilla_item_to_link[k]];
@@ -793,7 +793,7 @@ void SomarianBlast_Draw(int k) {  // 888650
     0x50, 0x50, 0x44, 0x44, 0x51, 0x51, 0x50, 0x50, 0x44, 0x44, 0x52, 0x52, 0x43, 0x43, 0x42, 0x42,
     0x40, 0x40, 0x43, 0x43, 0x42, 0x42, 0x41, 0x41,
   };
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = ancilla_dir[k] * 6 + ancilla_step[k];
 
   oam[0].x = info.x + kSomarianBlast_Draw_X0[j];
@@ -843,11 +843,11 @@ void Ancilla02_FireRodShot(int k) {  // 8886d2
     }
     FireShot_Draw(k);
   } else {
-    struct AncillaOamInfo info;
+    AncillaOamInfo info;
     Ancilla_CheckBasicSpriteCollision(k);
     if (Ancilla_ReturnIfOutsideBounds(k, &info))
       return;
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     if (!ancilla_timer[k]) {
       uint8 old_type = ancilla_type[k];
       ancilla_type[k] = 0;
@@ -882,13 +882,13 @@ void FireShot_Draw(int k) {  // 88877c
   static const uint8 kFireShot_Draw_X2[16] = {7, 0, 8, 0, 8, 4, 0, 0, 2, 8, 0, 0, 1, 4, 9, 0};
   static const uint8 kFireShot_Draw_Y2[16] = {1, 4, 9, 0, 7, 0, 8, 0, 8, 4, 0, 0, 2, 8, 0, 0};
   static const uint8 kFireShot_Draw_Char2[3] = {0x8d, 0x9d, 0x9c};
-  struct AncillaOamInfo info;
+  AncillaOamInfo info;
   if (Ancilla_ReturnIfOutsideBounds(k, &info))
     return;
   if (ancilla_objprio[k])
     info.flags |= 0x30;
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = ancilla_item_to_link[k] & 0xc;
   for (int i = 2; i >= 0; i--) {
     oam->x = info.x + kFireShot_Draw_X2[j + i];
@@ -1049,14 +1049,14 @@ void Ancilla04_BeamHit(int k) {  // 888d19
   static const int8 kBeamHit_Y[16] = {-12, -12, 20, 20, -8, -8, 16, 16, -4, -4, 12, 12, 0, 0, 8, 8};
   static const uint8 kBeamHit_Char[16] = {0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x54, 0x54, 0x54, 0x54};
   static const uint8 kBeamHit_Flags[16] = {0x40, 0, 0xc0, 0x80, 0x40, 0, 0xc0, 0x80, 0x40, 0, 0xc0, 0x80, 0, 0x40, 0x80, 0xc0};
-  struct AncillaOamInfo info;
+  AncillaOamInfo info;
   if (Ancilla_ReturnIfOutsideBounds(k, &info))
     return;
   if (!ancilla_timer[k]) {
     ancilla_type[k] = 0;
     return;
   }
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = ancilla_timer[k] >> 1;
   uint16 ancilla_x = Ancilla_GetX(k);
   uint16 ancilla_y = Ancilla_GetY(k);
@@ -1090,7 +1090,7 @@ int Ancilla_CheckSpriteCollision(int k) {  // 888d68
 
 bool Ancilla_CheckSpriteCollision_Single(int k, int j) {  // 888dae
   int i;
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   Ancilla_SetupHitBox(k, &hb);
 
   Sprite_SetupHitBox(j, &hb);
@@ -1148,7 +1148,7 @@ return_true_set_alert:
   return false;
 }
 
-void Ancilla_SetupHitBox(int k, struct SpriteHitBox *hb) {  // 888ead
+void Ancilla_SetupHitBox(int k, SpriteHitBox *hb) {  // 888ead
   static const int8 kAncilla_HitBox_X[12] = {4, 4, 4, 4, 3, 3, 2, 11, -16, -16, -1, -8};
   static const int8 kAncilla_HitBox_Y[12] = {4, 4, 4, 4, 2, 11, 3, 3, -1, -8, -16, -16};
   static const uint8 kAncilla_HitBox_W[12] = {8, 8, 8, 8, 1, 1, 1, 1, 32, 32, 8, 8};
@@ -1166,15 +1166,15 @@ void Ancilla_SetupHitBox(int k, struct SpriteHitBox *hb) {  // 888ead
   hb->r3 = kAncilla_HitBox_H[j];
 }
 
-struct ProjectSpeedRet Ancilla_ProjectSpeedTowardsPlayer(int k, uint8 vel) {  // 888eed
+ProjectSpeedRet Ancilla_ProjectSpeedTowardsPlayer(int k, uint8 vel) {  // 888eed
   if (vel == 0) {
-    struct ProjectSpeedRet rv = { 0, 0, 0, 0 };
+    ProjectSpeedRet rv = { 0, 0, 0, 0 };
     return rv;
   }
-  struct PairU8 below = Ancilla_IsBelowLink(k);
+  PairU8 below = Ancilla_IsBelowLink(k);
   uint8 r12 = sign8(below.b) ? -below.b : below.b;
 
-  struct PairU8 right = Ancilla_IsRightOfLink(k);
+  PairU8 right = Ancilla_IsRightOfLink(k);
   uint8 r13 = sign8(right.b) ? -right.b : right.b;
   uint8 t;
   bool swapped = false;
@@ -1191,7 +1191,7 @@ struct ProjectSpeedRet Ancilla_ProjectSpeedTowardsPlayer(int k, uint8 vel) {  //
   } while (--vel);
   if (swapped)
     t = xvel, xvel = yvel, yvel = t;
-  struct ProjectSpeedRet rv = {
+  ProjectSpeedRet rv = {
     (uint8)(right.a ? -xvel : xvel),
     (uint8)(below.a ? -yvel : yvel),
     right.b,
@@ -1200,15 +1200,15 @@ struct ProjectSpeedRet Ancilla_ProjectSpeedTowardsPlayer(int k, uint8 vel) {  //
   return rv;
 }
 
-struct PairU8 Ancilla_IsRightOfLink(int k) {  // 888f5c
+PairU8 Ancilla_IsRightOfLink(int k) {  // 888f5c
   uint16 x = link_x_coord - Ancilla_GetX(k);
-  struct PairU8 rv = { (uint8)(sign16(x) ? 1 : 0), (uint8)x };
+  PairU8 rv = { (uint8)(sign16(x) ? 1 : 0), (uint8)x };
   return rv;
 }
 
-struct PairU8 Ancilla_IsBelowLink(int k) {  // 888f6f
+PairU8 Ancilla_IsBelowLink(int k) {  // 888f6f
   int y = link_y_coord - Ancilla_GetY(k);
-  struct PairU8 rv = { (uint8)(sign16(y) ? 1 : 0), (uint8)y };
+  PairU8 rv = { (uint8)(sign16(y) ? 1 : 0), (uint8)y };
   return rv;
 }
 
@@ -1238,7 +1238,7 @@ void Ancilla_WeaponTink() {  // 888f89
     return;
   }
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   static const uint8 kRepulseSpark_Flags[4] = {0x22, 0x12, 0x22, 0x22};
   uint8 flags = kRepulseSpark_Flags[repulsespark_floor_status];
@@ -1327,7 +1327,7 @@ void Ancilla05_Boomerang(int k) {  // 8890fc
       ancilla_K[k]++;
     WORD(ancilla_A[k]) = link_y_coord;
     link_y_coord += 8;
-    struct ProjectSpeedRet pt = Ancilla_ProjectSpeedTowardsPlayer(k, ancilla_H[k]);
+    ProjectSpeedRet pt = Ancilla_ProjectSpeedTowardsPlayer(k, ancilla_H[k]);
     Boomerang_CheatWhenNoOnesLooking(k, &pt);
     ancilla_x_vel[k] = pt.x;
     ancilla_y_vel[k] = pt.y;
@@ -1408,7 +1408,7 @@ void Boomerang_Draw(int k) {  // 889338
   static const int8 kBoomerang_Draw_XY[8] = {2, -2, 2, 2, -2, 2, -2, -2};
   static const uint16 kBoomerang_Draw_OamIdx[2] = {0x180, 0xd0};
   static const uint8 kBoomerang_Draw_Tab0[2] = {3, 2};
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
 
   if (ancilla_item_to_link[k]) {
@@ -1432,7 +1432,7 @@ void Boomerang_Draw(int k) {  // 889338
     oam_ext_cur_ptr = (i >> 2) + 0xa20;
     oam_cur_ptr = i + 0x800;
   }
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 ext = Ancilla_SetOam_XY_safe(oam, x, y);
   oam->charnum = 0x26;
   oam->flags = kBoomerang_Flags[ancilla_G[k] * 4 + j] & ~0x30 | HIBYTE(oam_priority_value);
@@ -1484,12 +1484,12 @@ void WallHit_Draw(int k) {  // 8894df
     0x32,    0,    0,    0, 0x32, 0, 0, 0, 0x32, 0x72, 0xb2, 0xf2, 0x32, 0x72, 0xb2, 0xf2,
     0x32, 0x72, 0xb2, 0xf2, 0x32, 0, 0, 0, 0x72,    0,    0,    0, 0x32, 0xf2,    0,    0,
   };
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
 
   int t = ancilla_item_to_link[k] * 4;
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int n = 3; n >= 0; n--, t++) {
     if (kWallHit_Char[t] != 0) {
       Ancilla_SetOam_XY(oam, info.x + kWallHit_X[t], info.y + kWallHit_Y[t]);
@@ -1649,7 +1649,7 @@ void Bomb_CheckSpriteAndPlayerDamage(int k) {  // 889815
   if (link_auxiliary_state || link_incapacitated_timer || ancilla_floor[k] != link_is_on_lower_level)
     return;
 
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   hb.r0_xlo = link_x_coord;
   hb.r8_xhi = link_x_coord >> 8;
   hb.r1_ylo = link_y_coord;
@@ -1671,7 +1671,7 @@ void Bomb_CheckSpriteAndPlayerDamage(int k) {  // 889815
   int x = Ancilla_GetX(k) - 8, y = Ancilla_GetY(k) - 12;
 
   int j = Bomb_GetDisplacementFromLink(k);
-  struct ProjectSpeedRet pt = Bomb_ProjectSpeedTowardsPlayer(k, x, y, kBomb_Dmg_Speed[j]);
+  ProjectSpeedRet pt = Bomb_ProjectSpeedTowardsPlayer(k, x, y, kBomb_Dmg_Speed[j]);
   if (countdown_for_blink || flag_block_link_menu == 2)
     return;
   link_actual_vel_x = pt.x;
@@ -1713,7 +1713,7 @@ label_6:
     if (!flag_is_ancilla_to_pick_up) {
 clear_pickup_item:
       flag_is_ancilla_to_pick_up = 0;
-      struct CheckPlayerCollOut coll;
+      CheckPlayerCollOut coll;
       if (ancilla_item_to_link[k] || link_state_bits || !Ancilla_CheckLinkCollision(k, 0, &coll) || ancilla_floor[k] != link_is_on_lower_level)
         return;
       if (coll.r8 >= 16 || coll.r10 >= 12) {
@@ -1866,7 +1866,7 @@ int Bomb_GetDisplacementFromLink(int k) {  // 889cce
 }
 
 void Bomb_Draw(int k) {  // 889e9e
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
 
   int z = (int8)ancilla_z[k];
@@ -1889,7 +1889,7 @@ void Bomb_Draw(int k) {  // 889e9e
     }
   }
 
-  struct OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
+  OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
   uint8 numframes = kBomb_Draw_Tab2[ancilla_item_to_link[k]];
 
   oam += (ancilla_item_to_link[k] == 0 && (ancilla_tile_attr[k] == 9 || ancilla_tile_attr[k] == 0x40)) ? 2 : 0;
@@ -1925,9 +1925,9 @@ void DoorDebris_Draw(int k) {  // 88a091
     0x205e, 0xe05e, 0xa05e, 0x605e, 0x204f, 0x204f, 0x204f, 0x204f, 0x605e, 0x605e, 0x205e, 0xe05e, 0x604f, 0x604f, 0x604f, 0x604f,
     0x205e, 0xe05e, 0xa05e, 0x605e, 0x204f, 0xe04f, 0x204f, 0x204f, 0x605e, 0x605e, 0x205e, 0xe05e, 0x604f, 0x604f, 0x604f, 0x604f,
   };
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int y = door_debris_y[k] - BG2VOFS_copy2;
   int x = door_debris_x[k] - BG2HOFS_copy2;
   int j = ancilla_arr25[k] + door_debris_direction[k] * 4;
@@ -2030,7 +2030,7 @@ void Arrow_Draw(int k) {  // 88a36e
     1, 1, 0, 0, -1, -2, 0, 0, 1, 1, 0, 0, -2, -1, 0, 0,
     0, 8, 0, 8,  0,  8, 0, 8, 0, 8, 0, 8,  0,  8, 0, 8,
   };
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
   if (ancilla_objprio[k])
     HIBYTE(oam_priority_value) = 0x30;
@@ -2049,7 +2049,7 @@ void Arrow_Draw(int k) {  // 88a36e
 
   j *= 2;
 
-  struct OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
+  OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
   uint8 flags = (link_item_bow & 4) ? 2 : 4;
   for (int i = 0; i != 2; i++, j++) {
     if (kArrow_Draw_Char[j] != 0xff) {
@@ -2097,7 +2097,7 @@ void Ancilla0B_IceRodShot(int k) {  // 88a4dd
       ancilla_aux_timer[k] = 3;
     }
     if (ancilla_step[k]) {
-      struct AncillaOamInfo info;
+      AncillaOamInfo info;
       if (Ancilla_ReturnIfOutsideBounds(k, &info))
         return;
       Ancilla_MoveY(k);
@@ -2128,11 +2128,11 @@ void IceShotSpread_Draw(int k) {  // 88a571
   static const uint8 kIceShotSpread_CharFlags[16] = {0xcf, 0x24, 0xcf, 0x24, 0xcf, 0x24, 0xcf, 0x24, 0xdf, 0x24, 0xdf, 0x24, 0xdf, 0x24, 0xdf, 0x24};
   static const uint8 kIceShotSpread_XY[16] = {0, 0, 0, 8, 8, 0, 8, 8, 0xf8, 0xf8, 0xf8, 0x10, 0x10, 0xf8, 0x10, 0x10};
 
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
 
   Ancilla_AllocateOamFromRegion_A_or_D_or_F(k, ancilla_numspr[k]);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = ancilla_item_to_link[k] * 4;
   for (int i = 0; i != 4; i++, j++) {
     uint16 y = info.y + (int8)kIceShotSpread_XY[j * 2 + 0];
@@ -2207,13 +2207,13 @@ void AncillaDraw_BlastWallBlast(int k, int x, int y) {  // 88a756
     Oam_AllocateFromRegionD(0x18);
   else
     Oam_AllocateFromRegionA(0x18);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int i = blastwall_var5[k];
   AncillaDraw_Explosion(oam, kBomb_Draw_Tab0[i] * 6, 0, kBomb_Draw_Tab2[i], 0x32,
       x - BG2HOFS_copy2, y - BG2VOFS_copy2);
 }
 
-struct OamEnt *AncillaDraw_Explosion(struct OamEnt *oam, int frame, int idx, int idx_end, uint8 r11, int x, int y) {  // 88a7ab
+OamEnt *AncillaDraw_Explosion(OamEnt *oam, int frame, int idx, int idx_end, uint8 r11, int x, int y) {  // 88a7ab
   static const int8 kBomb_DrawExplosion_XY[108] = {
      -8,  -8,   0,   0,   0,   0,   0,   0,   0,   0,   0,  0,  -8,  -8,  -8,  0,
       0,  -8,   0,   0,   0,   0,   0,   0, -16, -16, -16,  0,   0, -16,   0,  0,
@@ -2273,9 +2273,9 @@ void Ancilla15_JumpSplash(int k) {  // 88a80f
       Ancilla_MoveY(k);
     }
   }
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int ax = Ancilla_GetX(k);
   int x8 = link_x_coord * 2 - ax - BG2HOFS_copy2;
   int x6 = ax + 12 - BG2HOFS_copy2;
@@ -2318,7 +2318,7 @@ void Ancilla16_HitStars(int k) {  // 88a8e5
       Ancilla_MoveX(k);
     }
   }
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
 
   uint16 ax = Ancilla_GetX(k);
@@ -2329,7 +2329,7 @@ void Ancilla16_HitStars(int k) {  // 88a8e5
   if (ancilla_step[k] == 2)
     Ancilla_AllocateOamFromRegion_B_or_E(8);
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint16 x = info.x, y = info.y;
   uint8 flags = 0;
   for (int i = 1; i >= 0; i--) {
@@ -2346,9 +2346,9 @@ void Ancilla16_HitStars(int k) {  // 88a8e5
 void Ancilla17_ShovelDirt(int k) {  // 88a9a9
   static const int8 kShovelDirt_XY[8] = {18, -13, -9, 4, 18, 13, -9, -11};
   static const int8 kShovelDirt_Char[2] = {0x40, 0x50};
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   if (!ancilla_timer[k]) {
     ancilla_timer[k] = 8;
     if (++ancilla_item_to_link[k] == 2) {
@@ -2388,9 +2388,9 @@ void Ancilla32_BlastWallFireball(int k) {  // 88aa35
   else
     Oam_AllocateFromRegionA(4);
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   Ancilla_SetOam_XY(oam, pt.x, pt.y);
   oam->charnum = kBlastWallFireball_Char[blastwall_var12[k] & 8 ? 0 : blastwall_var12[k] & 4 ? 1 : 2];
   oam->flags = 0x22;
@@ -2512,19 +2512,19 @@ void EtherSpell_HandleRadialSpin(int k) {  // 88abef
 
   uint8 sb = ancilla_step[k];
   uint8 sa = ancilla_item_to_link[k];
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 7; i >= 0; i--) {
     if (sb != 2 && sb != 5) {
       ether_arr1[i] = (ether_arr1[i] + 1) & 0x3f;
     }
-    struct AncillaRadialProjection arp = Ancilla_GetRadialProjection(ether_arr1[i], ether_var2);
+    AncillaRadialProjection arp = Ancilla_GetRadialProjection(ether_arr1[i], ether_var2);
     if (sb != 2)
       oam = AncillaDraw_EtherBlitzBall(oam, &arp, sa);
     else
       oam = AncillaDraw_EtherBlitzSegment(oam, &arp, sa, i);
   }
   if (ether_var2 < 0xf0) {
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     for (int i = 0; i != 8; i++) {
       if (oam[i].y != 0xf0)
         return;
@@ -2555,7 +2555,7 @@ void EtherSpell_HandleRadialSpin(int k) {  // 88abef
   Palette_Restore_BG_And_HUD();
 }
 
-struct OamEnt *AncillaDraw_EtherBlitzBall(struct OamEnt *oam, const struct AncillaRadialProjection *arp, int s) {  // 88aced
+OamEnt *AncillaDraw_EtherBlitzBall(OamEnt *oam, const AncillaRadialProjection*arp, int s) {  // 88aced
   static const uint8 kEther_BlitzBall_Char[2] = {0x68, 0x6a};
   int x = (arp->r6 ? -arp->r4 : arp->r4) + ether_x2 - 8 - BG2HOFS_copy2;
   int y = (arp->r2 ? -arp->r0 : arp->r0) + ether_y3 - 8 - BG2VOFS_copy2;
@@ -2566,7 +2566,7 @@ struct OamEnt *AncillaDraw_EtherBlitzBall(struct OamEnt *oam, const struct Ancil
   return Ancilla_AllocateOamFromCustomRegion(oam + 1);
 }
 
-struct OamEnt *AncillaDraw_EtherBlitzSegment(struct OamEnt *oam, const struct AncillaRadialProjection *arp, int s, int k) {  // 88adc9
+OamEnt *AncillaDraw_EtherBlitzSegment(OamEnt *oam, const AncillaRadialProjection*arp, int s, int k) {  // 88adc9
   static const int8 kEther_SpllittingBlitzSegment_X[16] = {-8, -16, -24, -16, -8, 0, 8, -16, -8, -16, -24, -16, -8, 0, 8, 0};
   static const int8 kEther_SpllittingBlitzSegment_Y[16] = {8, 0, -8, -16, -24, -16, -8, -16, 8, 0, -8, -16, -24, -16, -8, 0};
   static const uint8 kEther_SpllittingBlitzSegment_Char[32] = {
@@ -2595,9 +2595,9 @@ struct OamEnt *AncillaDraw_EtherBlitzSegment(struct OamEnt *oam, const struct An
 }
 
 void AncillaDraw_EtherBlitz(int k) {  // 88ae87
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int t = ancilla_item_to_link[k];
   int i = ancilla_arr25[k];
   int m = 0;
@@ -2614,7 +2614,7 @@ void AncillaDraw_EtherBlitz(int k) {  // 88ae87
     AncillaDraw_EtherOrb(k, oam);
 }
 
-void AncillaDraw_EtherOrb(int k, struct OamEnt *oam) {  // 88aedd
+void AncillaDraw_EtherOrb(int k, OamEnt *oam) {  // 88aedd
   uint16 y = ether_y - 1 - BG2VOFS_copy2;
   uint16 x = ether_x - 8 - BG2HOFS_copy2;
   int t = ancilla_item_to_link[k] * 4;
@@ -2666,7 +2666,7 @@ void AncillaAdd_BombosSpell(uint8 a, uint8 y) {  // 88af66
     bombos_x_coord2[i] = link_x_coord + kBombos_XDelta[i];
     bombos_y_coord2[i] = link_y_coord + kBombos_YDelta[i];
     bombos_var1 = 16;
-    struct AncillaRadialProjection arp = Ancilla_GetRadialProjection(bombos_arr7[i], 16);
+    AncillaRadialProjection arp = Ancilla_GetRadialProjection(bombos_arr7[i], 16);
     int x = (arp.r6 ? -arp.r4 : arp.r4) + bombos_x_coord2[i];
     int y = (arp.r2 ? -arp.r0 : arp.r0) + bombos_y_coord2[i];
     bombos_x_lo[i] = (uint8)x;
@@ -2734,7 +2734,7 @@ void BombosSpell_ControlFireColumns(int k) {  // 88b10a
 exit_loop:
         bombos_var1 = (bombos_var1 + 3 >= 207) ? 207 : bombos_var1 + 3;
         bombos_arr7[0] += 6;
-        struct AncillaRadialProjection arp = Ancilla_GetRadialProjection(bombos_arr7[0] & 0x3f, bombos_var1);
+        AncillaRadialProjection arp = Ancilla_GetRadialProjection(bombos_arr7[0] & 0x3f, bombos_var1);
         int x = (arp.r6 ? -arp.r4 : arp.r4) + bombos_x_coord2[0];
         int y = (arp.r2 ? -arp.r0 : arp.r0) + bombos_y_coord2[0];
         bombos_x_lo[j] = (uint8)x;
@@ -2796,7 +2796,7 @@ void AncillaDraw_BombosFireColumn(int kk) {  // 88b373
     0xff, 0x6a, 0xff, 0xff, 0x4e, 0xff, 0xff,
   };
   Ancilla_AllocateOamFromRegion_A_or_D_or_F(kk, 0x10);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 0; i < 1; i++) {
     int k = bombos_arr2[kk];
     if (k == 13)
@@ -2893,7 +2893,7 @@ void AncillaDraw_BombosBlast(int k) {  // 88b5e1
     return;
 
   Ancilla_AllocateOamFromRegion_A_or_D_or_F(k, 0x10);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   int t = bombos_arr3[k] * 4 + 3;
   for (int j = 0; j < 4; j++, t--) {
@@ -2982,9 +2982,9 @@ void AncillaDraw_QuakeInitialBolts(int k) {  // 88b793
   static const uint8 kQuakeDrawGroundBolts_Tab[5] = {0, 0x18, 0, 0x18, 0x2f};
 
   int t = quake_arr2[k] + kQuakeDrawGroundBolts_Tab[k];
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int idx = kQuakeItemPos[t], num = kQuakeItemPos[t + 1] - idx;
-  const struct QuakeItem *p = &kQuakeItems[idx], *pend = p + num;
+  const QuakeItem *p = &kQuakeItems[idx], *pend = p + num;
   do {
     uint16 x = p->x + quake_var2 - BG2HOFS_copy2;
     uint16 y = p->y + quake_var1 - BG2VOFS_copy2;
@@ -3018,8 +3018,8 @@ void QuakeSpell_SpreadBolts(int k) {  // 88b84f
   int t = ancilla_item_to_link[k];
 
   int idx = kQuakeItemPos2[t], num = kQuakeItemPos2[t + 1] - idx;
-  const struct QuakeItem *p = &kQuakeItems2[idx], *pend = p + num;
-  struct OamEnt *oam = GetOamCurPtr();
+  const QuakeItem *p = &kQuakeItems2[idx], *pend = p + num;
+  OamEnt *oam = GetOamCurPtr();
 
   do {
     oam->x = p->x;
@@ -3075,9 +3075,9 @@ void Ancilla_MagicPowder_Draw(int k) {  // 88baeb
     0xe4, 0xa8, 0xe2, 0x68, 0xe2, 0xa4, 0xe8, 0x64, 0xe8, 0xa8, 0xe4, 0x62, 0xe4, 0xa8, 0xe2, 0x68,
     0xe2, 0xa4, 0xe8, 0x64, 0xe8, 0xa8, 0xe4, 0x62, 0xe4, 0xa8, 0xe2, 0x68,
   };
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int b = ancilla_arr25[k];
   for (int i = 0; i < 4; i++, oam++) {
     Ancilla_SetOam_XY(oam, info.x + kMagicPowder_DrawX[b * 4 + i], info.y + kMagicPowder_DrawY[b * 4 + i]);
@@ -3092,7 +3092,7 @@ void Powder_ApplyDamageToSprites(int k) {  // 88bb58
   for (int j = 15; j >= 0; j--) {
     if ((frame_counter ^ j) & 3 || sprite_state[j] != 9 || sprite_bump_damage[j] & 0x20)
       continue;
-    struct SpriteHitBox hb;
+    SpriteHitBox hb;
     Ancilla_SetupBasicHitBox(k, &hb);
     Sprite_SetupHitBox(j, &hb);
     if (!CheckIfHitBoxesOverlap(&hb))
@@ -3149,9 +3149,9 @@ void Ancilla1E_DashDust(int k) {  // 88bc92
   if (ancilla_item_to_link[k] == 5)
     return;
 
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   static const int8 kDashDust_Draw_X1[4] = {0, 0, 4, -4};
   static const int16 kDashDust_Draw_X[30] = {
@@ -3278,12 +3278,12 @@ endif_7:
   static const uint8 kHookShot_Draw_Flags[12] = {0, 0, 0xff, 0x80, 0x80, 0xff, 0x40, 0xff, 0x40, 0, 0xff, 0};
   static const uint8 kHookShot_Draw_Char[12] = {9, 0xa, 0xff, 9, 0xa, 0xff, 9, 0xff, 0xa, 9, 0xff, 0xa};
 
-  struct Point16U info;
+  Point16U info;
 do_draw:
   Ancilla_PrepOamCoord(k, &info);
   if (ancilla_L[k])
     oam_priority_value = 0x3000;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   int j = ancilla_dir[k] * 3;
   int x = info.x, y = info.y;
@@ -3335,7 +3335,7 @@ do_draw:
 void Ancilla20_Blanket(int k) {  // 88c013
   static const uint8 kBedSpread_Char[8] = {0xa, 0xa, 0xa, 0xa, 0xc, 0xc, 0xa, 0xa};
   static const uint8 kBedSpread_Flags[8] = {0, 0x60, 0xa0, 0xe0, 0, 0x60, 0xa0, 0xe0};
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
 
   if (!link_pose_during_opening) {
@@ -3344,7 +3344,7 @@ void Ancilla20_Blanket(int k) {  // 88c013
     Oam_AllocateFromRegionA(0x10);
   }
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = link_pose_during_opening ? 4 : 0;
   uint16 x = pt.x, y = pt.y;
   for (int i = 3; i >= 0; i--, j++, oam++) {
@@ -3373,9 +3373,9 @@ void Ancilla21_Snore(int k) {  // 88c094
   if (Ancilla_GetY(k) <= (uint16)(link_y_coord - 24))
     ancilla_type[k] = 0;
   link_dma_var5 = kBedSpread_Dma[ancilla_item_to_link[k]];
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   Ancilla_SetOam_XY(oam, pt.x, pt.y);
   oam->charnum = 9;
   oam->flags = 0x24;
@@ -3402,9 +3402,9 @@ void Ancilla3B_SwordUpSparkle(int k) {  // 88c167
     }
   }
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   int j = ancilla_item_to_link[k] * 4;
   for (int i = 0; i < 4; i++, j++) {
@@ -3432,9 +3432,9 @@ void Ancilla3C_SpinAttackChargeSparkle(int k) {  // 88c1ea
     }
   }
   ancilla_oam_idx[k] = Ancilla_AllocateOamFromRegion_A_or_D_or_F(k, 4);
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   Ancilla_SetOam_XY(oam, info.x, info.y);
   int j = ancilla_item_to_link[k];
   oam->charnum = kSwordChargeSpark_Char[j];
@@ -3456,9 +3456,9 @@ void Ancilla35_MasterSwordReceipt(int k) {  // 88c25f
     ancilla_item_to_link[k] = (ancilla_item_to_link[k] == 2) ? 0 : ancilla_item_to_link[k] + 1;
   }
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = (ancilla_item_to_link[k] - 1) * 4;
   if (j < 0)
     return;
@@ -3640,14 +3640,14 @@ skipit:;
     ancilla_arr3[k] = kReceiveItem_Tab4[a];
     WriteTo4BPPBuffer_at_7F4000(kReceiveItem_Tab5[a]);
   }
-  struct Point16U pt;
+  Point16U pt;
 endif_12:
   Ancilla_PrepAdjustedOamCoord(k, &pt);
   Ancilla_ReceiveItem_Draw(k, pt.x, pt.y);
 }
 
-struct OamEnt *Ancilla_ReceiveItem_Draw(int k, int x, int y) {  // 88c690
-  struct OamEnt *oam = GetOamCurPtr();
+OamEnt *Ancilla_ReceiveItem_Draw(int k, int x, int y) {  // 88c690
+  OamEnt *oam = GetOamCurPtr();
   int j = ancilla_item_to_link[k];
   Ancilla_SetOam_XY(oam, x, y);
   oam->charnum = 0x24;
@@ -3691,13 +3691,13 @@ void Ancilla28_WishPondItem(int k) {  // 88c6f2
 }
 
 void WishPondItem_Draw(int k) {  // 88c760
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
 
   if (ancilla_item_to_link[k] == 1)
     ancilla_arr4[k] = 5;
 
-  struct OamEnt *oam = Ancilla_ReceiveItem_Draw(k, pt.x, pt.y - (int8)ancilla_z[k]);
+  OamEnt *oam = Ancilla_ReceiveItem_Draw(k, pt.x, pt.y - (int8)ancilla_z[k]);
 
   if (link_picking_throw_state != 2 || !sign8(ancilla_z_vel[k]) && ancilla_z_vel[k] >= 2)
     return;
@@ -3825,9 +3825,9 @@ void ObjectSplash_Draw(int k) {  // 88ca22
   static const uint8 kObjectSplash_Draw_Char[10] = {0xc0, 0xff, 0xe7, 0xff, 0xaf, 0xbf, 0x80, 0x80, 0x83, 0x83};
   static const uint8 kObjectSplash_Draw_Flags[10] = {0, 0xff, 0, 0xff, 0x40, 0, 0x40, 0, 0xc0, 0x80};
   static const uint8 kObjectSplash_Draw_Ext[10] = {2, 0, 2, 0, 0, 0, 0, 0, 0, 0};
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = ancilla_item_to_link[k] * 2;
   for (int i = 0; i != 2; i++, j++) {
     if (kObjectSplash_Draw_Char[j] != 0xff) {
@@ -3880,7 +3880,7 @@ void Ancilla29_MilestoneItemReceipt(int k) {  // 88ca8c
     AncillaAdd_OccasionalSparkle(k);
 
   if (submodule_index == 0) {
-    struct CheckPlayerCollOut coll_out;
+    CheckPlayerCollOut coll_out;
     if (ancilla_z[k] < 24 && Ancilla_CheckLinkCollision(k, 2, &coll_out) && related_to_hookshot == 0 && link_auxiliary_state == 0) {
       ancilla_type[k] = 0;
       if (link_player_handler_state == kPlayerState_ReceivingEther || link_player_handler_state == kPlayerState_ReceivingBombos) {
@@ -3906,9 +3906,9 @@ void Ancilla29_MilestoneItemReceipt(int k) {  // 88ca8c
     }
   }
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = Ancilla_ReceiveItem_Draw(k, pt.x, pt.y - ancilla_z[k]);
+  OamEnt *oam = Ancilla_ReceiveItem_Draw(k, pt.x, pt.y - ancilla_z[k]);
 
   if (sign8(--ancilla_aux_timer[k])) {
     ancilla_aux_timer[k] = 9;
@@ -3955,7 +3955,7 @@ void Ancilla_RisingCrystal(int k) {  // 88cbf2
     }
   }
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
   Ancilla_ReceiveItem_Draw(k, pt.x, pt.y);
 }
@@ -3966,7 +3966,7 @@ void AncillaAdd_OccasionalSparkle(int k) {  // 88cc93
 }
 
 void Ancilla43_GanonsTowerCutscene(int k) {  // 88cca0
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   if (!ancilla_step[k]) {
     uint8 yy = ancilla_y_vel[k] - 1;
     ancilla_y_vel[k] = (yy < 0xf0) ? 0xf0 : yy;
@@ -4043,7 +4043,7 @@ label_b:
   for (int j = 6; j >= 0; j--) {
     if (submodule_index == 0 && astep != 1 && !(frame_counter & 1))
       breaktowerseal_var3[j] = breaktowerseal_var3[j] + 1 & 63;
-    struct AncillaRadialProjection arp = Ancilla_GetRadialProjection(breaktowerseal_var3[j], breaktowerseal_var4);
+    AncillaRadialProjection arp = Ancilla_GetRadialProjection(breaktowerseal_var3[j], breaktowerseal_var4);
     int x = (arp.r6 ? -arp.r4 : arp.r4) + breaktowerseal_x - 8 - BG2HOFS_copy;
     int y = (arp.r2 ? -arp.r0 : arp.r0) + breaktowerseal_y - 8 - BG2VOFS_copy;
 
@@ -4056,7 +4056,7 @@ label_b:
     AncillaDraw_GTCutsceneCrystal(oam, x, y);
     oam++;
   }
-  struct Point16U info;
+  Point16U info;
 label_a:
   Ancilla_PrepAdjustedOamCoord(k, &info);
 
@@ -4073,7 +4073,7 @@ label_a:
     GTCutscene_ActivateSparkle();
 }
 
-void AncillaDraw_GTCutsceneCrystal(struct OamEnt *oam, int x, int y) {  // 88ceaa
+void AncillaDraw_GTCutsceneCrystal(OamEnt *oam, int x, int y) {  // 88ceaa
   uint8 ext = Ancilla_SetOam_XY_safe(oam, x, y);
   oam->charnum = 0x24;
   oam->flags = 0x3c;
@@ -4100,7 +4100,7 @@ void GTCutscene_ActivateSparkle() {  // 88cec7
   }
 }
 
-struct OamEnt *GTCutscene_SparkleALot(struct OamEnt *oam) {  // 88cf35
+OamEnt *GTCutscene_SparkleALot(OamEnt *oam) {  // 88cf35
   static const uint8 kSwordChargeSpark_Char[3] = {0xb7, 0x80, 0x83};
   static const uint8 kSwordChargeSpark_Flags[3] = {4, 4, 0x84};
   for (int k = 0x17; k >= 0; k--) {
@@ -4140,7 +4140,7 @@ void Ancilla36_Flute(int k) {  // 88cfaa
         ancilla_z[k] = 0;
       }
     } else {
-      struct CheckPlayerCollOut coll_out;
+      CheckPlayerCollOut coll_out;
       if (Ancilla_CheckLinkCollision(k, 2, &coll_out) && !related_to_hookshot && link_auxiliary_state == 0) {
         ancilla_type[k] = 0;
         item_receipt_method = 0;
@@ -4150,9 +4150,9 @@ void Ancilla36_Flute(int k) {  // 88cfaa
     }
   }
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   Ancilla_SetOam_XY(oam, pt.x, pt.y - (int8)ancilla_z[k]);
   oam->charnum = 0x24;
   oam->flags = HIBYTE(oam_priority_value) | 4;
@@ -4224,13 +4224,13 @@ void Ancilla37_WeathervaneExplosion(int k) {  // 88d03d
 
 void AncillaDraw_WeathervaneExplosionWoodDebris(int k) {  // 88d188
   static const uint8 kWeathervane_Explode_Char[2] = {0x4e, 0x4f};
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
   pt.y -= (int8)ancilla_z[k];
   int i = ancilla_item_to_link[k];
   if (sign8(i))
     return;
-  struct OamEnt *oam = GetOamCurPtr() + (weathervane_var14 >> 2);
+  OamEnt *oam = GetOamCurPtr() + (weathervane_var14 >> 2);
   Ancilla_SetOam_XY(oam, pt.x, pt.y);
   oam->charnum = kWeathervane_Explode_Char[i];
   oam->flags = 0x3c;
@@ -4281,9 +4281,9 @@ after_stuff:
   Ancilla_MoveX(k);
   Ancilla_MoveZ(k);
   BYTE(flag_travel_bird) = kTravelBird_DmaStuffs[ancilla_K[k] + 1];
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   Ancilla_SetOam_XY(oam, info.x + kTravelBird_Draw_X[0], info.y + (int8)ancilla_z[k] + kTravelBird_Draw_Y[0]);
   oam->charnum = kTravelBird_Draw_Char[0];
@@ -4330,9 +4330,9 @@ void MorphPoof_Draw(int k) {  // 88d3fd
     oam_cur_ptr = 0x8d0;
     oam_ext_cur_ptr = 0xa20 + (0xd0 >> 2);
   }
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int j = ancilla_item_to_link[k];
   uint8 ext = kMorphPoof_Ext[j];
   uint8 chr = kMorphPoof_Char[j];
@@ -4372,9 +4372,9 @@ void Ancilla3F_BushPoof(int k) {  // 88d519
     }
   }
   Oam_AllocateFromRegionC(0x10);
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   int j = ancilla_item_to_link[k] * 4;
   for (int i = 0; i < 4; i++, j++, oam++) {
@@ -4415,12 +4415,12 @@ void Ancilla26_SwordSwingSparkle(int k) {  // 88d65a
   }
   Ancilla_SetXY(k, link_x_coord, link_y_coord);
 
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
 
   k = ancilla_item_to_link[k] * 3 + ancilla_dir[k] * 12;
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int n = 2; n >= 0; n--, k++, oam++) {
     uint8 chr = kSwordSwingSparkle_Char[k];
     if (chr == 0xff)
@@ -4505,12 +4505,12 @@ void Ancilla2B_SpinAttackSparkleB(int k) {  // 88d8fd
       ancilla_aux_timer[k] = 2;
     }
   }
-  struct OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
+  OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
   int i = ancilla_step[k];
   do {
     if (submodule_index == 0)
       swordbeam_arr[i] = (swordbeam_arr[i] + 4) & 0x3f;
-    struct Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_arr[i], swordbeam_var2));
+    Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_arr[i], swordbeam_var2));
     Ancilla_SetOam_XY(oam, pt.x, pt.y);
     oam->charnum = kSpinSpark_Char[i];
     oam->flags = flags | HIBYTE(oam_priority_value);
@@ -4532,7 +4532,7 @@ void Ancilla2B_SpinAttackSparkleB(int k) {  // 88d8fd
   t = ancilla_arr1[k];
   if (t != 3) {
     static const uint8 kSpinSpark_Char2[3] = {0xb7, 0x80, 0x83};
-    struct Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_var1, swordbeam_var2));
+    Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_var1, swordbeam_var2));
     Ancilla_SetOam_XY(oam, pt.x, pt.y);
     oam->charnum = kSpinSpark_Char2[t];
     oam->flags = 4 | HIBYTE(oam_priority_value);
@@ -4543,8 +4543,8 @@ endif_2:
     bytewise_extended_oam[oam_org - oam_buf + 3] = 1;
 }
 
-struct Point16U Sparkle_PrepOamFromRadial(struct AncillaRadialProjection p) {  // 88da17
-  struct Point16U pt;
+Point16U Sparkle_PrepOamFromRadial(AncillaRadialProjection p) {  // 88da17
+  Point16U pt;
   pt.y = (p.r2 ? -p.r0 : p.r0) + swordbeam_temp_y - 4 - BG2VOFS_copy2;
   pt.x = (p.r6 ? -p.r4 : p.r4) + swordbeam_temp_x - 4 - BG2HOFS_copy2;
   return pt;
@@ -4586,7 +4586,7 @@ void Ancilla30_ByrnaWindupSpark(int k) {  // 88db24
   }
   j += link_direction_facing * 2;
   Ancilla_SetXY(k, link_x_coord + kInitialCaneSpark_X[j], link_y_coord + kInitialCaneSpark_Y[j]);
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepOamCoord(k, &pt);
 
   uint8 a = (ancilla_item_to_link[k] - 1) & 0xf;
@@ -4594,7 +4594,7 @@ void Ancilla30_ByrnaWindupSpark(int k) {  // 88db24
   if (a != 0)
     j = 4 * ((a != 15) ? (a & 1) + 1 : 3);
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for (int i = 0; i < 4; i++, j++) {
     if (kInitialCaneSpark_Draw_Char[j] != 255) {
       Ancilla_SetOam_XY(oam, pt.x + kInitialCaneSpark_Draw_X[j], pt.y + kInitialCaneSpark_Draw_Y[j]);
@@ -4673,13 +4673,13 @@ kill_me:
     ancilla_timer[k] = 21;
     Ancilla_Sfx3_Near(0x30);
   }
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int i = ancilla_step[k];
   do {
     static const uint8 kCaneSpark_Char[4] = {0xd7, 0xb7, 0x80, 0x83};
     if (!submodule_index)
       swordbeam_arr[i] = (swordbeam_arr[i] + 3) & 0x3f;
-    struct Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_arr[i], swordbeam_var2));
+    Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_arr[i], swordbeam_var2));
     Ancilla_SetOam_XY(oam, pt.x, pt.y);
     oam->charnum = kCaneSpark_Char[i];
     oam->flags = flags | HIBYTE(oam_priority_value);
@@ -4723,13 +4723,13 @@ void Ancilla_SwordBeam(int k) {  // 88ddc5
     }
   }
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 s = ancilla_S[k];
   for (int i = 3; i >= 0; i--, oam++) {
     static const uint8 kSwordBeam_Char[4] = {0xd7, 0xb7, 0x80, 0x83};
     if (submodule_index == 0)
       swordbeam_arr[i] = (swordbeam_arr[i] + s) & 0x3f;
-    struct Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_arr[i], swordbeam_var2));
+    Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_arr[i], swordbeam_var2));
     Ancilla_SetOam_XY(oam, pt.x, pt.y);
     oam->charnum = kSwordBeam_Char[i];
     oam->flags = flags | HIBYTE(oam_priority_value);
@@ -4751,7 +4751,7 @@ void Ancilla_SwordBeam(int k) {  // 88ddc5
   t = ancilla_arr1[k];
   if (t != 3) {
     static const uint8 kSwordBeam_Char2[3] = {0xb7, 0x80, 0x83};
-    struct Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_var1, swordbeam_var2));
+    Point16U pt = Sparkle_PrepOamFromRadial(Ancilla_GetRadialProjection(swordbeam_var1, swordbeam_var2));
     Ancilla_SetOam_XY(oam, pt.x, pt.y);
     oam->charnum = kSwordBeam_Char2[t];
     oam->flags = 4 | HIBYTE(oam_priority_value);
@@ -4784,7 +4784,7 @@ void Ancilla0D_SpinAttackFullChargeSpark(int k) {  // 88ddca
   uint16 y = link_y_coord + kSwordFullChargeSpark_Y[j] - BG2VOFS_copy2;
 
   oam_priority_value = kSwordFullChargeSpark_Flags[ancilla_floor[k]] << 8;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   Ancilla_SetOam_XY(oam, x, y);
   oam->charnum = 0xd7;
   oam->flags = HIBYTE(oam_priority_value) | 2;
@@ -4792,7 +4792,7 @@ void Ancilla0D_SpinAttackFullChargeSpark(int k) {  // 88ddca
 }
 
 void Ancilla27_Duck(int k) {  // 88dde8
-  struct CheckPlayerCollOut coll;
+  CheckPlayerCollOut coll;
   int j;
 
   if (submodule_index)
@@ -4889,10 +4889,10 @@ endif_1:
 endif_5:
   BYTE(flag_travel_bird) = kTravelBird_DmaStuffs[j];
 
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
 
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int z = ancilla_z[k] ? ancilla_z[k] | ~0xff : 0;
   int i = 0, n = ancilla_step[k] + 1;
   do {
@@ -5008,7 +5008,7 @@ int Ancilla_CheckBasicSpriteCollision(int k) {  // 88e1f9
 }
 
 bool Ancilla_CheckBasicSpriteCollision_Single(int k, int j) {  // 88e23d
-  struct SpriteHitBox hb;
+  SpriteHitBox hb;
   Ancilla_SetupBasicHitBox(k, &hb);
   Sprite_SetupHitBox(j, &hb);
   if (!CheckIfHitBoxesOverlap(&hb))
@@ -5023,14 +5023,14 @@ bool Ancilla_CheckBasicSpriteCollision_Single(int k, int j) {  // 88e23d
     return false;
 
   int x = Ancilla_GetX(k) - 8, y = Ancilla_GetY(k) - 8 - ancilla_z[k];
-  struct ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(j, x, y, 80);
+  ProjectSpeedRet pt = Sprite_ProjectSpeedTowardsLocation(j, x, y, 80);
   sprite_y_recoil[j] = ~pt.y;
   sprite_x_recoil[j] = ~pt.x;
   Ancilla_CheckDamageToSprite(j, ancilla_type[k]);
   return true;
 }
 
-void Ancilla_SetupBasicHitBox(int k, struct SpriteHitBox *hb) {  // 88e2ca
+void Ancilla_SetupBasicHitBox(int k, SpriteHitBox *hb) {  // 88e2ca
   int x = Ancilla_GetX(k) - 8;
   hb->r0_xlo = x;
   hb->r8_xhi = x >> 8;
@@ -5188,9 +5188,9 @@ void AncillaDraw_SomariaBlock(int k) {  // 88e61b
     oam_ext_cur_ptr = 0xa20 + 0x34;
   }
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
+  OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
   int z = (int8)ancilla_z[k];
   if (z != 0 && z != -1 && ancilla_K[k] != 3 && ancilla_objprio[k])
     oam_priority_value = 0x3000;
@@ -5266,9 +5266,9 @@ void Ancilla2D_SomariaBlockFizz(int k) {  // 88e9e8
       return;
     }
   }
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint8 z = ancilla_z[k];
   if (z == 0xff)
     z = 0;
@@ -5289,7 +5289,7 @@ void Ancilla39_SomariaPlatformPoof(int k) {  // 88ea83
   if (!sign8(--ancilla_aux_timer[k]))
     return;
   ancilla_type[k] = 0;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int x = Ancilla_GetX(k) & ~7 | 4, y = Ancilla_GetY(k) & ~7 | 4;
   uint8 floor = ancilla_floor[k];
   int j = Sprite_SpawnDynamically(k, 0xed, &info);  // wtf
@@ -5331,9 +5331,9 @@ void Ancilla2E_SomariaBlockFission(int k) {  // 88eb3e
       return;
     }
   }
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
+  OamEnt *oam = GetOamCurPtr(), *oam_org = oam;
 
   int8 z = ancilla_z[k] + (ancilla_K[k] == 3 && BYTE(link_z_coord) != 0xff ? BYTE(link_z_coord) : 0);
   int j = ancilla_item_to_link[k] * 8;
@@ -5350,9 +5350,9 @@ void Ancilla2F_LampFlame(int k) {  // 88ec13
   static const int8 kLampFlame_Draw_Y[12] = {-3, 0, 0, 0, 0, 0, 8, 8, 0, 8, 0, 0};
   static const int8 kLampFlame_Draw_X[12] = {4, 10, 0, 0, 1, 9, 2, 7, 4, 4, 0, 0};
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   if (!ancilla_timer[k]) {
     ancilla_type[k] = 0;
     return;
@@ -5400,9 +5400,9 @@ void Ancilla41_WaterfallSplash(int k) {  // 88ecaf
   static const uint8 kWaterfallSplash_Flags[8] = {0x84, 0xff, 0x84, 0xc4, 0x84, 0xc4, 0x84, 0xc4};
   static const uint8 kWaterfallSplash_Ext[8] = {2, 0xff, 2, 2, 2, 2, 0, 0};
 
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
 
   uint8 z = link_z_coord;
   pt.y -= (sign8(z) ? 0 : z);
@@ -5421,10 +5421,10 @@ void Ancilla41_WaterfallSplash(int k) {  // 88ecaf
 void Ancilla24_Gravestone(int k) {  // 88ee01
   static const uint8 kAncilla_Gravestone_Char[4] = {0xc8, 0xc8, 0xd8, 0xd8};
   static const uint8 kAncilla_Gravestone_Flags[4] = {0, 0x40, 0, 0x40};
-  struct Point16U pt;
+  Point16U pt;
   Ancilla_PrepAdjustedOamCoord(k, &pt);
   Oam_AllocateFromRegionB(16);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   uint16 x = pt.x, y = pt.y;
   for (int i = 0; i < 4; i++, oam++) {
     Ancilla_SetOam_XY(oam, x, y);
@@ -5465,7 +5465,7 @@ void Ancilla34_SkullWoodsFire(int k) {  // 88ef9a
     ancilla_aux_timer[k] = 5;
     ancilla_item_to_link[k]++;
   }
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   for(int k = 3; k >= 0; k--) {
     if (sign8(--skullwoodsfire_var5[k])) {
       skullwoodsfire_var5[k] = 5;
@@ -5557,7 +5557,7 @@ void Ancilla3A_BigBombExplosion(int k) {  // 88f18d
     uint16 y = Ancilla_GetY(k) + kSuperBombExplode_Y[i] - BG2VOFS_copy2;
     if (x < 256 && y < 256) {
       Ancilla_AllocateOamFromRegion_A_or_D_or_F((uint8)(j * 2), 0x18); // wtf
-      struct OamEnt *oam = GetOamCurPtr() + yy;
+      OamEnt *oam = GetOamCurPtr() + yy;
       yy += AncillaDraw_Explosion(oam, j, 0, numframes, 0x32, x, y) - oam;
 
     }
@@ -5620,9 +5620,9 @@ void RevivalFairy_Main() {  // 88f283
 
   {
     Oam_AllocateFromRegionC(12);
-    struct Point16U pt;
+    Point16U pt;
     Ancilla_PrepOamCoord(k, &pt);
-    struct OamEnt *oam = GetOamCurPtr();
+    OamEnt *oam = GetOamCurPtr();
     int t = (ancilla_step[k] == 1 && ancilla_L[k]) ? ancilla_item_to_link[k] + 1 : 0;
     Ancilla_SetOam_XY(oam, pt.x, pt.y - (int8)ancilla_z[k]);
     if (t != 0)
@@ -5711,7 +5711,7 @@ void GameOverText_Draw() {  // 88f5c4
   static const uint8 kGameOverText_Chars[16] = {0x40, 0x50, 0x41, 0x51, 0x42, 0x52, 0x43, 0x53, 0x44, 0x54, 0x45, 0x55, 0x43, 0x53, 0x46, 0x56};
   oam_cur_ptr = 0x800;
   oam_ext_cur_ptr = 0xa20;
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   int k = flag_for_boomerang_in_place;
   do {
     Ancilla_SetOam_XY(oam, Ancilla_GetX(k), 0x57);
@@ -5742,19 +5742,19 @@ int AncillaAdd_AddAncilla_Bank08(uint8 type, uint8 y) {  // 88f631
   return k;
 }
 
-void Ancilla_PrepOamCoord(int k, struct Point16U *info) {  // 88f671
+void Ancilla_PrepOamCoord(int k, Point16U *info) {  // 88f671
   oam_priority_value = kTagalongLayerBits[ancilla_floor[k]] << 8;
   info->x = Ancilla_GetX(k) - BG2HOFS_copy2;
   info->y = Ancilla_GetY(k) - BG2VOFS_copy2;
 }
 
-void Ancilla_PrepAdjustedOamCoord(int k, struct Point16U *info) {  // 88f6a4
+void Ancilla_PrepAdjustedOamCoord(int k, Point16U *info) {  // 88f6a4
   oam_priority_value = kTagalongLayerBits[ancilla_floor[k]] << 8;
   info->x = Ancilla_GetX(k) - BG2HOFS_copy;
   info->y = Ancilla_GetY(k) - BG2VOFS_copy;
 }
 
-void Ancilla_SetOam_XY(struct OamEnt *oam, uint16 x, uint16 y) {  // 88f6e1
+void Ancilla_SetOam_XY(OamEnt *oam, uint16 x, uint16 y) {  // 88f6e1
   uint8 yval = 0xf0;
   if (x < 256 && y < 256) {
     oam->x = x;
@@ -5764,7 +5764,7 @@ void Ancilla_SetOam_XY(struct OamEnt *oam, uint16 x, uint16 y) {  // 88f6e1
   oam->y = yval;
 }
 
-uint8 Ancilla_SetOam_XY_safe(struct OamEnt *oam, uint16 x, uint16 y) {  // 88f702
+uint8 Ancilla_SetOam_XY_safe(OamEnt *oam, uint16 x, uint16 y) {  // 88f702
   uint8 rv = 0;
   oam->x = x;
   if ((uint16)(x + 0x80) < 0x180) {
@@ -5777,7 +5777,7 @@ uint8 Ancilla_SetOam_XY_safe(struct OamEnt *oam, uint16 x, uint16 y) {  // 88f70
   return rv;
 }
 
-bool Ancilla_CheckLinkCollision(int k, int j, struct CheckPlayerCollOut *out) {  // 88f76b
+bool Ancilla_CheckLinkCollision(int k, int j, CheckPlayerCollOut*out) {  // 88f76b
   static const int16 kAncilla_Coll_Yoffs[5] = {0, 8, 8, 8, 0};
   static const int16 kAncilla_Coll_Xoffs[5] = {0, 8, 8, 8, 0};
   static const int16 kAncilla_Coll_H[5] = {20, 20, 8, 28, 14};
@@ -5809,7 +5809,7 @@ bool Ancilla_CheckForEntranceTrigger(int what) {  // 88f844
     abs16(link_x_coord + 8 - kEntranceTrigger_BaseX[what]) < kEntranceTrigger_SizeX[what];
 }
 
-void AncillaDraw_Shadow(struct OamEnt *oam, int k, int x, int y, uint8 pal) {  // 88f897
+void AncillaDraw_Shadow(OamEnt *oam, int k, int x, int y, uint8 pal) {  // 88f897
   static const uint8 kAncilla_DrawShadow_Char[14] = {0x6c, 0x6c, 0x28, 0x28, 0x38, 0xff, 0xc8, 0xc8, 0xd8, 0xd8, 0xd9, 0xd9, 0xda, 0xda};
   static const uint8 kAncilla_DrawShadow_Flags[14] = {0x28, 0x68, 0x28, 0x68, 0x28, 0xff, 0x22, 0x22, 0x24, 0x64, 0x24, 0x64, 0x24, 0x64};
 
@@ -5838,7 +5838,7 @@ void Ancilla_AllocateOamFromRegion_B_or_E(uint8 size) {  // 88f90a
     Oam_AllocateFromRegionE(size);
 }
 
-struct OamEnt *Ancilla_AllocateOamFromCustomRegion(struct OamEnt *oam) {  // 88f9ba
+OamEnt *Ancilla_AllocateOamFromCustomRegion(OamEnt *oam) {  // 88f9ba
   int a = (uint8 *)oam - g_ram;
   if (sort_sprites_setting) {
     if (a < 0x900) {
@@ -5860,7 +5860,7 @@ struct OamEnt *Ancilla_AllocateOamFromCustomRegion(struct OamEnt *oam) {  // 88f
   return GetOamCurPtr();
 }
 
-struct OamEnt *HitStars_UpdateOamBufferPosition(struct OamEnt *oam) {  // 88fa00
+OamEnt *HitStars_UpdateOamBufferPosition(OamEnt *oam) {  // 88fa00
   int a = (uint8 *)oam - g_ram;
   if (!sort_sprites_setting && a >= 0x9d0) {
     oam_cur_ptr = 0x820;
@@ -5888,7 +5888,7 @@ bool Hookshot_ShouldIEvenBotherWithTiles(int k) {  // 88fa2d
   }
 }
 
-struct AncillaRadialProjection Ancilla_GetRadialProjection(uint8 a, uint8 r8) {  // 88fadd
+AncillaRadialProjection Ancilla_GetRadialProjection(uint8 a, uint8 r8) {  // 88fadd
   static const uint8 kRadialProjection_Tab0[64] = {
     255, 254, 251, 244, 236, 225, 212, 197, 181, 162, 142, 120,  97,  74,  49,  25,
       0,  25,  49,  74,  97, 120, 142, 162, 181, 197, 212, 225, 236, 244, 251, 254,
@@ -5913,7 +5913,7 @@ struct AncillaRadialProjection Ancilla_GetRadialProjection(uint8 a, uint8 r8) { 
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   };
-  struct AncillaRadialProjection rv;
+  AncillaRadialProjection rv;
   int p0 = kRadialProjection_Tab0[a] * r8;
   int p1 = kRadialProjection_Tab2[a] * r8;
   rv.r0 = (p0 >> 8) + (p0 >> 7 & 1);
@@ -7173,9 +7173,9 @@ void DashDust_Motive(int k) {  // 89adf4
   }
   if (link_direction_facing == 2)
     Oam_AllocateFromRegionB(4);
-  struct Point16U info;
+  Point16U info;
   Ancilla_PrepOamCoord(k, &info);
-  struct OamEnt *oam = GetOamCurPtr();
+  OamEnt *oam = GetOamCurPtr();
   Ancilla_SetOam_XY(oam, info.x, info.y);
   oam->charnum = kMotiveDashDust_Draw_Char[ancilla_item_to_link[k]];
   oam->flags = 4 | HIBYTE(oam_priority_value);
@@ -7309,7 +7309,7 @@ void Ancilla_TerminateIfOffscreen(int j) {  // 8ffd52
     ancilla_type[j] = 0;
 }
 
-bool Bomb_CheckUndersideSpriteStatus(int k, struct Point16U *out_pt, uint8 *out_r10) {  // 8ffdcf
+bool Bomb_CheckUndersideSpriteStatus(int k, Point16U *out_pt, uint8 *out_r10) {  // 8ffdcf
   if (ancilla_item_to_link[k] != 0)
     return true;
 
@@ -7340,7 +7340,7 @@ bool Bomb_CheckUndersideSpriteStatus(int k, struct Point16U *out_pt, uint8 *out_
 
 void Sprite_CreateDeflectedArrow(int k) {  // 9d8040
   ancilla_type[k] = 0;
-  struct SpriteSpawnInfo info;
+  SpriteSpawnInfo info;
   int j = Sprite_SpawnDynamically(k, 0x1b, &info);
   if (j >= 0) {
     sprite_x_lo[j] = ancilla_x_lo[k];

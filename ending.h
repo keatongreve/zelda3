@@ -1,10 +1,10 @@
 #pragma once
 
-struct IntroSpriteEnt {
+typedef struct IntroSpriteEnt {
   int8 x, y;
   uint8 charnum, flags;
   uint8 ext;
-};
+} IntroSpriteEnt;
 
 void Intro_SetupScreen();
 void Intro_LoadTextPointersAndPalettes();
@@ -44,7 +44,7 @@ void InitializeSceneSprite_Copyright(int k);
 void AnimateSceneSprite_Copyright(int k);
 void InitializeSceneSprite_Sparkle(int k);
 void AnimateSceneSprite_Sparkle(int k);
-void AnimateSceneSprite_AddObjectsToOamBuffer(int k, const struct IntroSpriteEnt *src, int num);
+void AnimateSceneSprite_AddObjectsToOamBuffer(int k, const IntroSpriteEnt *src, int num);
 void AnimateSceneSprite_MoveTriangle(int k);
 void TriforceRoom_PrepGFXSlotForPoly();
 void Credits_InitializePolyhedral();

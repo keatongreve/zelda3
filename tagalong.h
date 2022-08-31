@@ -1,9 +1,9 @@
 #pragma once
 #include "types.h"
 
-struct TagalongMessageInfo {
+typedef struct TagalongMessageInfo {
   uint16 y, x, bit, msg, tagalong;
-};
+} TagalongMessageInfo;
 
 bool Tagalong_IsFollowing();
 bool Follower_ValidateMessageFreedom();
@@ -23,7 +23,7 @@ bool Follower_CheckProximityToLink();
 void Follower_HandleTrigger();
 void Tagalong_Draw();
 void Follower_AnimateMovement_preserved(uint8 ain, uint16 xin, uint16 yin);
-bool Follower_CheckForTrigger(const struct TagalongMessageInfo *info);
+bool Follower_CheckForTrigger(const TagalongMessageInfo *info);
 void Follower_Disable();
 void Blind_SpawnFromMaiden(uint16 x, uint16 y);
 void Kiki_RevertToSprite(int k);

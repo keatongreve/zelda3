@@ -10,16 +10,19 @@
 
 #include "types.h"
 #include "snes_regs.h"
+#include "snes/dma.h"
+#include "snes/ppu.h"
+#include "spc_player.h"
 
-struct ZeldaEnv {
+typedef struct ZeldaEnv {
   uint8 *ram;
   uint8 *sram;
   uint16 *vram;
-  struct Ppu *ppu;
-  struct SpcPlayer *player;
-  struct Dma *dma;
-};
-extern struct ZeldaEnv g_zenv;
+  Ppu *ppu;
+  SpcPlayer *player;
+  Dma *dma;
+} ZeldaEnv;
+extern ZeldaEnv g_zenv;
 // it's here so that the variables.h can access it
 extern uint8 g_ram[131072];
 extern const uint16 kUpperBitmasks[];
@@ -32,32 +35,32 @@ extern const int8 kGetBestActionToPerformOnTile_y[];
 
 static inline void zelda_snes_dummy_write(uint32_t adr, uint8_t val) {}
 
-struct MovableBlockData {
+typedef struct MovableBlockData {
   uint16 room;
   uint16 tilemap;
-};
+} MovableBlockData;
 
-struct OamEntSigned {
+typedef struct OamEntSigned {
   int8 x, y;
   uint8 charnum, flags;
-};
+} OamEntSigned;
 
 
 
-#define movable_block_datas ((struct MovableBlockData*)(g_ram+0xf940))
-#define oam_buf ((struct OamEnt*)(g_ram+0x800))
+#define movable_block_datas ((MovableBlockData*)(g_ram+0xf940))
+#define oam_buf ((OamEnt*)(g_ram+0x800))
 
 
 
 
-struct OwScrollVars {
+typedef struct OwScrollVars {
   uint16 ystart, yend, xstart, xend;
-};
+} OwScrollVars;
 
-#define ow_scroll_vars0 (*(struct OwScrollVars*)(g_ram+0x600))
-#define ow_scroll_vars1 (*(struct OwScrollVars*)(g_ram+0x608))
+#define ow_scroll_vars0 (*(OwScrollVars*)(g_ram+0x600))
+#define ow_scroll_vars1 (*(OwScrollVars*)(g_ram+0x608))
 
-#define ow_scroll_vars0_exit (*(struct OwScrollVars*)(g_ram+0xC154))
+#define ow_scroll_vars0_exit (*(OwScrollVars*)(g_ram+0xC154))
 
 
 
@@ -75,7 +78,7 @@ extern const uint16 kOverworld_OffsetBaseX[64];
 // forwards
 
 
-struct MirrorHdmaVars {
+typedef struct MirrorHdmaVars {
   uint16 var0;
   uint16 var1[2];
   uint16 var3[2];
@@ -88,7 +91,7 @@ struct MirrorHdmaVars {
   uint16 var11;
   uint16 pad;
   uint8 ctr2, ctr;
-};
+} MirrorHdmaVars;
 
 
 // Various level tables
@@ -143,11 +146,11 @@ struct MirrorHdmaVars {
 
 
 #define turn_on_off_water_ctr (*(uint8*)(g_ram+0x424))
-#define mirror_vars (*(struct MirrorHdmaVars*)(g_ram+0x6A0))
+#define mirror_vars (*(MirrorHdmaVars*)(g_ram+0x6A0))
 #define sprite_N_word ((uint16*)(g_ram+0xBC0))
 #define sprite_where_in_overworld ((uint8*)(g_ram+0x1DF80))
 #define alt_sprite_B ((uint8*)(g_ram+0x1FA5C))
-#define uvram_screen (*(struct UploadVram_32x32*)&g_ram[0x1000])
+#define uvram_screen (*(UploadVram_32x32*)&g_ram[0x1000])
 #define vram_upload_offset (*(uint16*)(g_ram+0x1000))
 #define vram_upload_data ((uint16*)(g_ram+0x1002))
 #define vram_upload_tile_buf ((uint16*)(g_ram+0x1100))

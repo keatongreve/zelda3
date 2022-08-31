@@ -42,7 +42,7 @@ void SelectFile_Func5_DrawOams(int k) {
   link_dma_graphics_index = 0x116 * 2;
   uint8 *sram = g_zenv.sram + 0x500 * k;
 
-  struct OamEnt *oam = oam_buf + kSelectFile_Draw_OamIdx[k] / 4;
+  OamEnt *oam = oam_buf + kSelectFile_Draw_OamIdx[k] / 4;
   uint8 x = 0x34;
   uint8 y = kSelectFile_Draw_Y[k];
 
@@ -101,7 +101,7 @@ void SelectFile_Func6_DrawOams2(int k) {
   digits[0] = died_ctr % 10;
 
   int i = (digits[2] != 0) ? 2 : (digits[1] != 0) ? 1 : 0;
-  struct OamEnt *oam = oam_buf + kSelectFile_DrawDigit_OamIdx[k] / 4;
+  OamEnt *oam = oam_buf + kSelectFile_DrawDigit_OamIdx[k] / 4;
   do {
     oam->charnum = kSelectFile_DrawDigit_Char[digits[i]];
     oam->x = x + kSelectFile_DrawDigit_X[i];
@@ -840,7 +840,7 @@ void NameFile_DoTheNaming() {  // 8cda4d
     NameFile_CheckForScrollInputY();
   }
 
-  struct OamEnt *oam = oam_buf;
+  OamEnt *oam = oam_buf;
   for (int i = 0; i != 26; i++) {
     oam->x = 0x18 + i * 8;
     oam->y = selectfile_var7;

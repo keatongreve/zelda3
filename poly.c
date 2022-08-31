@@ -24,10 +24,10 @@ static const int8 kPolySinCos[320] = {
   45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  56,  57,  58,  59,
   59,  60,  60,  61,  61,  62,  62,  62,  63,  63,  63,  64,  64,  64,  64,  64,
 };
-struct Vertex3 {
+typedef struct Vertex3 {
   int8 x, y, z;
-};
-static const struct Vertex3 kPoly0_Vtx[6] = {
+} Vertex3;
+static const Vertex3 kPoly0_Vtx[6] = {
   {  0,  65,   0},
   {  0, -65,   0},
   {  0,   0, -40},
@@ -45,7 +45,7 @@ static const uint8 kPoly0_Polys[40] = {
   3, 1, 4, 3, 2,
   3, 1, 5, 4, 3,
 };
-static const struct Vertex3 kPoly1_Vtx[6] = {
+static const Vertex3 kPoly1_Vtx[6] = {
   {  0,  40,  10},
   { 40, -40,  10},
   {-40, -40,  10},
@@ -60,13 +60,13 @@ static const uint8 kPoly1_Polys[28] = {
   4, 1, 5, 4, 2, 4,
   4, 3, 0, 2, 4, 3,
 };
-struct PolyConfig {
+typedef struct PolyConfig {
   uint8 num_vtx, num_poly;
   uint16 vtx_val, polys_val;
-  const struct Vertex3 *vertex;
+  const Vertex3 *vertex;
   const uint8 *poly;
-};
-static const struct PolyConfig kPolyConfigs[2] = {
+} PolyConfig;
+static const PolyConfig kPolyConfigs[2] = {
   {6, 8, 0xff98, 0xffaa, kPoly0_Vtx, kPoly0_Polys},
   {6, 5, 0xffd2, 0xffe4, kPoly1_Vtx, kPoly1_Polys},
 };
@@ -99,7 +99,7 @@ void Polyhedral_SetShapePointer() {  // 89f83d
   poly_var1 = poly_config1 * 2 + 0x80;
   poly_tmp0 = poly_which_model * 2;
 
-  const struct PolyConfig *poly_config = &kPolyConfigs[poly_which_model];
+  const PolyConfig *poly_config = &kPolyConfigs[poly_which_model];
   poly_config_num_vertex = poly_config->num_vtx;
   poly_config_num_polys = poly_config->num_poly;
   poly_fromlut_ptr2 = poly_config->vtx_val;
@@ -118,7 +118,7 @@ void Polyhedral_SetRotationMatrix() {  // 89f864
 }
 
 void Polyhedral_OperateRotation() {  // 89f8fb
-  const struct PolyConfig *poly_config = &kPolyConfigs[poly_which_model];
+  const PolyConfig *poly_config = &kPolyConfigs[poly_which_model];
   const int8 *src = &poly_config->vertex[0].x;
   int i = poly_config_num_vertex;
   src += i * 3;
@@ -150,7 +150,7 @@ void Polyhedral_ProjectPoint() {  // 89f9d6
 }
 
 void Polyhedral_DrawPolyhedron() {  // 89fa4f
-  const struct PolyConfig *poly_config = &kPolyConfigs[poly_which_model];
+  const PolyConfig *poly_config = &kPolyConfigs[poly_which_model];
   const uint8 *src = poly_config->poly;
   do {
     poly_num_vertex_in_poly = *src++;
