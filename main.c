@@ -16,6 +16,7 @@
 
 #include "types.h"
 #include "variables.h"
+#include "win_volume_control/win_volume_control.h"
 
 #include "zelda_rtl.h"
 #include "config.h"
@@ -46,6 +47,7 @@ static void OpenOneGamepad(int i);
 
 static inline int IntMin(int a, int b) { return a < b ? a : b; }
 static inline int IntMax(int a, int b) { return a > b ? a : b; }
+static inline int Clamp(int value, int a, int b) { return (value < a) ? a : (value > b ? b : value);  }
 
 enum {
   kRenderWidth = 512,
@@ -118,7 +120,8 @@ void DoZoom(int zoom_step) {
 }
 
 void AdjustMasterVolume(int volume_adjustment) {
-  g_current_user_volume_level = SDL_clamp(g_current_user_volume_level + volume_adjustment, 0, kMaxUserVolumeLevel);
+  g_current_user_volume_level = Clamp(g_current_user_volume_level + volume_adjustment, 0, kMaxUserVolumeLevel);
+  SetApplicationVolume(g_current_user_volume_level);
 }
 
 static SDL_HitTestResult HitTestCallback(SDL_Window *win, const SDL_Point *area, void *data) {
@@ -314,7 +317,12 @@ static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, SDL_AudioFormat form
     SDL_memset(volumeAdjustedAudioBuffer, 0, 735 * 4);
 
     int16 volume_div_shift = 0x8;
+#if defined(__WIN32__)
+    int32 volume_shifted = 100 << volume_div_shift;
+#else
     int32 volume_shifted = (g_current_user_volume_level << volume_div_shift) / kMaxUserVolumeLevel * SDL_MIX_MAXVOLUME;
+#endif
+
     SDL_MixAudioFormat((Uint8 *)volumeAdjustedAudioBuffer, (Uint8 *)audioBuffer, format, 735 * 4, volume_shifted >> volume_div_shift);
 
     SDL_QueueAudio(device, volumeAdjustedAudioBuffer, 735 * 4);

@@ -118,6 +118,9 @@
     <ClCompile Include="config.c">
       <Filter>Zelda</Filter>
     </ClCompile>
+    <ClCompile Include="volume.c">
+      <Filter>Snes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="snes\apu.h">
@@ -236,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="config.h">
       <Filter>Zelda</Filter>
+    </ClInclude>
+    <ClInclude Include="volume.h">
+      <Filter>Snes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
