@@ -20,6 +20,9 @@
 #include "zelda_rtl.h"
 #include "config.h"
 
+#include "platform/macos/mac_volume_control.h"
+
+extern Ppu *GetPpuForRendering();
 extern Dsp *GetDspForRendering();
 extern Snes *g_snes;
 extern uint8 g_emulated_ram[0x20000];
@@ -321,7 +324,7 @@ int main(int argc, char** argv) {
     if (is_turbo)
       continue;
 
-    PlayAudio(snes_run, device, audioBuffer);
+    PlayAudio(snes_run, device, audioBuffer, have);
     RenderScreen(window, renderer, texture, (g_win_flags & SDL_WINDOW_FULLSCREEN_DESKTOP) != 0);
 
     SDL_RenderPresent(renderer); // vsyncs to 60 FPS
@@ -360,7 +363,7 @@ int main(int argc, char** argv) {
   return 0;
 }
 
-static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, int16 *audioBuffer) {
+static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, int16 *audioBuffer, SDL_AudioSpec spec) {
   // generate enough samples
   if (snes) {
     while (snes->apu->dsp->sampleOffset < 534)
@@ -374,6 +377,9 @@ static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, int16 *audioBuffer) 
     if (SDL_GetQueuedAudioSize(device) <= g_samples_per_block * 4 * 6) {
       // don't queue audio if buffer is still filled
       SDL_QueueAudio(device, audioBuffer, g_samples_per_block * 4);
+
+      PlayAudioBuffer(audioBuffer, spec.samples, spec.freq, i);
+
       return;
     }
     SDL_Delay(1);
