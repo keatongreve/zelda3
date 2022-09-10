@@ -1,3 +1,1 @@
-// void PlayAudioBuffer(void *buffer, int bufferLength, int sampleRate, int blockNumber);
-
-void PlayAudioBuffer(void *buffer, int numberFrames, int sampleRate);
+void PlayAudioBuffer(void *buffer, int numberFrames, int numberChannels, int sampleRate);

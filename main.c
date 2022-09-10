@@ -231,8 +231,8 @@ int main(int argc, char** argv) {
     printf("Failed to open audio device: %s\n", SDL_GetError());
     return 1;
   }
-  g_samples_per_block = (534 * g_config.audio_freq) / 32000; //735?
-  int16_t* audioBuffer = (int16_t * )malloc(g_samples_per_block * 2 * sizeof(int16)); //num channels, then sizeof(int16)==2, 
+  g_samples_per_block = (534 * g_config.audio_freq) / 32000;
+  int16_t* audioBuffer = (int16_t * )malloc(g_samples_per_block * have.channels * sizeof(int16)); //num channels, then sizeof(int16)==2, 
   SDL_PauseAudioDevice(device, 0);
 
   Snes *snes = snes_init(g_emulated_ram), *snes_run = NULL;
@@ -373,12 +373,13 @@ static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, int16 *audioBuffer, 
 
   dsp_getSamples(GetDspForRendering(), audioBuffer, g_samples_per_block);
 
+  PlayAudioBuffer(audioBuffer, g_samples_per_block, spec.channels, spec.freq);
+  return;
+
   for (int i = 0; i < 10; i++) {
     if (SDL_GetQueuedAudioSize(device) <= g_samples_per_block * 4 * 6) {
       // don't queue audio if buffer is still filled
-      SDL_QueueAudio(device, audioBuffer, g_samples_per_block * 4);
-
-      // PlayAudioBuffer(audioBuffer, g_samples_per_block * 2, spec.freq);
+      // SDL_QueueAudio(device, audioBuffer, g_samples_per_block * 4);
 
       return;
     }
