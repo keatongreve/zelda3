@@ -36,7 +36,7 @@ void PatchCommand(char cmd);
 bool RunOneFrame(Snes *snes, int input_state, bool turbo);
 
 static bool LoadRom(const char *name, Snes *snes);
-static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, int16 *audioBuffer);
+static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, int16 *audioBuffer, SDL_AudioSpec spec);
 static void RenderScreen(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture, bool fullscreen);
 static void HandleInput(int keyCode, int modCode, bool pressed);
 static void HandleGamepadInput(int button, bool pressed);
@@ -231,8 +231,8 @@ int main(int argc, char** argv) {
     printf("Failed to open audio device: %s\n", SDL_GetError());
     return 1;
   }
-  g_samples_per_block = (534 * g_config.audio_freq) / 32000;
-  int16_t* audioBuffer = (int16_t * )malloc(g_samples_per_block * 2 * sizeof(int16));
+  g_samples_per_block = (534 * g_config.audio_freq) / 32000; //735?
+  int16_t* audioBuffer = (int16_t * )malloc(g_samples_per_block * 2 * sizeof(int16)); //num channels, then sizeof(int16)==2, 
   SDL_PauseAudioDevice(device, 0);
 
   Snes *snes = snes_init(g_emulated_ram), *snes_run = NULL;
@@ -378,7 +378,7 @@ static void PlayAudio(Snes *snes, SDL_AudioDeviceID device, int16 *audioBuffer, 
       // don't queue audio if buffer is still filled
       SDL_QueueAudio(device, audioBuffer, g_samples_per_block * 4);
 
-      PlayAudioBuffer(audioBuffer, spec.samples, spec.freq, i);
+      // PlayAudioBuffer(audioBuffer, g_samples_per_block * 2, spec.freq);
 
       return;
     }

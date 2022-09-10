@@ -6,7 +6,7 @@ GEN:=$(shell grep -hor tables/generated.*.h --include \*.c .)
 PYTHON:=/usr/bin/env python3
 CFLAGS:=$(if $(CFLAGS),$(CFLAGS),-O2)
 
-APPLE_FRAMEWORKS=Foundation AVFAudio
+APPLE_FRAMEWORKS=Foundation AVFAudio Accelerate
 APPLE_LDFLAGS=$(foreach FRAMEWORK,$(APPLE_FRAMEWORKS),-framework $(FRAMEWORK))
 XLINKER_FLAGS=$(foreach FLAG,$(APPLE_LDFLAGS),-Xlinker $(FLAG))
 
